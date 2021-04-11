@@ -8,3 +8,7 @@
 /.gradle
 /*.iml
 /*.ipr
+*.bat
+gendustry.iws
+projectFilesBackup/gendustry.iml
+projectFilesBackup/gendustry.ipr

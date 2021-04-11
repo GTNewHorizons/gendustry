@@ -71,10 +71,6 @@ repositories {
         url "http://mobiusstrip.eu/maven"
     }
     ivy {
-        name "CoFHLib"
-        artifactPattern "http://addons-origin.cursecdn.com/files/${config.cofhlib.cf}/[module]-[revision](-[classifier])(.[ext])"
-    }
-    ivy {
         name "BuildCraft"
         artifactPattern "http://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision]-[classifier].[ext]"
     }
@@ -93,7 +89,7 @@ dependencies {
         transitive = false // WAILA is depending on an invalid combination of CCC/NEI that doesn't run...
     }
 
-    compile ":CoFHLib:${config.cofhlib.version}:dev@jar"
+    //compile ":CoFHLib:${config.cofhlib.version}:dev@jar"
 
     compile "net.bdew.thirdparty:mekanism:${config.mekanism.version}-mc${config.minecraft.version}:api"
 }
