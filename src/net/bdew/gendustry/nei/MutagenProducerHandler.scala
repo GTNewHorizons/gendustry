@@ -64,5 +64,5 @@ class MutagenProducerHandler extends BaseRecipeHandler(5, 13) {
   }
 
   def getGuiTexture = Gendustry.modId + ":textures/gui/mutagenproducer.png"
-  def getRecipeName = Misc.toLocal("tile.gendustry.mutagen.producer.name")
+  def getRecipeName = Misc.toLocal("tile.gendustry.mutagen_producer.name")
 }
