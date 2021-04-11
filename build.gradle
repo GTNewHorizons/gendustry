@@ -56,15 +56,15 @@ repositories {
     mavenLocal()
     maven {
         name = "bdew"
-        url = "http://jenkins.bdew.net/maven"
+        url = "https://jenkins.bdew.net/maven"
     }
     maven {
         name = "chickenbones"
-        url = "http://chickenbones.net/maven"
+        url = "https://chickenbones.net/maven"
     }
     maven {
         name = "ic2"
-        url = "http://maven.ic2.player.to/"
+        url = "https://maven.ic2.player.to/"
     }
     maven {
         name "waila"
@@ -72,7 +72,11 @@ repositories {
     }
     ivy {
         name "BuildCraft"
-        artifactPattern "http://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision]-[classifier].[ext]"
+        artifactPattern "https://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision]-[classifier].[ext]"
+    }
+    ivy {
+        name "GTNH"
+        artifactPattern "http://downloads.gtnewhorizons.com/Mods_for_Jenkins/[module]-[revision](-[classifier]).[ext]"
     }
 }
 
@@ -89,7 +93,7 @@ dependencies {
         transitive = false // WAILA is depending on an invalid combination of CCC/NEI that doesn't run...
     }
 
-    //compile ":CoFHLib:${config.cofhlib.version}:dev@jar"
+    compile ":CoFHLib:${config.cofhlib.version}:dev"
 
     compile "net.bdew.thirdparty:mekanism:${config.mekanism.version}-mc${config.minecraft.version}:api"
 }
