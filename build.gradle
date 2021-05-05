@@ -1,21 +1,22 @@
 buildscript {
-    configurations.all {
-        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-    }
     repositories {
         mavenCentral()
-        mavenLocal()
+        jcenter()
+        maven {
+            name = "gt"
+            url = "https://gregtech.overminddl1.com/"
+        }
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
         maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+            name = "jitpack"
+            url = "https://jitpack.io"
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath "com.github.GTNH2:ForgeGradle:FG_1.2-SNAPSHOT"
     }
 }
 
@@ -109,7 +110,7 @@ sourceSets {
         resources {
             srcDir 'resources'
         }
-        output.resourcesDir = output.classesDir // Hack for IDEA
+//        output.resourcesDir = output.classesDir // Hack for IDEA
     }
 }
 
