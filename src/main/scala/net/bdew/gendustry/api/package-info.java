@@ -7,7 +7,7 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-@API(apiVersion = "GENDUSTRY_APIVER", owner = "gendustry", provides = "gendustryAPI") //
+@API(apiVersion = "2.3.0", owner = "gendustry", provides = "gendustryAPI") //
         package net.bdew.gendustry.api;
 
 import cpw.mods.fml.common.API;

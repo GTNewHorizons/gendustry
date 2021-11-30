@@ -1,9 +1,10 @@
 [
 {
-  "modid": "gendustry",
-  "name": "GenDustry",
+  "modid": "${modId}",
+  "name": "${modName}",
   "description": "",
-  "version": "@GENDUSTRY_VER@",
+  "version": "${modVersion}",
+  "mcversion": "${minecraftVersion}",
   "url": "bdew.net/mods/",
   "updateUrl": "",
   "authorList": [
