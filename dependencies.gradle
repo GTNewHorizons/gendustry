@@ -1,6 +1,7 @@
 // Add your dependencies here
 
 dependencies {
+    compile("com.github.GTNewHorizons:NotEnoughItems:2.1.22-GTNH:dev")
     compile("com.github.GTNewHorizons:bdlib:1.9.6:dev")
     compile("com.github.GTNewHorizons:ForestryMC:4.4.4:dev") {
         exclude group: "net.industrial-craft", module: "industrialcraft-2"
