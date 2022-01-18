@@ -1,8 +1,8 @@
 // Add your dependencies here
 
 dependencies {
-    compile("com.github.GTNewHorizons:bdlib:master-SNAPSHOT:dev")
-    compile("com.github.GTNewHorizons:ForestryMC:master-SNAPSHOT:dev") {
+    compile("com.github.GTNewHorizons:bdlib:1.9.6:dev")
+    compile("com.github.GTNewHorizons:ForestryMC:4.4.4:dev") {
         exclude group: "net.industrial-craft", module: "industrialcraft-2"
         exclude group: "com.mod-buildcraft", module: "buildcraft"
     }
@@ -13,7 +13,7 @@ dependencies {
         transitive = false
     }
 
-    compileOnly("com.github.GTNewHorizons:waila:master-SNAPSHOT:api") {
+    compileOnly("com.github.GTNewHorizons:waila:1.5.18:api") {
         transitive = false
     }
 
