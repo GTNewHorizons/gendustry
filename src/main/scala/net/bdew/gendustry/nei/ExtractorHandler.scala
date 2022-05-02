@@ -42,7 +42,7 @@ class ExtractorHandler extends BaseRecipeHandler(5, 13) {
     components :+= new FluidComponent(dnaRect, new FluidStack(Fluids.dna, out), MachineExtractor.tankSize)
     components :+= new PowerComponent(mjRect, MachineExtractor.mjPerItem, MachineExtractor.maxStoredEnergy)
 
-    override def getOtherStacks = List(inPositioned, labware)
+    override def getIngredients = List(inPositioned, labware)
   }
 
   def getRecipe(i: Int) = arecipes.get(i).asInstanceOf[ExtractorRecipe]

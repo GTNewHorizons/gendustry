@@ -34,7 +34,7 @@ class MutagenProducerHandler extends BaseRecipeHandler(5, 13) {
     components :+= new FluidComponent(mutagenRect, new FluidStack(Fluids.mutagen, out), MachineMutagenProducer.tankSize)
     components :+= new PowerComponent(mjRect, MachineMutagenProducer.mjPerItem, MachineMutagenProducer.maxStoredEnergy)
 
-    override def getOtherStacks = List(inPositioned)
+    override def getIngredients = List(inPositioned)
   }
 
   def getRecipe(i: Int) = arecipes.get(i).asInstanceOf[MutagenProducerRecipe]

@@ -35,7 +35,7 @@ class ReplicatorHandler extends BaseRecipeHandler(5, 13) {
     components :+= new FluidComponent(proteinRect, new FluidStack(Fluids.protein, MachineReplicator.proteinPerItem), MachineReplicator.proteinTankSize)
     components :+= new PowerComponent(mjRect, MachineReplicator.mjPerItem, MachineReplicator.maxStoredEnergy)
 
-    override def getOtherStacks = List(templateStack)
+    override def getIngredients = List(templateStack)
   }
 
   def addRecipe(tpl: ItemStack) {
