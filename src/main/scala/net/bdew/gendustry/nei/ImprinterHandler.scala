@@ -41,7 +41,7 @@ class ImprinterHandler extends BaseRecipeHandler(5, 13) {
 
     components :+= new PowerComponent(mjRect, MachineImprinter.mjPerItem, MachineImprinter.maxStoredEnergy)
 
-    override def getOtherStacks = List(input, template, labware)
+    override def getIngredients = List(input, template, labware)
   }
 
   def getExampleStack(template: ItemStack, modded: Boolean): ItemStack = {

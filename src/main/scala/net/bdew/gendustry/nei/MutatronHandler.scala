@@ -44,7 +44,7 @@ class MutatronHandler extends BaseRecipeHandler(5, 13) {
     components :+= new FluidComponent(mutagenRect, new FluidStack(Fluids.mutagen, MachineMutatron.mutagenPerItem), MachineMutatron.tankSize)
     components :+= new PowerComponent(mjRect, MachineMutatron.mjPerItem, MachineMutatron.maxStoredEnergy)
 
-    override def getOtherStacks = List(in1, in2, labware)
+    override def getIngredients = List(in1, in2, labware)
   }
 
   def getRecipeStack(slot: Int, mutation: IMutation): ItemStack = {

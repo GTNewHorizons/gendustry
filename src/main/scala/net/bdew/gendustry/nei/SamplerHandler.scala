@@ -43,7 +43,7 @@ import scala.collection.JavaConversions._
 
     components :+= new PowerComponent(mjRect, MachineSampler.mjPerItem, MachineSampler.maxStoredEnergy)
 
-    override def getOtherStacks = List(individual, sampleBlank, labware)
+    override def getIngredients = List(individual, sampleBlank, labware)
   }
 
   def getRecipeStack(species: IAlleleSpecies): ItemStack = {

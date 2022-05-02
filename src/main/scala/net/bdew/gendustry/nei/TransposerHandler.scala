@@ -38,7 +38,7 @@ class TransposerHandler extends BaseRecipeHandler(5, 13) {
 
     components :+= new PowerComponent(mjRect, MachineTransposer.mjPerItem, MachineTransposer.maxStoredEnergy)
 
-    override def getOtherStacks = List(template, blank, labware)
+    override def getIngredients = List(template, blank, labware)
   }
 
   def addRecipe(template: ItemStack) = template match {

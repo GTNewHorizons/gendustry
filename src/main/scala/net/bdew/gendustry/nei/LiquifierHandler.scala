@@ -34,7 +34,7 @@ class LiquifierHandler extends BaseRecipeHandler(5, 13) {
     components :+= new FluidComponent(proteinRect, new FluidStack(Fluids.protein, out), MachineLiquifier.tankSize)
     components :+= new PowerComponent(mjRect, MachineLiquifier.mjPerItem, MachineLiquifier.maxStoredEnergy)
 
-    override def getOtherStacks = List(inPositioned)
+    override def getIngredients = List(inPositioned)
   }
 
   def getRecipe(i: Int) = arecipes.get(i).asInstanceOf[LiquifierRecipe]
