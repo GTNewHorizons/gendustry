@@ -105,7 +105,7 @@ import scala.collection.JavaConversions._
     }
   }
 
-  override def handleItemTooltip(gui: GuiRecipe, stack: ItemStack, tip: util.List[String], recipe: Int): util.List[String] = {
+  override def handleItemTooltip(gui: GuiRecipe[_], stack: ItemStack, tip: util.List[String], recipe: Int): util.List[String] = {
     if (stack == getRecipe(recipe).labware.item)
       tip += Misc.toLocalF("gendustry.label.consume", MachineSampler.labwareConsumeChance.toInt)
     super.handleItemTooltip(gui, stack, tip, recipe)

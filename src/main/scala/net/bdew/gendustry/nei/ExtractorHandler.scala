@@ -103,7 +103,7 @@ class ExtractorHandler extends BaseRecipeHandler(5, 13) {
     }
   }
 
-  override def handleItemTooltip(gui: GuiRecipe, stack: ItemStack, tip: util.List[String], recipe: Int): util.List[String] = {
+  override def handleItemTooltip(gui: GuiRecipe[_], stack: ItemStack, tip: util.List[String], recipe: Int): util.List[String] = {
     if (stack == getRecipe(recipe).labware.item)
       tip.add(Misc.toLocalF("gendustry.label.consume", MachineExtractor.labwareConsumeChance.toInt))
     super.handleItemTooltip(gui, stack, tip, recipe)

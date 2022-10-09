@@ -10,7 +10,6 @@
 package net.bdew.gendustry.machines.apiary.upgrades
 
 import java.util
-
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.gendustry.Gendustry
 import net.bdew.gendustry.api.ApiaryModifiers
@@ -21,7 +20,7 @@ import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
-import net.minecraft.util.IIcon
+import net.minecraft.util.{EnumChatFormatting, IIcon}
 
 object ItemApiaryUpgrade extends Item with IApiaryUpgrade with NamedItem {
   var icons = Map.empty[Int, IIcon]
@@ -84,7 +83,8 @@ object ItemApiaryUpgrade extends Item with IApiaryUpgrade with NamedItem {
 
   def getStackingId(stack: ItemStack) = Item.getIdFromItem(this) * Int.MaxValue + stack.getItemDamage
   override def addInformation(stack: ItemStack, player: EntityPlayer, list: util.List[_], par4: Boolean) {
-    list.asInstanceOf[util.List[String]].addAll(getDisplayDetails(stack))
+    //list.asInstanceOf[util.List[String]].addAll(getDisplayDetails(stack))
+    list.asInstanceOf[util.List[String]].add(EnumChatFormatting.RED + "DEPRECATED: Put in crafting table to get back !")
   }
 
   def getMaxNumber(stack: ItemStack): Int = {

@@ -15,7 +15,10 @@ import codechicken.nei.recipe.{ICraftingHandler, IUsageHandler}
 import cpw.mods.fml.common.event.FMLInterModComms
 import net.bdew.gendustry.Gendustry
 import net.bdew.gendustry.config.Config
+import net.bdew.gendustry.custom.CustomUpgradeFrame
 import net.bdew.gendustry.items.GeneSample
+import net.bdew.gendustry.machines.apiary.BlockApiary
+import net.bdew.gendustry.machines.apiary.upgrades.ItemApiaryUpgrade
 import net.bdew.gendustry.machines.extractor.MachineExtractor
 import net.bdew.gendustry.machines.imprinter.MachineImprinter
 import net.bdew.gendustry.machines.liquifier.MachineLiquifier
@@ -25,6 +28,10 @@ import net.bdew.gendustry.machines.replicator.MachineReplicator
 import net.bdew.gendustry.machines.sampler.MachineSampler
 import net.bdew.gendustry.machines.transposer.MachineTransposer
 import net.bdew.gendustry.misc.GeneticsCache
+import net.minecraft.item.ItemStack
+
+import java.util
+import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 
 class NEIGendustryConfig extends IConfigureNEI {
   def getName: String = "Gendustry"
@@ -82,5 +89,12 @@ class NEIGendustryConfig extends IConfigureNEI {
     }
 
     GuiContainerManager.addTooltipHandler(new SmeltingTooltipHandler)
+
+    API.hideItem(new ItemStack(BlockApiary))
+    val upgradelist = new util.ArrayList[ItemStack]()
+    ItemApiaryUpgrade.getSubItems(null, null, upgradelist)
+    for(i <- upgradelist.asScala.toList)
+      API.hideItem(i)
+    API.hideItem(new ItemStack(CustomUpgradeFrame))
   }
 }
