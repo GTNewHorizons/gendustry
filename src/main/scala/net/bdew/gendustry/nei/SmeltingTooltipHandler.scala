@@ -22,8 +22,8 @@ class SmeltingTooltipHandler extends IContainerTooltipHandler {
   override def handleItemDisplayName(gui: GuiContainer, stack: ItemStack, tip: util.List[String]) = tip
   override def handleTooltip(gui: GuiContainer, mouseX: Int, mouseY: Int, tip: util.List[String]) = tip
   override def handleItemTooltip(gui: GuiContainer, itemStack: ItemStack, mouseX: Int, mouseY: Int, tip: util.List[String]) = {
-    if (gui.isInstanceOf[GuiRecipe] && itemStack != null) {
-      val gr = gui.asInstanceOf[GuiRecipe]
+    if (gui.isInstanceOf[GuiRecipe[_]] && itemStack != null) {
+      val gr = gui.asInstanceOf[GuiRecipe[_]]
       val handler = gr.currenthandlers.get(gr.recipetype)
       if (handler.isInstanceOf[FurnaceRecipeHandler]) {
         if (itemStack.getItem == GeneSample)

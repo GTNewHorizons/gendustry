@@ -39,14 +39,14 @@ abstract class BaseRecipeHandler(val offX: Int, val offY: Int) extends TemplateR
     super.drawExtras(recipe)
   }
 
-  override def mouseClicked(gui: GuiRecipe, button: Int, recipe: Int): Boolean = {
+  override def mouseClicked(gui: GuiRecipe[_], button: Int, recipe: Int): Boolean = {
     val relative = getMousePosition - gui.getRecipePosition(recipe) +(offX, offY) -(gui.guiLeft, gui.guiTop)
     for (component <- arecipes.get(recipe).asInstanceOf[CachedRecipeWithComponents].components)
       if (component.rect.contains(relative) && component.mouseClick(button)) return true
     super.mouseClicked(gui, button, recipe)
   }
 
-  override def handleTooltip(gui: GuiRecipe, tip: util.List[String], recipe: Int) = {
+  override def handleTooltip(gui: GuiRecipe[_], tip: util.List[String], recipe: Int) = {
     import scala.collection.JavaConversions._
     val relative = getMousePosition - gui.getRecipePosition(recipe) +(offX, offY) -(gui.guiLeft, gui.guiTop)
     for (component <- arecipes.get(recipe).asInstanceOf[CachedRecipeWithComponents].components)

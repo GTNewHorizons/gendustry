@@ -21,7 +21,7 @@ import net.minecraft.block.Block
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.item.ItemStack
-import net.minecraft.util.IIcon
+import net.minecraft.util.{EnumChatFormatting, IIcon}
 import net.minecraft.world.{IBlockAccess, World}
 
 object BlockApiary extends Block(MachineMaterial) with HasTE[TileApiary] with BlockCoverable[TileApiary] with BlockGuiWrenchable with BlockTooltip with BlockKeepData {
@@ -52,6 +52,7 @@ object BlockApiary extends Block(MachineMaterial) with HasTE[TileApiary] with Bl
   }
 
   override def getTooltip(stack: ItemStack, player: EntityPlayer, advanced: Boolean): List[String] = {
+    return List(EnumChatFormatting.RED + "DEPRECATED: Put in crafting table to get back !")
     if (stack.hasTagCompound && stack.getTagCompound.hasKey("data")) {
       val data = stack.getTagCompound.getCompoundTag("data")
       val inv = BlockTooltipHelper.getInventory(data)
