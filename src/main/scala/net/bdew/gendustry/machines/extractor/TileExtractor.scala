@@ -24,7 +24,13 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids._
 
-class TileExtractor extends TileBaseProcessor with TileWorker with TilePowered with ExposeTank with TileCoverable with TileKeepData {
+class TileExtractor
+    extends TileBaseProcessor
+    with TileWorker
+    with TilePowered
+    with ExposeTank
+    with TileCoverable
+    with TileKeepData {
   lazy val cfg = MachineExtractor
 
   object slots {
@@ -32,7 +38,8 @@ class TileExtractor extends TileBaseProcessor with TileWorker with TilePowered w
     val inLabware = 1
   }
 
-  val tank = DataSlotTankRestricted("tank", this, cfg.tankSize, Fluids.dna).setUpdate(UpdateKind.GUI, UpdateKind.SAVE)
+  val tank = DataSlotTankRestricted("tank", this, cfg.tankSize, Fluids.dna)
+    .setUpdate(UpdateKind.GUI, UpdateKind.SAVE)
   val output = DataSlotInt("output", this).setUpdate(UpdateKind.SAVE)
 
   def getSizeInventory = 2
@@ -42,7 +49,11 @@ class TileExtractor extends TileBaseProcessor with TileWorker with TilePowered w
   def isWorking = output > 0
 
   def tryStart(): Boolean = {
-    if (getStackInSlot(slots.inIndividual) != null && getStackInSlot(slots.inLabware) != null) {
+    if (
+      getStackInSlot(slots.inIndividual) != null && getStackInSlot(
+        slots.inLabware
+      ) != null
+    ) {
       output := LiquidDNASources.getValue(getStackInSlot(0))
       if (worldObj.rand.nextInt(100) < cfg.labwareConsumeChance)
         decrStackSize(slots.inLabware, 1)
@@ -61,9 +72,15 @@ class TileExtractor extends TileBaseProcessor with TileWorker with TilePowered w
 
   def sendFluid() {
     for (dir <- ForgeDirection.VALID_DIRECTIONS) {
-      val te: TileEntity = worldObj.getTileEntity(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ)
+      val te: TileEntity = worldObj.getTileEntity(
+        xCoord + dir.offsetX,
+        yCoord + dir.offsetY,
+        zCoord + dir.offsetZ
+      )
       if (te != null && te.isInstanceOf[IFluidHandler]) {
-        val pumped = te.asInstanceOf[IFluidHandler].fill(dir.getOpposite, tank.getFluid.copy(), true)
+        val pumped = te
+          .asInstanceOf[IFluidHandler]
+          .fill(dir.getOpposite, tank.getFluid.copy(), true)
         if (pumped > 0) {
           tank.drain(pumped, true)
           if (tank.getFluidAmount <= 0) return
@@ -78,14 +95,20 @@ class TileExtractor extends TileBaseProcessor with TileWorker with TilePowered w
   }
 
   allowSided = true
-  override def isItemValidForSlot(slot: Int, stack: ItemStack): Boolean = slot match {
-    case slots.inIndividual => LiquidDNASources.getValue(stack) > 0
-    case slots.inLabware => stack.getItem == Items.labware
-    case _ => false
-  }
-  override def canExtractItem(slot: Int, item: ItemStack, side: Int): Boolean = false
+  override def isItemValidForSlot(slot: Int, stack: ItemStack): Boolean =
+    slot match {
+      case slots.inIndividual => LiquidDNASources.getValue(stack) > 0
+      case slots.inLabware    => stack.getItem == Items.labware
+      case _                  => false
+    }
+  override def canExtractItem(slot: Int, item: ItemStack, side: Int): Boolean =
+    false
 
-  override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean) = 0
+  override def fill(
+      from: ForgeDirection,
+      resource: FluidStack,
+      doFill: Boolean
+  ) = 0
   override def canFill(from: ForgeDirection, fluid: Fluid) = false
 
   override def isValidCover(side: ForgeDirection, cover: ItemStack) = true

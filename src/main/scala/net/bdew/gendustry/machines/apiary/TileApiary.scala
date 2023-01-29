@@ -42,18 +42,19 @@ import net.minecraftforge.common.util.ForgeDirection
 
 import scala.util.Random
 
-class TileApiary extends TileExtended
-with TileDataSlots
-with PersistentInventoryTile
-with SidedInventory
-with TileKeepData
-with TilePowered
-with TileRSControllable
-with TileCoverable
-with IIndustrialApiary
-with IBeeModifier
-with IBeeListener
-with IBeeHousingInventory {
+class TileApiary
+    extends TileExtended
+    with TileDataSlots
+    with PersistentInventoryTile
+    with SidedInventory
+    with TileKeepData
+    with TilePowered
+    with TileRSControllable
+    with TileCoverable
+    with IIndustrialApiary
+    with IBeeModifier
+    with IBeeListener
+    with IBeeHousingInventory {
 
   object slots {
     val queen = 0
@@ -66,11 +67,17 @@ with IBeeHousingInventory {
   var mods = new ApiaryModifiers
   var movePrincess = false
 
-  val beeRoot = AlleleManager.alleleRegistry.getSpeciesRoot("rootBees").asInstanceOf[IBeeRoot]
+  val beeRoot = AlleleManager.alleleRegistry
+    .getSpeciesRoot("rootBees")
+    .asInstanceOf[IBeeRoot]
   lazy val cfg = MachineApiary
 
   val power = DataSlotPower("power", this)
-  val errorConditions = DataSlotErrorStates("errors", this).setUpdate(UpdateKind.GUI, UpdateKind.SAVE, UpdateKind.WORLD)
+  val errorConditions = DataSlotErrorStates("errors", this).setUpdate(
+    UpdateKind.GUI,
+    UpdateKind.SAVE,
+    UpdateKind.WORLD
+  )
   val owner = DataSlotGameProfile("owner", this).setUpdate(UpdateKind.SAVE)
   val guiProgress = DataSlotFloat("progress", this)
 
@@ -105,7 +112,13 @@ with IBeeHousingInventory {
   }
 
   def doMovePrincess() {
-    for ((slot, stack) <- Misc.iterSomeEnum(inv, slots.output) if stack != null && beeRoot.isMember(stack, EnumBeeType.PRINCESS.ordinal())) {
+    for (
+      (slot, stack) <- Misc.iterSomeEnum(inv, slots.output)
+      if stack != null && beeRoot.isMember(
+        stack,
+        EnumBeeType.PRINCESS.ordinal()
+      )
+    ) {
       setInventorySlotContents(slots.queen, stack)
       setInventorySlotContents(slot, null)
       return
@@ -116,7 +129,11 @@ with IBeeHousingInventory {
 
   clientTick.listen(() => {
     tickCount += 1
-    if (beeRoot.isMated(queen) && errorConditions.isOk && Config.renderBeeEffects && logic.canDoBeeFX && tickCount % Config.beeEffectFrequency == 0) {
+    if (
+      beeRoot.isMated(
+        queen
+      ) && errorConditions.isOk && Config.renderBeeEffects && logic.canDoBeeFX && tickCount % Config.beeEffectFrequency == 0
+    ) {
       logic.doBeeFX()
     }
   })
@@ -129,11 +146,24 @@ with IBeeHousingInventory {
 
     errorConditions.withSuspendedUpdates {
       val canWork = logic.canWork
-      val powered = getWorldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)
-      errorConditions.setCondition((rsmode :== RSMode.RS_OFF) && powered, ForestryErrorStates.disabledRedstone)
-      errorConditions.setCondition((rsmode :== RSMode.RS_ON) && !powered, ForestryErrorStates.noRedstone)
-      errorConditions.setCondition(rsmode :== RSMode.NEVER, GendustryErrorStates.Disabled)
-      errorConditions.setCondition(power.stored < cfg.baseMjPerTick * mods.energy, ForestryErrorStates.noPower)
+      val powered =
+        getWorldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)
+      errorConditions.setCondition(
+        (rsmode :== RSMode.RS_OFF) && powered,
+        ForestryErrorStates.disabledRedstone
+      )
+      errorConditions.setCondition(
+        (rsmode :== RSMode.RS_ON) && !powered,
+        ForestryErrorStates.noRedstone
+      )
+      errorConditions.setCondition(
+        rsmode :== RSMode.NEVER,
+        GendustryErrorStates.Disabled
+      )
+      errorConditions.setCondition(
+        power.stored < cfg.baseMjPerTick * mods.energy,
+        ForestryErrorStates.noPower
+      )
       if (errorConditions.isOk && canWork) {
         logic.doWork()
         power.extract(cfg.baseMjPerTick * mods.energy, false)
@@ -147,9 +177,9 @@ with IBeeHousingInventory {
       guiProgress := 0
     } else {
       if (beeRoot.getType(getQueen) == EnumBeeType.PRINCESS)
-        guiProgress := logic.getBeeProgressPercent / 100F
+        guiProgress := logic.getBeeProgressPercent / 100f
       else
-        guiProgress := 1 - (logic.getBeeProgressPercent / 100F)
+        guiProgress := 1 - (logic.getBeeProgressPercent / 100f)
     }
   })
 
@@ -158,7 +188,9 @@ with IBeeHousingInventory {
   })
 
   def getUpgrade(stack: ItemStack) = stack.getItem.asInstanceOf[IApiaryUpgrade]
-  def isUpgrade(stack: ItemStack) = stack != null && stack.getItem != null && stack.getItem.isInstanceOf[IApiaryUpgrade]
+  def isUpgrade(stack: ItemStack) =
+    stack != null && stack.getItem != null && stack.getItem
+      .isInstanceOf[IApiaryUpgrade]
 
   def getMaxAdditionalUpgrades(stack: ItemStack): Int = {
     if (!isUpgrade(stack)) return 0
@@ -176,7 +208,8 @@ with IBeeHousingInventory {
     if (slots.upgrades.contains(slot)) {
       return getMaxAdditionalUpgrades(stack) >= stack.stackSize
     } else if (slot == slots.queen) {
-      return beeRoot.isMember(stack, EnumBeeType.QUEEN.ordinal()) || beeRoot.isMember(stack, EnumBeeType.PRINCESS.ordinal())
+      return beeRoot.isMember(stack, EnumBeeType.QUEEN.ordinal()) || beeRoot
+        .isMember(stack, EnumBeeType.PRINCESS.ordinal())
     } else if (slot == slots.drone) {
       return beeRoot.isMember(stack, EnumBeeType.DRONE.ordinal())
     } else
@@ -186,19 +219,43 @@ with IBeeHousingInventory {
   def getStats = {
     var strings = List.empty[String]
 
-    strings :+= Misc.toLocalF("gendustry.label.energy", "%.1f".format(cfg.baseMjPerTick * mods.energy * Config.powerShowMultiplier), Config.powerShowUnits)
-    strings :+= Misc.toLocalF("gendustry.label.temperature", Misc.toLocal(getTemperature.getName))
-    strings :+= Misc.toLocalF("gendustry.label.humidity", Misc.toLocal(getHumidity.getName))
+    strings :+= Misc.toLocalF(
+      "gendustry.label.energy",
+      "%.1f".format(
+        cfg.baseMjPerTick * mods.energy * Config.powerShowMultiplier
+      ),
+      Config.powerShowUnits
+    )
+    strings :+= Misc.toLocalF(
+      "gendustry.label.temperature",
+      Misc.toLocal(getTemperature.getName)
+    )
+    strings :+= Misc.toLocalF(
+      "gendustry.label.humidity",
+      Misc.toLocal(getHumidity.getName)
+    )
 
     if (queen.value != null) {
       val bee = beeRoot.getMember(queen)
       if (bee != null && bee.isAnalyzed) {
         val genome = bee.getGenome
-        strings :+= Misc.toLocalF("gendustry.label.production", "%.0f%%".format(100F * mods.production * genome.getSpeed))
-        strings :+= Misc.toLocalF("gendustry.label.flowering", "%.0f%%".format(mods.flowering * genome.getFlowering))
-        strings :+= Misc.toLocalF("gendustry.label.lifespan", "%.0f%%".format(mods.lifespan * genome.getLifespan))
+        strings :+= Misc.toLocalF(
+          "gendustry.label.production",
+          "%.0f%%".format(100f * mods.production * genome.getSpeed)
+        )
+        strings :+= Misc.toLocalF(
+          "gendustry.label.flowering",
+          "%.0f%%".format(mods.flowering * genome.getFlowering)
+        )
+        strings :+= Misc.toLocalF(
+          "gendustry.label.lifespan",
+          "%.0f%%".format(mods.lifespan * genome.getLifespan)
+        )
         val t = genome.getTerritory.toSeq.map(mods.territory * _)
-        strings :+= Misc.toLocalF("gendustry.label.territory", "%.0f x %.0f x %.0f".format(t(0), t(1), t(2)))
+        strings :+= Misc.toLocalF(
+          "gendustry.label.territory",
+          "%.0f x %.0f x %.0f".format(t(0), t(1), t(2))
+        )
       }
     }
 
@@ -208,12 +265,15 @@ with IBeeHousingInventory {
   // Misc
   def getBiome = worldObj.getBiomeGenForCoordsBody(xCoord, zCoord)
   override def getSizeInventory = 15
-  def getModifiedBiome = if (mods.biomeOverride == null) getBiome else mods.biomeOverride
+  def getModifiedBiome =
+    if (mods.biomeOverride == null) getBiome else mods.biomeOverride
 
   // SidedInventory
 
-  override def canInsertItem(slot: Int, stack: ItemStack, side: Int) = slots.bees.contains(slot) && isItemValidForSlot(slot, stack)
-  override def canExtractItem(slot: Int, stack: ItemStack, side: Int) = slots.output.contains(slot)
+  override def canInsertItem(slot: Int, stack: ItemStack, side: Int) =
+    slots.bees.contains(slot) && isItemValidForSlot(slot, stack)
+  override def canExtractItem(slot: Int, stack: ItemStack, side: Int) =
+    slots.output.contains(slot)
 
   // IIndustrialApiary
 
@@ -249,12 +309,30 @@ with IBeeHousingInventory {
   }
 
   // IBeeModifier
-  override def getTerritoryModifier(genome: IBeeGenome, currentModifier: Float) = Misc.min(mods.territory, 5)
-  override def getMutationModifier(genome: IBeeGenome, mate: IBeeGenome, currentModifier: Float) = mods.mutation
-  override def getLifespanModifier(genome: IBeeGenome, mate: IBeeGenome, currentModifier: Float) = mods.lifespan
-  override def getProductionModifier(genome: IBeeGenome, currentModifier: Float) = mods.production
-  override def getFloweringModifier(genome: IBeeGenome, currentModifier: Float) = mods.flowering
-  override def getGeneticDecay(genome: IBeeGenome, currentModifier: Float) = mods.geneticDecay
+  override def getTerritoryModifier(
+      genome: IBeeGenome,
+      currentModifier: Float
+  ) = Misc.min(mods.territory, 5)
+  override def getMutationModifier(
+      genome: IBeeGenome,
+      mate: IBeeGenome,
+      currentModifier: Float
+  ) = mods.mutation
+  override def getLifespanModifier(
+      genome: IBeeGenome,
+      mate: IBeeGenome,
+      currentModifier: Float
+  ) = mods.lifespan
+  override def getProductionModifier(
+      genome: IBeeGenome,
+      currentModifier: Float
+  ) = mods.production
+  override def getFloweringModifier(
+      genome: IBeeGenome,
+      currentModifier: Float
+  ) = mods.flowering
+  override def getGeneticDecay(genome: IBeeGenome, currentModifier: Float) =
+    mods.geneticDecay
   override def isSealed = mods.isSealed
   override def isSelfLighted = mods.isSelfLighted
   override def isSunlightSimulated = mods.isSunlightSimulated
@@ -269,19 +347,25 @@ with IBeeHousingInventory {
   override def getBeeListeners = Collections.singletonList(this)
   override def getBeeModifiers = Collections.singletonList(this)
   override def getBeekeepingLogic: IBeekeepingLogic = logic
-  override def getBeeFXCoordinates: Vec3 = Vec3.createVectorHelper(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5)
+  override def getBeeFXCoordinates: Vec3 =
+    Vec3.createVectorHelper(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5)
 
-  override def getBlockLightValue: Int = worldObj.getBlockLightValue(xCoord, yCoord + 1, zCoord)
-  override def canBlockSeeTheSky: Boolean = worldObj.canBlockSeeTheSky(xCoord, yCoord + 1, zCoord)
+  override def getBlockLightValue: Int =
+    worldObj.getBlockLightValue(xCoord, yCoord + 1, zCoord)
+  override def canBlockSeeTheSky: Boolean =
+    worldObj.canBlockSeeTheSky(xCoord, yCoord + 1, zCoord)
   override def getOwner: GameProfile = owner
 
   override def getTemperature =
     if (BiomeHelper.isBiomeHellish(getModifiedBiome))
       EnumTemperature.HELLISH
     else
-      EnumTemperature.getFromValue(getModifiedBiome.temperature + mods.temperature)
+      EnumTemperature.getFromValue(
+        getModifiedBiome.temperature + mods.temperature
+      )
 
-  override def getHumidity = EnumHumidity.getFromValue(getModifiedBiome.rainfall + mods.humidity)
+  override def getHumidity =
+    EnumHumidity.getFromValue(getModifiedBiome.rainfall + mods.humidity)
 
   // IBeeHousingInventory
   override def setQueen(stack: ItemStack) = setInventorySlotContents(0, stack)
@@ -291,10 +375,19 @@ with IBeeHousingInventory {
 
   override def addProduct(product: ItemStack, all: Boolean): Boolean = {
     if (product == null || product.getItem == null) {
-      Gendustry.logError("Industrial Apiary at %d,%d,%d received an invalid bee product, one of your bee-adding mods is borked.", xCoord, yCoord, zCoord)
+      Gendustry.logError(
+        "Industrial Apiary at %d,%d,%d received an invalid bee product, one of your bee-adding mods is borked.",
+        xCoord,
+        yCoord,
+        zCoord
+      )
       if (getQueen != null) {
         val genome = beeRoot.getMember(getQueen).getGenome
-        Gendustry.logInfo("Bee in the apiary: %s/%s", genome.getPrimary.getName, genome.getSecondary.getName)
+        Gendustry.logInfo(
+          "Bee in the apiary: %s/%s",
+          genome.getPrimary.getName,
+          genome.getSecondary.getName
+        )
       }
       return true
     }

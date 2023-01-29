@@ -30,9 +30,11 @@ object ItemApiaryUpgrade extends Item with IApiaryUpgrade with NamedItem {
   setMaxDamage(-1)
   setUnlocalizedName(Gendustry.modId + ".apiary.upgrade")
 
-  def formatModifier(f: Float, base: Float) = (if (f > base) "+" else "") + "%.0f".format((f - base) * 100) + "%"
+  def formatModifier(f: Float, base: Float) =
+    (if (f > base) "+" else "") + "%.0f".format((f - base) * 100) + "%"
 
-  override def getDisplayName(stack: ItemStack) = Misc.toLocal(getUnlocalizedName(stack))
+  override def getDisplayName(stack: ItemStack) =
+    Misc.toLocal(getUnlocalizedName(stack))
 
   override def getDisplayDetails(stack: ItemStack): util.ArrayList[String] = {
     val list = new util.ArrayList[String]()
@@ -42,12 +44,21 @@ object ItemApiaryUpgrade extends Item with IApiaryUpgrade with NamedItem {
 
     upgrade.mod(mods, 1)
 
-    list.add(Misc.toLocal(Gendustry.modId + ".label.maxinstall") + " " + upgrade.maxNum.toString)
+    list.add(
+      Misc.toLocal(
+        Gendustry.modId + ".label.maxinstall"
+      ) + " " + upgrade.maxNum.toString
+    )
 
     if (mods.isAutomated)
       list.add(Misc.toLocal(Gendustry.modId + ".label.mod.automated"))
     if (mods.biomeOverride != null)
-      list.add(Misc.toLocalF(Gendustry.modId + ".label.mod.biome", mods.biomeOverride.biomeName))
+      list.add(
+        Misc.toLocalF(
+          Gendustry.modId + ".label.mod.biome",
+          mods.biomeOverride.biomeName
+        )
+      )
     if (mods.isSealed)
       list.add(Misc.toLocal(Gendustry.modId + ".label.mod.sealed"))
     if (mods.isSelfLighted)
@@ -58,33 +69,79 @@ object ItemApiaryUpgrade extends Item with IApiaryUpgrade with NamedItem {
       list.add(Misc.toLocal(Gendustry.modId + ".label.mod.sieve"))
 
     if (mods.lifespan != 1)
-      list.add(Misc.toLocal(Gendustry.modId + ".label.mod.lifespan") + " " + formatModifier(mods.lifespan, 1))
+      list.add(
+        Misc.toLocal(
+          Gendustry.modId + ".label.mod.lifespan"
+        ) + " " + formatModifier(mods.lifespan, 1)
+      )
     if (mods.flowering != 1)
-      list.add(Misc.toLocal(Gendustry.modId + ".label.mod.flowering") + " " + formatModifier(mods.flowering, 1))
+      list.add(
+        Misc.toLocal(
+          Gendustry.modId + ".label.mod.flowering"
+        ) + " " + formatModifier(mods.flowering, 1)
+      )
     if (mods.geneticDecay != 1)
-      list.add(Misc.toLocal(Gendustry.modId + ".label.mod.geneticDecay") + " " + formatModifier(mods.geneticDecay, 1))
+      list.add(
+        Misc.toLocal(
+          Gendustry.modId + ".label.mod.geneticDecay"
+        ) + " " + formatModifier(mods.geneticDecay, 1)
+      )
     if (mods.mutation != 1)
-      list.add(Misc.toLocal(Gendustry.modId + ".label.mod.mutation") + " " + formatModifier(mods.mutation, 1))
+      list.add(
+        Misc.toLocal(
+          Gendustry.modId + ".label.mod.mutation"
+        ) + " " + formatModifier(mods.mutation, 1)
+      )
     if (mods.production != 1)
-      list.add(Misc.toLocal(Gendustry.modId + ".label.mod.production") + " " + formatModifier(mods.production, 1))
+      list.add(
+        Misc.toLocal(
+          Gendustry.modId + ".label.mod.production"
+        ) + " " + formatModifier(mods.production, 1)
+      )
     if (mods.territory != 1)
-      list.add(Misc.toLocal(Gendustry.modId + ".label.mod.territory") + " " + formatModifier(mods.territory, 1))
+      list.add(
+        Misc.toLocal(
+          Gendustry.modId + ".label.mod.territory"
+        ) + " " + formatModifier(mods.territory, 1)
+      )
 
     if (mods.humidity != 0)
-      list.add(Misc.toLocal(Gendustry.modId + ".label.mod.humidity") + " " + formatModifier(mods.humidity, 0))
+      list.add(
+        Misc.toLocal(
+          Gendustry.modId + ".label.mod.humidity"
+        ) + " " + formatModifier(mods.humidity, 0)
+      )
     if (mods.temperature != 0)
-      list.add(Misc.toLocal(Gendustry.modId + ".label.mod.temperature") + " " + formatModifier(mods.temperature, 0))
+      list.add(
+        Misc.toLocal(
+          Gendustry.modId + ".label.mod.temperature"
+        ) + " " + formatModifier(mods.temperature, 0)
+      )
 
     if (mods.energy != 1)
-      list.add(Misc.toLocal(Gendustry.modId + ".label.mod.energy") + " " + formatModifier(mods.energy, 1))
+      list.add(
+        Misc.toLocal(
+          Gendustry.modId + ".label.mod.energy"
+        ) + " " + formatModifier(mods.energy, 1)
+      )
 
     return list
   }
 
-  def getStackingId(stack: ItemStack) = Item.getIdFromItem(this) * Int.MaxValue + stack.getItemDamage
-  override def addInformation(stack: ItemStack, player: EntityPlayer, list: util.List[_], par4: Boolean) {
-    //list.asInstanceOf[util.List[String]].addAll(getDisplayDetails(stack))
-    list.asInstanceOf[util.List[String]].add(EnumChatFormatting.RED + "DEPRECATED: Put in crafting table to get back !")
+  def getStackingId(stack: ItemStack) =
+    Item.getIdFromItem(this) * Int.MaxValue + stack.getItemDamage
+  override def addInformation(
+      stack: ItemStack,
+      player: EntityPlayer,
+      list: util.List[_],
+      par4: Boolean
+  ) {
+    // list.asInstanceOf[util.List[String]].addAll(getDisplayDetails(stack))
+    list
+      .asInstanceOf[util.List[String]]
+      .add(
+        EnumChatFormatting.RED + "DEPRECATED: Put in crafting table to get back !"
+      )
   }
 
   def getMaxNumber(stack: ItemStack): Int = {
@@ -108,11 +165,18 @@ object ItemApiaryUpgrade extends Item with IApiaryUpgrade with NamedItem {
 
   override def getUnlocalizedName(stack: ItemStack): String = {
     if (Upgrades.map.contains(stack.getItemDamage))
-      return "%s.upgrades.%s".format(Gendustry.modId, Upgrades.map(stack.getItemDamage).name)
+      return "%s.upgrades.%s".format(
+        Gendustry.modId,
+        Upgrades.map(stack.getItemDamage).name
+      )
     return "invalid"
   }
 
-  override def getSubItems(par1: Item, par2CreativeTabs: CreativeTabs, list: util.List[_]) {
+  override def getSubItems(
+      par1: Item,
+      par2CreativeTabs: CreativeTabs,
+      list: util.List[_]
+  ) {
     val l = list.asInstanceOf[util.List[ItemStack]]
     for ((id, name) <- Upgrades.map)
       l.add(new ItemStack(this, 1, id))
@@ -120,8 +184,12 @@ object ItemApiaryUpgrade extends Item with IApiaryUpgrade with NamedItem {
 
   @SideOnly(Side.CLIENT)
   override def registerIcons(reg: IIconRegister) {
-    icons = Upgrades.map.map({
-      case (id, upgrade) => id -> reg.registerIcon(Misc.iconName(Gendustry.modId, "upgrades", upgrade.name))
-    }).toMap
+    icons = Upgrades.map
+      .map({ case (id, upgrade) =>
+        id -> reg.registerIcon(
+          Misc.iconName(Gendustry.modId, "upgrades", upgrade.name)
+        )
+      })
+      .toMap
   }
 }

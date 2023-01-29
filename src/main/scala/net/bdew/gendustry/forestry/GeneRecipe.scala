@@ -16,7 +16,8 @@ import net.minecraft.item.crafting.IRecipe
 import net.minecraft.world.World
 
 class GeneRecipe extends IRecipe {
-  def matches(inv: InventoryCrafting, world: World): Boolean = getCraftingResult(inv) != null
+  def matches(inv: InventoryCrafting, world: World): Boolean =
+    getCraftingResult(inv) != null
   def getCraftingResult(inv: InventoryCrafting): ItemStack = {
     var template: ItemStack = null
     var samples = Seq.empty[GeneSampleInfo]

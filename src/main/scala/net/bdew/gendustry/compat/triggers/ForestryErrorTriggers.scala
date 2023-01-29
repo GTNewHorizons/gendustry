@@ -17,7 +17,12 @@ import net.bdew.lib.Misc
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraftforge.common.util.ForgeDirection
 
-case class ForestryErrorTrigger(state: IErrorState) extends BaseTrigger("forestry.error." + state.getID, "y%03d".format(state.getID), classOf[IErrorLogicSource]) {
+case class ForestryErrorTrigger(state: IErrorState)
+    extends BaseTrigger(
+      "forestry.error." + state.getID,
+      "y%03d".format(state.getID),
+      classOf[IErrorLogicSource]
+    ) {
   override def getIcon = state.getIcon
   override def getDescription = Misc.toLocal("for." + state.getDescription)
   override def registerIcons(ir: IIconRegister) {}
@@ -25,7 +30,8 @@ case class ForestryErrorTrigger(state: IErrorState) extends BaseTrigger("forestr
     tile.getErrorLogic.contains(state)
 }
 
-object ForestryNoErrorTrigger extends BaseTrigger("forestry.noerror", "_", classOf[IErrorLogicSource]) {
+object ForestryNoErrorTrigger
+    extends BaseTrigger("forestry.noerror", "_", classOf[IErrorLogicSource]) {
   override def getDescription = Misc.toLocal("gendustry.errorstate.ok")
 
   @SideOnly(Side.CLIENT)
@@ -43,11 +49,17 @@ object ForestryErrorTriggers {
 
   val errorStateRegistry = ForestryAPI.errorStateRegistry
 
-  val triggers = errorStateRegistry.getErrorStates.map(ForestryErrorTrigger) ++ List(ForestryNoErrorTrigger)
+  val triggers =
+    errorStateRegistry.getErrorStates.map(ForestryErrorTrigger) ++ List(
+      ForestryNoErrorTrigger
+    )
 
   def register() {
     triggers.foreach(StatementManager.registerStatement)
     StatementManager.registerStatement(ForestryNoErrorTrigger)
-    Gendustry.logInfo("Created %d BC triggers for Forestry error codes", triggers.size)
+    Gendustry.logInfo(
+      "Created %d BC triggers for Forestry error codes",
+      triggers.size
+    )
   }
 }

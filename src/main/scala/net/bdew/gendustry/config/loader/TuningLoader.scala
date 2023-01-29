@@ -26,8 +26,12 @@ object TuningLoader extends IConfigLoader {
       Gendustry.configDir.mkdir()
       val nl = System.getProperty("line.separator")
       val f = new FileWriter(new File(Gendustry.configDir, "readme.txt"))
-      f.write("Any .cfg files in this directory will be loaded after the internal configuration, in alphabetic order" + nl)
-      f.write("Files in 'overrides' directory with matching names cab be used to override internal configuration" + nl)
+      f.write(
+        "Any .cfg files in this directory will be loaded after the internal configuration, in alphabetic order" + nl
+      )
+      f.write(
+        "Files in 'overrides' directory with matching names cab be used to override internal configuration" + nl
+      )
       f.close()
     }
 
@@ -36,7 +40,8 @@ object TuningLoader extends IConfigLoader {
       listResource = "/assets/gendustry/config/files.lst",
       configDir = Gendustry.configDir,
       resBaseName = "/assets/gendustry/config/",
-      loader = loader)
+      loader = loader
+    )
   }
 
   override def loadConfig(reader: Reader): Boolean = {
@@ -46,13 +51,21 @@ object TuningLoader extends IConfigLoader {
       true
     } catch {
       case e: Throwable =>
-        Gendustry.logErrorException("Error loading config submitted by mod %s", e, Misc.getActiveModId)
+        Gendustry.logErrorException(
+          "Error loading config submitted by mod %s",
+          e,
+          Misc.getActiveModId
+        )
         false
     }
   }
 
   override def loadConfig(file: File): Boolean = {
-    Gendustry.logInfo("Loading config %s submitted by mod %s", file.getAbsolutePath, Misc.getActiveModId)
+    Gendustry.logInfo(
+      "Loading config %s submitted by mod %s",
+      file.getAbsolutePath,
+      Misc.getActiveModId
+    )
     try {
       Misc.withAutoClose(new FileReader(file)) { reader =>
         loader.load(reader)
@@ -60,7 +73,12 @@ object TuningLoader extends IConfigLoader {
       }
     } catch {
       case e: Throwable =>
-        Gendustry.logErrorException("Error loading config %s submitted by mod %s", e, file.getAbsolutePath, Misc.getActiveModId)
+        Gendustry.logErrorException(
+          "Error loading config %s submitted by mod %s",
+          e,
+          file.getAbsolutePath,
+          Misc.getActiveModId
+        )
         false
     }
   }
@@ -68,10 +86,18 @@ object TuningLoader extends IConfigLoader {
   override def loadConfig(resourceName: String): Boolean = {
     val res = getClass.getResource(resourceName)
     if (res == null) {
-      Gendustry.logError("Unable to load resource %s submitted by mod %s - resource not found", resourceName, Misc.getActiveModId)
+      Gendustry.logError(
+        "Unable to load resource %s submitted by mod %s - resource not found",
+        resourceName,
+        Misc.getActiveModId
+      )
       return false
     }
-    Gendustry.logInfo("Loading config %s submitted by mod %s", res.toString, Misc.getActiveModId)
+    Gendustry.logInfo(
+      "Loading config %s submitted by mod %s",
+      res.toString,
+      Misc.getActiveModId
+    )
     try {
       Misc.withAutoClose(getClass.getResourceAsStream(resourceName)) { stream =>
         loader.load(new InputStreamReader(stream))
@@ -79,7 +105,12 @@ object TuningLoader extends IConfigLoader {
       }
     } catch {
       case e: Throwable =>
-        Gendustry.logErrorException("Error loading config %s submitted by mod %s", e, getClass.getResource(resourceName).toString, Misc.getActiveModId)
+        Gendustry.logErrorException(
+          "Error loading config %s submitted by mod %s",
+          e,
+          getClass.getResource(resourceName).toString,
+          Misc.getActiveModId
+        )
         false
     }
   }

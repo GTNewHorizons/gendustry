@@ -11,7 +11,8 @@ package net.bdew.gendustry.config.loader
 
 import net.bdew.lib.recipes.{Condition, ConfigStatement, StackRef}
 
-case class CSHiveDefinition(id: String, definition: List[HiveDefStatement]) extends ConfigStatement
+case class CSHiveDefinition(id: String, definition: List[HiveDefStatement])
+    extends ConfigStatement
 
 trait HiveDefStatement
 
@@ -63,4 +64,9 @@ object BlockFilterDefReplaceable extends BlockFilterDef
 
 case class BlockFilterRef(blocks: List[StackRef]) extends BlockFilterDef
 
-case class HiveDropEntry(chance: Int, uid: String, ignobleShare: Float, additional: List[StackRef])
+case class HiveDropEntry(
+    chance: Int,
+    uid: String,
+    ignobleShare: Float,
+    additional: List[StackRef]
+)

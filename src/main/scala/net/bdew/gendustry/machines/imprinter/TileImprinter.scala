@@ -24,7 +24,12 @@ import net.minecraftforge.common.util.ForgeDirection
 
 import scala.util.Random
 
-class TileImprinter extends TileItemProcessor with TileWorker with TilePowered with TileCoverable with TileKeepData {
+class TileImprinter
+    extends TileItemProcessor
+    with TileWorker
+    with TilePowered
+    with TileCoverable
+    with TileKeepData {
   lazy val cfg = MachineImprinter
   val outputSlots = Seq(slots.outIndividual)
 
@@ -45,14 +50,20 @@ class TileImprinter extends TileItemProcessor with TileWorker with TilePowered w
   def tryStart(): Boolean = {
     if (canStart) {
 
-      val individual = AlleleManager.alleleRegistry.getIndividual(getStackInSlot(slots.inIndividual))
+      val individual = AlleleManager.alleleRegistry.getIndividual(
+        getStackInSlot(slots.inIndividual)
+      )
       val genome = individual.getGenome.getChromosomes
       val root = GeneTemplate.getSpecies(getStackInSlot(slots.inTemplate))
 
       if (root != individual.getGenome.getSpeciesRoot) return false
 
       if (individual.isInstanceOf[IBee]) {
-        if (root.asInstanceOf[IBeeRoot].getType(getStackInSlot(slots.inIndividual)) != EnumBeeType.DRONE) {
+        if (
+          root
+            .asInstanceOf[IBeeRoot]
+            .getType(getStackInSlot(slots.inIndividual)) != EnumBeeType.DRONE
+        ) {
           val random = new Random()
           if (individual.asInstanceOf[IBee].isNatural) {
             if (random.nextInt(100) < cfg.deathChanceNatural) {
@@ -69,7 +80,8 @@ class TileImprinter extends TileItemProcessor with TileWorker with TilePowered w
       }
 
       val primary = genome.map(x => if (x == null) null else x.getPrimaryAllele)
-      val secondary = genome.map(x => if (x == null) null else x.getSecondaryAllele)
+      val secondary =
+        genome.map(x => if (x == null) null else x.getSecondaryAllele)
 
       for (x <- GeneTemplate.getSamples(getStackInSlot(slots.inTemplate))) {
         primary(x.chromosome) = x.allele
@@ -79,9 +91,16 @@ class TileImprinter extends TileItemProcessor with TileWorker with TilePowered w
       val newStack = getStackInSlot(slots.inIndividual).copy()
       newStack.stackSize = 1
 
-      newStack.getTagCompound.setTag("Genome", NBT.from(root.templateAsGenome(primary, secondary).writeToNBT))
+      newStack.getTagCompound.setTag(
+        "Genome",
+        NBT.from(root.templateAsGenome(primary, secondary).writeToNBT)
+      )
 
-      if (individual.isAnalyzed || GeneTemplate.isComplete(getStackInSlot(slots.inTemplate)))
+      if (
+        individual.isAnalyzed || GeneTemplate.isComplete(
+          getStackInSlot(slots.inTemplate)
+        )
+      )
         newStack.getTagCompound.setBoolean("IsAnalyzed", true)
 
       doStart(newStack)
@@ -103,12 +122,18 @@ class TileImprinter extends TileItemProcessor with TileWorker with TilePowered w
     slot match {
       case slots.inTemplate =>
         return (stack.getItem == GeneTemplate) &&
-          (inv(slots.inIndividual) == null || GeneTemplate.getSpecies(stack) == AlleleManager.alleleRegistry.getSpeciesRoot(inv(slots.inIndividual)))
+          (inv(slots.inIndividual) == null || GeneTemplate.getSpecies(
+            stack
+          ) == AlleleManager.alleleRegistry.getSpeciesRoot(
+            inv(slots.inIndividual)
+          ))
       case slots.inLabware =>
         return stack.getItem == Items.labware
       case slots.inIndividual =>
         return (AlleleManager.alleleRegistry.getIndividual(stack) != null) &&
-          (inv(slots.inTemplate) == null || GeneTemplate.getSpecies(inv(slots.inTemplate)) == AlleleManager.alleleRegistry.getSpeciesRoot(stack))
+          (inv(slots.inTemplate) == null || GeneTemplate.getSpecies(
+            inv(slots.inTemplate)
+          ) == AlleleManager.alleleRegistry.getSpeciesRoot(stack))
       case _ =>
         return false
     }
@@ -119,7 +144,9 @@ class TileImprinter extends TileItemProcessor with TileWorker with TilePowered w
   // can extract the template if input is empty and there's no operation in progress
   override def canExtractItem(slot: Int, item: ItemStack, side: Int) =
     slot == slots.outIndividual ||
-      (slot == slots.inTemplate && inv(slots.inIndividual) == null && (output :== null))
+      (slot == slots.inTemplate && inv(
+        slots.inIndividual
+      ) == null && (output :== null))
 
   override def isValidCover(side: ForgeDirection, cover: ItemStack) = true
 }

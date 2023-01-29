@@ -16,8 +16,11 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.util.ForgeDirection
 
 object CofhConduitPushProxy extends ItemPushProxy {
-  override def pushStack(from: TileEntity, dir: ForgeDirection, stack: ItemStack) =
-    (for (conduit <- Misc.getNeighbourTile(from, dir, classOf[IItemDuct])) yield
-      conduit.insertItem(dir.getOpposite, stack)
-      ).getOrElse(stack)
+  override def pushStack(
+      from: TileEntity,
+      dir: ForgeDirection,
+      stack: ItemStack
+  ) =
+    (for (conduit <- Misc.getNeighbourTile(from, dir, classOf[IItemDuct]))
+      yield conduit.insertItem(dir.getOpposite, stack)).getOrElse(stack)
 }

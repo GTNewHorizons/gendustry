@@ -14,13 +14,18 @@ import net.bdew.lib.gui.GuiProvider
 import net.bdew.lib.machine.{Machine, ProcessorMachine}
 import net.minecraft.entity.player.EntityPlayer
 
-object MachineMutagenProducer extends Machine("MutagenProducer", BlockMutagenProducer) with GuiProvider with ProcessorMachine {
+object MachineMutagenProducer
+    extends Machine("MutagenProducer", BlockMutagenProducer)
+    with GuiProvider
+    with ProcessorMachine {
   def guiId = 1
   type TEClass = TileMutagenProducer
 
   lazy val tankSize = tuning.getInt("TankSize")
 
   @SideOnly(Side.CLIENT)
-  def getGui(te: TileMutagenProducer, player: EntityPlayer) = new GuiMutagenProducer(te, player)
-  def getContainer(te: TileMutagenProducer, player: EntityPlayer) = new ContainerMutagenProducer(te, player)
+  def getGui(te: TileMutagenProducer, player: EntityPlayer) =
+    new GuiMutagenProducer(te, player)
+  def getContainer(te: TileMutagenProducer, player: EntityPlayer) =
+    new ContainerMutagenProducer(te, player)
 }

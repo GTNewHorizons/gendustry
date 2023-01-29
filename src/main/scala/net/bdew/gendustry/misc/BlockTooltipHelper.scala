@@ -19,7 +19,13 @@ import net.minecraftforge.fluids.FluidTank
 object BlockTooltipHelper {
   def getPowerTooltip(tag: NBTTagCompound, name: String) = {
     if (tag.hasKey(name))
-      Some(DecFormat.round(tag.getCompoundTag(name).getFloat("stored") * Config.powerShowMultiplier) + " " + Config.powerShowUnits)
+      Some(
+        DecFormat.round(
+          tag
+            .getCompoundTag(name)
+            .getFloat("stored") * Config.powerShowMultiplier
+        ) + " " + Config.powerShowUnits
+      )
     else None
   }
 
@@ -32,9 +38,17 @@ object BlockTooltipHelper {
 
   def getTankTooltip(tag: NBTTagCompound, name: String) = {
     if (tag.hasKey(name)) {
-      val tank = new FluidTank(Int.MaxValue).readFromNBT(tag.getCompoundTag(name))
-      if (tank.getFluid != null && tank.getFluid.getFluid != null && tank.getFluid.amount > 0) {
-        Some("%s mB %s".format(DecFormat.round(tank.getFluidAmount), tank.getFluid.getLocalizedName))
+      val tank =
+        new FluidTank(Int.MaxValue).readFromNBT(tag.getCompoundTag(name))
+      if (
+        tank.getFluid != null && tank.getFluid.getFluid != null && tank.getFluid.amount > 0
+      ) {
+        Some(
+          "%s mB %s".format(
+            DecFormat.round(tank.getFluidAmount),
+            tank.getFluid.getLocalizedName
+          )
+        )
       } else None
     } else None
   }

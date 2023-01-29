@@ -16,8 +16,16 @@ import net.bdew.gendustry.machines.mutatron.TileMutatron
 import net.minecraft.world.World
 
 object BlockApiImpl extends IBlockAPI {
-  private def getTypedTileEntity[T](w: World, x: Int, y: Int, z: Int, cls: Class[T]) =
-    Option(w.getTileEntity(x, y, z)) filter cls.isInstance map (_.asInstanceOf[T])
+  private def getTypedTileEntity[T](
+      w: World,
+      x: Int,
+      y: Int,
+      z: Int,
+      cls: Class[T]
+  ) =
+    Option(w.getTileEntity(x, y, z)) filter cls.isInstance map (_.asInstanceOf[
+      T
+    ])
 
   override def isWorkerMachine(w: World, x: Int, y: Int, z: Int) =
     getTypedTileEntity(w, x, y, z, classOf[TileWorker]).isDefined
@@ -43,5 +51,3 @@ object BlockApiImpl extends IBlockAPI {
   override def getIndustrialApiary(w: World, x: Int, y: Int, z: Int) =
     getTypedTileEntity(w, x, y, z, classOf[TileApiary]).orNull
 }
-
-

@@ -24,13 +24,20 @@ import net.bdew.gendustry.machines.transposer.MachineTransposer
 import net.bdew.gendustry.misc.GendustryCreativeTabs
 import net.bdew.lib.config.MachineManager
 
-object Machines extends MachineManager(Tuning.getSection("Machines"), Config.guiHandler, GendustryCreativeTabs.main) {
+object Machines
+    extends MachineManager(
+      Tuning.getSection("Machines"),
+      Config.guiHandler,
+      GendustryCreativeTabs.main
+    ) {
   registerMachine(MachineMutagenProducer)
   registerMachine(MachineMutatron)
   if (ForestryHelper.haveRoot("Bees"))
     registerMachine(MachineApiary)
   else
-    Gendustry.logInfo("Apiculture module seems to be disabled in Forestry, not registering Industrial Apiary")
+    Gendustry.logInfo(
+      "Apiculture module seems to be disabled in Forestry, not registering Industrial Apiary"
+    )
   registerMachine(MachineImprinter)
   registerMachine(MachineSampler)
   registerMachine(MachineMutatronAdv)

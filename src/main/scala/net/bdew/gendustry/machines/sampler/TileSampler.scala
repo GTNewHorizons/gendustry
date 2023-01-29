@@ -23,7 +23,12 @@ import net.minecraftforge.common.util.ForgeDirection
 
 import scala.util.Random
 
-class TileSampler extends TileItemProcessor with TileWorker with TilePowered with TileCoverable with TileKeepData {
+class TileSampler
+    extends TileItemProcessor
+    with TileWorker
+    with TilePowered
+    with TileCoverable
+    with TileKeepData {
   lazy val cfg = MachineSampler
   val outputSlots = Seq(slots.outSample)
 
@@ -42,8 +47,8 @@ class TileSampler extends TileItemProcessor with TileWorker with TilePowered wit
     val member = root.getMember(stack)
     val genome = member.getGenome
     val chromosomes = genome.getChromosomes.zipWithIndex.filter(_._1 != null)
-    val alleles = chromosomes.flatMap {
-      case (x, n) => Seq(n -> x.getPrimaryAllele, n -> x.getSecondaryAllele)
+    val alleles = chromosomes.flatMap { case (x, n) =>
+      Seq(n -> x.getPrimaryAllele, n -> x.getSecondaryAllele)
     }
 
     val rand = new Random()
@@ -83,7 +88,8 @@ class TileSampler extends TileItemProcessor with TileWorker with TilePowered wit
   }
 
   allowSided = true
-  override def canExtractItem(slot: Int, item: ItemStack, side: Int) = slot == slots.outSample
+  override def canExtractItem(slot: Int, item: ItemStack, side: Int) =
+    slot == slots.outSample
 
   override def isValidCover(side: ForgeDirection, cover: ItemStack) = true
 }

@@ -17,7 +17,8 @@ import scala.collection.mutable
 class FluidSourceRegistry {
   val values = mutable.Map.empty[Item, mutable.Map[Int, Int]]
 
-  def register(stack: ItemStack, value: Int): Unit = register(stack.getItem, stack.getItemDamage, value)
+  def register(stack: ItemStack, value: Int): Unit =
+    register(stack.getItem, stack.getItemDamage, value)
 
   def register(item: Item, damage: Int, value: Int) =
     values.getOrElseUpdate(item, mutable.Map.empty) += (damage -> value)
@@ -39,4 +40,3 @@ object MutagenSources extends FluidSourceRegistry
 object LiquidDNASources extends FluidSourceRegistry
 
 object ProteinSources extends FluidSourceRegistry
-

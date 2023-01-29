@@ -19,18 +19,35 @@ import net.minecraft.item.ItemStack
 import net.minecraft.world.World
 
 object PollenKit extends SimpleItem("PollenKit") {
-  override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, xOff: Float, yOff: Float, zOff: Float): Boolean = {
+  override def onItemUse(
+      stack: ItemStack,
+      player: EntityPlayer,
+      world: World,
+      x: Int,
+      y: Int,
+      z: Int,
+      side: Int,
+      xOff: Float,
+      yOff: Float,
+      zOff: Float
+  ): Boolean = {
     if (player.isSneaking) return false
     if (!world.isRemote) {
       if (player.inventory.getCurrentItem.getItem != this) return false
       val blockRef = BlockRef(x, y, z)
       (blockRef.getTile[IPollinatable](world) map { te => te.getPollen }
-        // If block is not IPollinatable, check for vanilla leafs conversion
-        orElse (blockRef.block(world) flatMap { bl => GeneticsHelper.getErsatzPollen(bl, blockRef.meta(world)) })
-        ) map { individual =>
+      // If block is not IPollinatable, check for vanilla leafs conversion
+        orElse (blockRef.block(world) flatMap { bl =>
+          GeneticsHelper.getErsatzPollen(bl, blockRef.meta(world))
+        })) map { individual =>
         (individual.getGenome.getSpeciesRoot match {
-          case trees: ITreeRoot => Option(trees.getMemberStack(individual, EnumGermlingType.POLLEN.ordinal()))
-          case root if root.getUID == "rootFlowers" => Option(root.getMemberStack(individual, 2))
+          case trees: ITreeRoot =>
+            Option(
+              trees
+                .getMemberStack(individual, EnumGermlingType.POLLEN.ordinal())
+            )
+          case root if root.getUID == "rootFlowers" =>
+            Option(root.getMemberStack(individual, 2))
           case _ => None
         }) map { newStack =>
           // Generate pollen item and consume kit

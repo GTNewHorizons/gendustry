@@ -46,9 +46,15 @@ object GeneticsCache {
         x.allele.getUID.compareTo(y.allele.getUID)
   }
 
-  val speciesResultMutations = collection.mutable.Map.empty[IAlleleSpecies, collection.SortedSet[IMutation]].withDefault(x => collection.SortedSet.empty[IMutation])
-  val speciesUsedMutations = collection.mutable.Map.empty[IAlleleSpecies, collection.SortedSet[IMutation]].withDefault(x => collection.SortedSet.empty[IMutation])
-  val speciesChromosomes = collection.mutable.Map.empty[GeneSampleInfo, collection.SortedSet[IAlleleSpecies]].withDefault(x => collection.SortedSet.empty[IAlleleSpecies])
+  val speciesResultMutations = collection.mutable.Map
+    .empty[IAlleleSpecies, collection.SortedSet[IMutation]]
+    .withDefault(x => collection.SortedSet.empty[IMutation])
+  val speciesUsedMutations = collection.mutable.Map
+    .empty[IAlleleSpecies, collection.SortedSet[IMutation]]
+    .withDefault(x => collection.SortedSet.empty[IMutation])
+  val speciesChromosomes = collection.mutable.Map
+    .empty[GeneSampleInfo, collection.SortedSet[IAlleleSpecies]]
+    .withDefault(x => collection.SortedSet.empty[IAlleleSpecies])
   var geneSamples = collection.SortedSet.empty[GeneSampleInfo]
 
   def load() {
@@ -56,18 +62,28 @@ object GeneticsCache {
 
     Gendustry.logInfo("Preparing genetics cache ...")
 
-    for ((_, root) <- AlleleManager.alleleRegistry.getSpeciesRoot; mutation <- root.getMutations(false)) {
-      speciesResultMutations(mutation.getTemplate.apply(0).asInstanceOf[IAlleleSpecies]) += mutation
+    for (
+      (_, root) <- AlleleManager.alleleRegistry.getSpeciesRoot;
+      mutation <- root.getMutations(false)
+    ) {
+      speciesResultMutations(
+        mutation.getTemplate.apply(0).asInstanceOf[IAlleleSpecies]
+      ) += mutation
       speciesUsedMutations(mutation.getAllele0) += mutation
       speciesUsedMutations(mutation.getAllele1) += mutation
     }
 
-    Gendustry.logDebug("Mutations with multiple results from a single combination:")
-    Gendustry.logDebug("(This is not an error, no need to report it to anybody)")
+    Gendustry.logDebug(
+      "Mutations with multiple results from a single combination:"
+    )
+    Gendustry.logDebug(
+      "(This is not an error, no need to report it to anybody)"
+    )
 
     speciesUsedMutations foreach { case (sp1, mutations) =>
       // First make a list of partner -> result
-      val pairs = mutations.toList.map(mutation => mutation.getPartner(sp1) -> mutation)
+      val pairs =
+        mutations.toList.map(mutation => mutation.getPartner(sp1) -> mutation)
       // Select distinct partners
       pairs.map(_._1).distinct map { dsp =>
         // Find all results
@@ -80,23 +96,48 @@ object GeneticsCache {
         val names = results map { mutation =>
           mutation.getTemplate()(0).getName +
             // Add * if there are special requirements
-            (if (GeneticsHelper.safeMutationConditions(mutation).nonEmpty) "*" else "")
+            (if (GeneticsHelper.safeMutationConditions(mutation).nonEmpty) "*"
+             else "")
         } mkString ", "
         // And print it out
-        Gendustry.logDebug("%s + %s => [%s]", sp1.getName, partner.getName, names)
+        Gendustry.logDebug(
+          "%s + %s => [%s]",
+          sp1.getName,
+          partner.getName,
+          names
+        )
       }
     }
 
     Gendustry.logInfo("Cached %d mutation outputs", speciesResultMutations.size)
     Gendustry.logInfo("Cached %d mutation inputs", speciesUsedMutations.size)
 
-    for (species <- Misc.filterType(AlleleManager.alleleRegistry.getRegisteredAlleles.values(), classOf[IAlleleSpecies])) {
+    for (
+      species <- Misc.filterType(
+        AlleleManager.alleleRegistry.getRegisteredAlleles.values(),
+        classOf[IAlleleSpecies]
+      )
+    ) {
       if (species.getRoot.getTemplate(species.getUID) == null) {
-        Gendustry.logWarn("getTemplate returned null for species %s (root: %s)", species.getUID, species.getRoot.getUID)
+        Gendustry.logWarn(
+          "getTemplate returned null for species %s (root: %s)",
+          species.getUID,
+          species.getRoot.getUID
+        )
       } else {
-        for ((allele, chromosome) <- species.getRoot.getTemplate(species.getUID).zipWithIndex) {
-          if (allele != null && !AlleleManager.alleleRegistry.isBlacklisted(allele.getUID))
-            speciesChromosomes(GeneSampleInfo(species.getRoot, chromosome, allele)) += species
+        for (
+          (allele, chromosome) <- species.getRoot
+            .getTemplate(species.getUID)
+            .zipWithIndex
+        ) {
+          if (
+            allele != null && !AlleleManager.alleleRegistry.isBlacklisted(
+              allele.getUID
+            )
+          )
+            speciesChromosomes(
+              GeneSampleInfo(species.getRoot, chromosome, allele)
+            ) += species
         }
       }
     }

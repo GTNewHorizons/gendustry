@@ -17,12 +17,19 @@ import net.bdew.lib.power.ItemPoweredBase
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.item.ItemStack
 
-@Optional.Interface(modid = PowerProxy.IC2_MOD_ID, iface = "ic2.api.item.ISpecialElectricItem")
+@Optional.Interface(
+  modid = PowerProxy.IC2_MOD_ID,
+  iface = "ic2.api.item.ISpecialElectricItem"
+)
 trait ItemPoweredEU extends ItemPoweredBase with ISpecialElectricItem {
   private lazy val ratio = Tuning.getSection("Power").getFloat("EU_MJ_Ratio")
   private lazy val manager = new ItemPoweredEUManager(this)
 
-  override def useCharge(stack: ItemStack, uses: Int, player: EntityLivingBase) = {
+  override def useCharge(
+      stack: ItemStack,
+      uses: Int,
+      player: EntityLivingBase
+  ) = {
     if (PowerProxy.haveIC2)
       ElectricItem.rawManager.chargeFromArmor(stack, player)
     super.useCharge(stack, uses, player)
@@ -38,4 +45,3 @@ trait ItemPoweredEU extends ItemPoweredBase with ISpecialElectricItem {
   @Optional.Method(modid = PowerProxy.IC2_MOD_ID)
   override def getManager(itemStack: ItemStack): IElectricItemManager = manager
 }
-

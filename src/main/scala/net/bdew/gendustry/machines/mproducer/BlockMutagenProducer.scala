@@ -17,11 +17,21 @@ import net.bdew.lib.covers.BlockCoverable
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 
-object BlockMutagenProducer extends BaseMachineBlock("mutagen_producer") with HasTE[TileMutagenProducer] with BlockCoverable[TileMutagenProducer] with BlockGuiWrenchable with BlockTooltip with BlockKeepData {
+object BlockMutagenProducer
+    extends BaseMachineBlock("mutagen_producer")
+    with HasTE[TileMutagenProducer]
+    with BlockCoverable[TileMutagenProducer]
+    with BlockGuiWrenchable
+    with BlockTooltip
+    with BlockKeepData {
   val TEClass = classOf[TileMutagenProducer]
   lazy val guiId = MachineMutagenProducer.guiId
 
-  override def getTooltip(stack: ItemStack, player: EntityPlayer, advanced: Boolean): List[String] = {
+  override def getTooltip(
+      stack: ItemStack,
+      player: EntityPlayer,
+      advanced: Boolean
+  ): List[String] = {
     if (stack.hasTagCompound && stack.getTagCompound.hasKey("data")) {
       val data = stack.getTagCompound.getCompoundTag("data")
       List.empty ++

@@ -24,7 +24,9 @@ import net.minecraftforge.event.entity.player.FillBucketEvent
 import net.minecraftforge.fluids.Fluid
 
 class ItemFluidBucket(fluid: Fluid) extends ItemBucket(fluid.getBlock) {
-  setUnlocalizedName(Gendustry.modId + "." + fluid.getName.toLowerCase(Locale.US) + ".bucket")
+  setUnlocalizedName(
+    Gendustry.modId + "." + fluid.getName.toLowerCase(Locale.US) + ".bucket"
+  )
 
   setContainerItem(GameRegistry.findItem("minecraft", "bucket"))
 
@@ -32,15 +34,32 @@ class ItemFluidBucket(fluid: Fluid) extends ItemBucket(fluid.getBlock) {
 
   @SubscribeEvent
   def onBucketFill(event: FillBucketEvent) {
-    if (event.world.getBlockMetadata(event.target.blockX, event.target.blockY, event.target.blockZ) != 0) return
-    if (event.world.getBlock(event.target.blockX, event.target.blockY, event.target.blockZ) != fluid.getBlock) return
-    event.world.setBlockToAir(event.target.blockX, event.target.blockY, event.target.blockZ)
+    if (
+      event.world.getBlockMetadata(
+        event.target.blockX,
+        event.target.blockY,
+        event.target.blockZ
+      ) != 0
+    ) return
+    if (
+      event.world.getBlock(
+        event.target.blockX,
+        event.target.blockY,
+        event.target.blockZ
+      ) != fluid.getBlock
+    ) return
+    event.world.setBlockToAir(
+      event.target.blockX,
+      event.target.blockY,
+      event.target.blockZ
+    )
     event.result = new ItemStack(this)
     event.setResult(Result.ALLOW)
   }
 
   @SideOnly(Side.CLIENT)
   override def registerIcons(reg: IIconRegister) {
-    itemIcon = reg.registerIcon(Misc.iconName(Gendustry.modId, "bucket", fluid.getName))
+    itemIcon =
+      reg.registerIcon(Misc.iconName(Gendustry.modId, "bucket", fluid.getName))
   }
 }

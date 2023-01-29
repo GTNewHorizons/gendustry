@@ -14,7 +14,10 @@ import net.bdew.lib.gui.GuiProvider
 import net.bdew.lib.machine.{Machine, ProcessorMachine}
 import net.minecraft.entity.player.EntityPlayer
 
-object MachineImprinter extends Machine("Imprinter", BlockImprinter) with GuiProvider with ProcessorMachine {
+object MachineImprinter
+    extends Machine("Imprinter", BlockImprinter)
+    with GuiProvider
+    with ProcessorMachine {
   def guiId = 4
   type TEClass = TileImprinter
 
@@ -23,6 +26,8 @@ object MachineImprinter extends Machine("Imprinter", BlockImprinter) with GuiPro
   lazy val deathChanceArtificial = tuning.getInt("DeathChanceArtificial")
 
   @SideOnly(Side.CLIENT)
-  def getGui(te: TileImprinter, player: EntityPlayer) = new GuiImprinter(te, player)
-  def getContainer(te: TileImprinter, player: EntityPlayer) = new ContainerImprinter(te, player)
+  def getGui(te: TileImprinter, player: EntityPlayer) =
+    new GuiImprinter(te, player)
+  def getContainer(te: TileImprinter, player: EntityPlayer) =
+    new ContainerImprinter(te, player)
 }

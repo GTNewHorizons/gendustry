@@ -14,7 +14,9 @@ import net.bdew.lib.gui.{BaseContainer, SlotValidating}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 
-class ContainerMutatronAdv(val te: TileMutatronAdv, player: EntityPlayer) extends BaseContainer(te) with ContainerDataSlots {
+class ContainerMutatronAdv(val te: TileMutatronAdv, player: EntityPlayer)
+    extends BaseContainer(te)
+    with ContainerDataSlots {
   lazy val dataSource = te
 
   addSlotToContainer(new SlotValidating(te, 0, 60, 30))
@@ -29,7 +31,12 @@ class ContainerMutatronAdv(val te: TileMutatronAdv, player: EntityPlayer) extend
 
   te.lastPlayer := player.getGameProfile
 
-  override def slotClick(slotNum: Int, button: Int, modifiers: Int, player: EntityPlayer): ItemStack = {
+  override def slotClick(
+      slotNum: Int,
+      button: Int,
+      modifiers: Int,
+      player: EntityPlayer
+  ): ItemStack = {
     te.lastPlayer := player.getGameProfile
     // This is a hacky workaround!
     // When a player changes the contents of a slot, playerInventoryBeingManipulated is set to true,

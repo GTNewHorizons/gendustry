@@ -17,12 +17,18 @@ import cpw.mods.fml.client.FMLClientHandler
 import cpw.mods.fml.common.registry.LanguageRegistry
 import net.bdew.gendustry.Gendustry
 import net.bdew.lib.{Client, Misc}
-import net.minecraft.client.resources.{IReloadableResourceManager, IResourceManager, IResourceManagerReloadListener}
+import net.minecraft.client.resources.{
+  IReloadableResourceManager,
+  IResourceManager,
+  IResourceManagerReloadListener
+}
 
 object ResourceListener extends IResourceManagerReloadListener {
   def init() {
     Gendustry.logInfo("Registered reload listener")
-    Client.minecraft.getResourceManager.asInstanceOf[IReloadableResourceManager].registerReloadListener(this)
+    Client.minecraft.getResourceManager
+      .asInstanceOf[IReloadableResourceManager]
+      .registerReloadListener(this)
   }
 
   def loadLangFile(lang: String, fileName: String) {
@@ -41,9 +47,13 @@ object ResourceListener extends IResourceManagerReloadListener {
     val newLang = FMLClientHandler.instance().getCurrentLanguage
     Gendustry.logInfo("Resource manager reload, new language: %s", newLang)
     val configFiles = Gendustry.configDir.list().sorted
-    configFiles.filter(_.endsWith(".en_US.lang")).foreach(loadLangFile(newLang, _))
+    configFiles
+      .filter(_.endsWith(".en_US.lang"))
+      .foreach(loadLangFile(newLang, _))
     if (newLang != "en_US")
-      configFiles.filter(_.endsWith("." + newLang + ".lang")).foreach(loadLangFile(newLang, _))
+      configFiles
+        .filter(_.endsWith("." + newLang + ".lang"))
+        .foreach(loadLangFile(newLang, _))
     Client.minecraft.getLanguageManager.onResourceManagerReload(rm)
   }
 }

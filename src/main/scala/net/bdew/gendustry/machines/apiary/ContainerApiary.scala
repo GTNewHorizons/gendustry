@@ -19,36 +19,60 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.{IInventory, Slot}
 import net.minecraft.item.ItemStack
 
-class ContainerApiary(val te: TileApiary, player: EntityPlayer) extends BaseContainer(te) with ContainerDataSlots with ContainerRSControllable {
+class ContainerApiary(val te: TileApiary, player: EntityPlayer)
+    extends BaseContainer(te)
+    with ContainerDataSlots
+    with ContainerRSControllable {
   lazy val dataSource = te
 
   addSlotToContainer(new SlotValidating(te, 0, 39, 29))
   addSlotToContainer(new SlotValidating(te, 1, 39, 52))
 
   if (!te.getWorld.isRemote && (te.owner :== null)) {
-    Gendustry.logInfo("Owner information missing on apiary at (%d,%d,%d), assigning: %s".format(te.xCoord, te.yCoord, te.zCoord, player.getGameProfile))
+    Gendustry.logInfo(
+      "Owner information missing on apiary at (%d,%d,%d), assigning: %s".format(
+        te.xCoord,
+        te.yCoord,
+        te.zCoord,
+        player.getGameProfile
+      )
+    )
     te.owner := player.getGameProfile
   }
 
-  class SlotUpgrade(inv: IInventory, slot: Int, x: Int, y: Int) extends SlotValidating(inv, slot, x, y) {
+  class SlotUpgrade(inv: IInventory, slot: Int, x: Int, y: Int)
+      extends SlotValidating(inv, slot, x, y) {
     // Fixes glitch in nei mouse scroll support
-    override def isItemValid(stack: ItemStack): Boolean = stack == this.getStack || super.isItemValid(stack)
+    override def isItemValid(stack: ItemStack): Boolean =
+      stack == this.getStack || super.isItemValid(stack)
   }
 
   for (i <- 0 to 1; j <- 0 to 1)
-    addSlotToContainer(new SlotUpgrade(te, 2 + j + i * 2, 70 + j * 18, 43 + i * 18))
+    addSlotToContainer(
+      new SlotUpgrade(te, 2 + j + i * 2, 70 + j * 18, 43 + i * 18)
+    )
 
   for (i <- 0 to 2; j <- 0 to 2)
-    addSlotToContainer(new SlotValidating(te, 6 + j + i * 3, 116 + j * 18, 25 + i * 18))
+    addSlotToContainer(
+      new SlotValidating(te, 6 + j + i * 3, 116 + j * 18, 25 + i * 18)
+    )
 
   bindPlayerInventory(player.inventory, 8, 84, 142)
 
-  override def transferStackInSlot(player: EntityPlayer, slot: Int): ItemStack = {
+  override def transferStackInSlot(
+      player: EntityPlayer,
+      slot: Int
+  ): ItemStack = {
     val stack = getSlot(slot).getStack
     if (getSlot(slot).inventory == player.inventory && te.isUpgrade(stack)) {
       val canAdd = Misc.min(te.getMaxAdditionalUpgrades(stack), stack.stackSize)
       if (canAdd > 0) {
-        val remains = ItemUtils.addStackToSlots(stack.splitStack(canAdd), te, te.slots.upgrades, true)
+        val remains = ItemUtils.addStackToSlots(
+          stack.splitStack(canAdd),
+          te,
+          te.slots.upgrades,
+          true
+        )
         if (remains != null)
           stack.stackSize += remains.stackSize
       }
@@ -58,12 +82,22 @@ class ContainerApiary(val te: TileApiary, player: EntityPlayer) extends BaseCont
     return super.transferStackInSlot(player, slot)
   }
 
-  override def slotClick(slot: Int, button: Int, modifiers: Int, player: EntityPlayer): ItemStack = {
+  override def slotClick(
+      slot: Int,
+      button: Int,
+      modifiers: Int,
+      player: EntityPlayer
+  ): ItemStack = {
     var oldStack = player.inventory.getItemStack
     if (te.slots.upgrades.contains(slot) && te.isUpgrade(oldStack)) {
       val idx = inventorySlots.get(slot).asInstanceOf[Slot].getSlotIndex
       if (te.slots.upgrades.contains(idx) && modifiers == 0 && button <= 1) {
-        if (te.getStackInSlot(idx) == null || ItemUtils.isSameItem(oldStack, te.getStackInSlot(idx))) {
+        if (
+          te.getStackInSlot(idx) == null || ItemUtils.isSameItem(
+            oldStack,
+            te.getStackInSlot(idx)
+          )
+        ) {
           var canAdd = te.getMaxAdditionalUpgrades(oldStack)
           if (canAdd > 0) {
             if (button == 1) canAdd = 1

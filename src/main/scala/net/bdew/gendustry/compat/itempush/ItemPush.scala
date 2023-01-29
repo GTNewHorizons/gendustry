@@ -19,7 +19,8 @@ object ItemPush {
 
   def init() {
     register(VanillaPush)
-    if (Misc.haveModVersion("BuildCraftAPI|transport@[3.0,)")) register(BCPipePushProxy)
+    if (Misc.haveModVersion("BuildCraftAPI|transport@[3.0,)"))
+      register(BCPipePushProxy)
     if (Misc.haveModVersion("CoFHAPI|transport")) register(CofhConduitPushProxy)
     if (Misc.haveModVersion("Mekanism")) register(MekanismPushProxy)
   }

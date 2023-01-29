@@ -33,8 +33,10 @@ object CustomHoneyDrop extends SimpleItem("HoneyDrop") {
 
   override def requiresMultipleRenderPasses() = true
 
-  val data = (Tuning.getOrAddSection("HoneyDrops").filterType(classOf[ConfigSection]) map {
-    case (ident, cfg) => cfg.getInt("ID") -> HoneyDropInfo(
+  val data = (Tuning
+    .getOrAddSection("HoneyDrops")
+    .filterType(classOf[ConfigSection]) map { case (ident, cfg) =>
+    cfg.getInt("ID") -> HoneyDropInfo(
       ident,
       cfg.getColor("PrimaryColor").asRGB,
       cfg.getColor("SecondaryColor").asRGB
@@ -42,14 +44,18 @@ object CustomHoneyDrop extends SimpleItem("HoneyDrop") {
   }).toMap
 
   for ((id, comb) <- data)
-    GameRegistry.registerCustomItemStack("HoneyDrop." + comb.name, new ItemStack(this, 1, id))
+    GameRegistry.registerCustomItemStack(
+      "HoneyDrop." + comb.name,
+      new ItemStack(this, 1, id)
+    )
 
   def getData(stack: ItemStack) = data.get(stack.getItemDamage)
 
-  override def getIconFromDamageForRenderPass(damage: Int, pass: Int) = pass match {
-    case 0 => icons(1)
-    case _ => icons(0)
-  }
+  override def getIconFromDamageForRenderPass(damage: Int, pass: Int) =
+    pass match {
+      case 0 => icons(1)
+      case _ => icons(0)
+    }
 
   override def getColorFromItemStack(stack: ItemStack, pass: Int): Int = {
     val data = getData(stack).getOrElse(return 0)
@@ -59,14 +65,20 @@ object CustomHoneyDrop extends SimpleItem("HoneyDrop") {
     }
   }
 
-  override def getSubItems(item: Item, par2CreativeTabs: CreativeTabs, list: util.List[_]) {
+  override def getSubItems(
+      item: Item,
+      par2CreativeTabs: CreativeTabs,
+      list: util.List[_]
+  ) {
     val l = list.asInstanceOf[util.List[ItemStack]]
     for ((id, name) <- data)
       l.add(new ItemStack(this, 1, id))
   }
 
   override def getUnlocalizedName(stack: ItemStack) =
-    getData(stack).map(x => "%s.honeydrop.%s".format(Gendustry.modId, x.name)).getOrElse("invalid")
+    getData(stack)
+      .map(x => "%s.honeydrop.%s".format(Gendustry.modId, x.name))
+      .getOrElse("invalid")
 
   @SideOnly(Side.CLIENT)
   override def registerIcons(reg: IIconRegister) {
@@ -76,4 +88,3 @@ object CustomHoneyDrop extends SimpleItem("HoneyDrop") {
     )
   }
 }
-

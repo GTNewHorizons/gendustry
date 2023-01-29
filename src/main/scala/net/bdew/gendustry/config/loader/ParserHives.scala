@@ -13,18 +13,25 @@ import net.bdew.lib.recipes.RecipeParser
 import net.bdew.lib.recipes.gencfg.GenericConfigParser
 
 trait ParserHives extends RecipeParser with GenericConfigParser {
-  private def blocks = spec ~ ("," ~> spec).* ^^ { case sp1 ~ spl => List(sp1) ++ spl }
-  private def strings = str ~ ("," ~> str).* ^^ { case s1 ~ sl => List(s1) ++ sl }
+  private def blocks = spec ~ ("," ~> spec).* ^^ { case sp1 ~ spl =>
+    List(sp1) ++ spl
+  }
+  private def strings = str ~ ("," ~> str).* ^^ { case s1 ~ sl =>
+    List(s1) ++ sl
+  }
   private def blockFilter = (
     blocks ^^ BlockFilterRef
       | "Air" ^^^ BlockFilterDefAir
       | "Leaves" ^^^ BlockFilterDefLeaves
       | "Replaceable" ^^^ BlockFilterDefReplaceable
-    )
+  )
   private def intRange = int ~ ("-" ~> int) ^^ { case a ~ b => (a, b) }
 
   private def hiveDropEntry =
-    (int <~ "%") ~ str ~ ("(" ~> int <~ "%" <~ "ignoble" <~ ")").? ~ ("+" ~> spec).* ^^ { case chance ~ uid ~ ignoble ~ drops => HiveDropEntry(chance, uid, ignoble.getOrElse(0) / 100F, drops) }
+    (int <~ "%") ~ str ~ ("(" ~> int <~ "%" <~ "ignoble" <~ ")").? ~ ("+" ~> spec).* ^^ {
+      case chance ~ uid ~ ignoble ~ drops =>
+        HiveDropEntry(chance, uid, ignoble.getOrElse(0) / 100f, drops)
+    }
 
   private def hiveDefStatement = (
     "YLevel" ~> int ~ "-" ~ int ^^ { case min ~ a ~ max => HDYRange(min, max) }
@@ -45,9 +52,12 @@ trait ParserHives extends RecipeParser with GenericConfigParser {
       | "LightLevel" ~> int ^^ HDLight
       | "Drops" ~> "{" ~> hiveDropEntry.+ <~ "}" ^^ HDDrops
       | "SpawnDebug" ^^^ HDSpawnDebug(true)
-    )
+  )
 
-  private def hiveDef = "HiveGen" ~> str ~ ("{" ~> hiveDefStatement.* <~ "}") ^^ { case id ~ statements => CSHiveDefinition(id, statements) }
+  private def hiveDef =
+    "HiveGen" ~> str ~ ("{" ~> hiveDefStatement.* <~ "}") ^^ {
+      case id ~ statements => CSHiveDefinition(id, statements)
+    }
 
   override def configStatement = super.configStatement | hiveDef
 }

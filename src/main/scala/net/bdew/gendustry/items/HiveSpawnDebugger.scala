@@ -12,7 +12,11 @@ package net.bdew.gendustry.items
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import forestry.api.core.{EnumHumidity, EnumTemperature}
 import net.bdew.gendustry.custom.CustomHives
-import net.bdew.gendustry.custom.hives.{BlockFilterAir, ConditionReplace, HiveDescription}
+import net.bdew.gendustry.custom.hives.{
+  BlockFilterAir,
+  ConditionReplace,
+  HiveDescription
+}
 import net.bdew.lib.Misc
 import net.bdew.lib.block.BlockRef
 import net.bdew.lib.items.SimpleItem
@@ -30,12 +34,22 @@ object HiveSpawnDebugger extends SimpleItem("HiveSpawnDebugger") {
 
   case class CheckResultFailed(msg: String) extends CheckResult(false)
 
-  def checkSpawnLocation(hive: HiveDescription, world: World, x: Int, y: Int, z: Int): CheckResult = {
+  def checkSpawnLocation(
+      hive: HiveDescription,
+      world: World,
+      x: Int,
+      y: Int,
+      z: Int
+  ): CheckResult = {
     val biome = world.getBiomeGenForCoords(x, z)
     if (!hive.isGoodBiome(biome)) CheckResultFailed("Wrong Biome")
-    else if (!hive.isGoodHumidity(EnumHumidity.getFromValue(biome.rainfall))) CheckResultFailed("Wrong Humidity")
-    else if (!hive.isGoodTemperature(EnumTemperature.getFromValue(biome.temperature))) CheckResultFailed("Wrong Temperature")
-    else if (y > hive.yMax || y < hive.yMin) CheckResultFailed("Incorrect Y level")
+    else if (!hive.isGoodHumidity(EnumHumidity.getFromValue(biome.rainfall)))
+      CheckResultFailed("Wrong Humidity")
+    else if (
+      !hive.isGoodTemperature(EnumTemperature.getFromValue(biome.temperature))
+    ) CheckResultFailed("Wrong Temperature")
+    else if (y > hive.yMax || y < hive.yMin)
+      CheckResultFailed("Incorrect Y level")
     else {
       val failed = hive.conditions.find(!_.isValidLocation(world, x, y, z))
       if (failed.isDefined)
@@ -46,18 +60,32 @@ object HiveSpawnDebugger extends SimpleItem("HiveSpawnDebugger") {
 
   }
 
-  override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, xOff: Float, yOff: Float, zOff: Float): Boolean = {
+  override def onItemUse(
+      stack: ItemStack,
+      player: EntityPlayer,
+      world: World,
+      x: Int,
+      y: Int,
+      z: Int,
+      side: Int,
+      xOff: Float,
+      yOff: Float,
+      zOff: Float
+  ): Boolean = {
     if (!world.isRemote) {
       import net.bdew.lib.helpers.ChatHelper._
-      player.addChatMessage(" ==== Checking Spawn At (%d,%d,%d) ===".format(x, y, z))
+      player.addChatMessage(
+        " ==== Checking Spawn At (%d,%d,%d) ===".format(x, y, z)
+      )
       for ((id, hive) <- CustomHives.hives) {
-        val pos = if (hive.conditions.contains(ConditionReplace(BlockFilterAir))) {
-          // Hive spawns in air, check block next to one clicked
-          BlockRef(x, y, z).neighbour(Misc.forgeDirection(side))
-        } else {
-          // Hive spawns replaces block, check clicked block
-          BlockRef(x, y, z)
-        }
+        val pos =
+          if (hive.conditions.contains(ConditionReplace(BlockFilterAir))) {
+            // Hive spawns in air, check block next to one clicked
+            BlockRef(x, y, z).neighbour(Misc.forgeDirection(side))
+          } else {
+            // Hive spawns replaces block, check clicked block
+            BlockRef(x, y, z)
+          }
         val msg =
           checkSpawnLocation(hive, world, pos.x, pos.y, pos.z) match {
             case CheckResultFailed(error) =>
@@ -66,14 +94,17 @@ object HiveSpawnDebugger extends SimpleItem("HiveSpawnDebugger") {
               ("OK at " + pos).setColor(Color.GREEN)
           }
 
-        player.addChatMessage(L(" * %s - %s", C(id).setColor(Color.YELLOW), msg))
+        player.addChatMessage(
+          L(" * %s - %s", C(id).setColor(Color.YELLOW), msg)
+        )
       }
     }
     true
   }
 
-  @SideOnly(Side.CLIENT) override
-  def registerIcons(reg: IIconRegister): Unit = {}
+  @SideOnly(Side.CLIENT) override def registerIcons(
+      reg: IIconRegister
+  ): Unit = {}
 
   @SideOnly(Side.CLIENT)
   override def getIconFromDamage(par1: Int) = Items.stick.getIconFromDamage(0)

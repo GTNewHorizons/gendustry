@@ -21,7 +21,10 @@ import net.bdew.lib.machine.{Machine, ProcessorMachine}
 import net.bdew.lib.recipes.gencfg.EntryStr
 import net.minecraft.entity.player.EntityPlayer
 
-object MachineMutatron extends Machine("Mutatron", BlockMutatron) with GuiProvider with ProcessorMachine {
+object MachineMutatron
+    extends Machine("Mutatron", BlockMutatron)
+    with GuiProvider
+    with ProcessorMachine {
   def guiId = 2
   type TEClass = TileMutatron
 
@@ -35,18 +38,29 @@ object MachineMutatron extends Machine("Mutatron", BlockMutatron) with GuiProvid
   lazy val mutatronOverrides =
     (
       MutatronOverridesImpl.overrides ++
-        (for ((key, value) <- Tuning.getSection("Genetics").getSection("MutatronOverrides").filterType(classOf[EntryStr]))
+        (for (
+          (key, value) <- Tuning
+            .getSection("Genetics")
+            .getSection("MutatronOverrides")
+            .filterType(classOf[EntryStr])
+        )
           yield value.v.toUpperCase(Locale.US) match {
-            case "ENABLED" => Some(key -> EnumMutationSetting.ENABLED)
-            case "DISABLED" => Some(key -> EnumMutationSetting.DISABLED)
+            case "ENABLED"      => Some(key -> EnumMutationSetting.ENABLED)
+            case "DISABLED"     => Some(key -> EnumMutationSetting.DISABLED)
             case "REQUIREMENTS" => Some(key -> EnumMutationSetting.REQUIREMENTS)
             case _ =>
-              Gendustry.logWarn("Ignoring mutatron override for species %s - invalid value (%s)", key, value.v)
+              Gendustry.logWarn(
+                "Ignoring mutatron override for species %s - invalid value (%s)",
+                key,
+                value.v
+              )
               None
           }).flatten.toMap
-      ).withDefaultValue(EnumMutationSetting.ENABLED)
+    ).withDefaultValue(EnumMutationSetting.ENABLED)
 
   @SideOnly(Side.CLIENT)
-  def getGui(te: TileMutatron, player: EntityPlayer) = new GuiMutatron(te, player)
-  def getContainer(te: TileMutatron, player: EntityPlayer) = new ContainerMutatron(te, player)
+  def getGui(te: TileMutatron, player: EntityPlayer) =
+    new GuiMutatron(te, player)
+  def getContainer(te: TileMutatron, player: EntityPlayer) =
+    new ContainerMutatron(te, player)
 }

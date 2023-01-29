@@ -26,7 +26,8 @@ import net.minecraft.util.EnumChatFormatting
 object GeneTemplate extends SimpleItem("GeneTemplate") {
   setMaxStackSize(1)
 
-  override def getCreativeTabs = Array(GendustryCreativeTabs.main, GendustryCreativeTabs.templates)
+  override def getCreativeTabs =
+    Array(GendustryCreativeTabs.main, GendustryCreativeTabs.templates)
 
   override def getSubItems(item: Item, tab: CreativeTabs, list: util.List[_]) {
     import scala.collection.JavaConversions._
@@ -35,26 +36,39 @@ object GeneTemplate extends SimpleItem("GeneTemplate") {
       case GendustryCreativeTabs.main => l.add(new ItemStack(this))
       case GendustryCreativeTabs.templates =>
         l.addAll(
-          Misc.filterType(AlleleManager.alleleRegistry.getRegisteredAlleles.values(), classOf[IAlleleSpecies])
+          Misc
+            .filterType(
+              AlleleManager.alleleRegistry.getRegisteredAlleles.values(),
+              classOf[IAlleleSpecies]
+            )
             .filter(sp => sp.getRoot.getTemplate(sp.getUID) != null)
-            .toList.sortBy(_.getUID)
-            .map(sp => GeneticsHelper.templateFromSpeciesUID(sp.getUID)))
+            .toList
+            .sortBy(_.getUID)
+            .map(sp => GeneticsHelper.templateFromSpeciesUID(sp.getUID))
+        )
       case _ =>
     }
   }
 
-  def getRequiredChromosomes(sp: ISpeciesRoot) = GeneticsHelper.getCleanKaryotype(sp).keys
+  def getRequiredChromosomes(sp: ISpeciesRoot) =
+    GeneticsHelper.getCleanKaryotype(sp).keys
 
   def isComplete(stack: ItemStack) = {
     val sp = getSpecies(stack)
     if (sp == null)
       false
     else
-      (getRequiredChromosomes(sp).toSet -- getSamples(stack).map(_.chromosome).toSet).isEmpty
+      (getRequiredChromosomes(sp).toSet -- getSamples(stack)
+        .map(_.chromosome)
+        .toSet).isEmpty
   }
 
   def getSpecies(stack: ItemStack): ISpeciesRoot =
-    if (stack.hasTagCompound) AlleleManager.alleleRegistry.getSpeciesRoot(stack.getTagCompound.getString("species")) else null
+    if (stack.hasTagCompound)
+      AlleleManager.alleleRegistry.getSpeciesRoot(
+        stack.getTagCompound.getString("species")
+      )
+    else null
 
   def getSamples(stack: ItemStack): Iterable[GeneSampleInfo] = {
     val tag = stack.getTagCompound
@@ -89,20 +103,33 @@ object GeneTemplate extends SimpleItem("GeneTemplate") {
     return true
   }
 
-  override def addInformation(stack: ItemStack, player: EntityPlayer, l: util.List[_], par4: Boolean) = {
+  override def addInformation(
+      stack: ItemStack,
+      player: EntityPlayer,
+      l: util.List[_],
+      par4: Boolean
+  ) = {
     import scala.collection.JavaConverters._
     val tip = l.asInstanceOf[util.List[String]].asScala
     val tag = stack.getTagCompound
     if (tag != null && tag.hasKey("species")) {
       try {
-        tip += Misc.toLocal("gendustry.label.template." + tag.getString("species"))
+        tip += Misc.toLocal(
+          "gendustry.label.template." + tag.getString("species")
+        )
         val root = getSpecies(stack)
-        val samples = getSamples(stack).map(x => x.chromosome -> x.getLocalizedName).toMap
+        val samples =
+          getSamples(stack).map(x => x.chromosome -> x.getLocalizedName).toMap
         val required = getRequiredChromosomes(root)
 
         tip +=
-          (if (isComplete(stack)) EnumChatFormatting.GREEN else EnumChatFormatting.RED) +
-            Misc.toLocalF("gendustry.label.template.chromosomes", samples.size, required.size) +
+          (if (isComplete(stack)) EnumChatFormatting.GREEN
+           else EnumChatFormatting.RED) +
+            Misc.toLocalF(
+              "gendustry.label.template.chromosomes",
+              samples.size,
+              required.size
+            ) +
             EnumChatFormatting.RESET
 
         for (chr <- required)
@@ -111,14 +138,20 @@ object GeneTemplate extends SimpleItem("GeneTemplate") {
           else if (Client.shiftDown)
             tip += "%s%s: %s%s".format(
               EnumChatFormatting.RED,
-              Misc.toLocal("gendustry.chromosome." + GeneSampleInfo.getChromosomeName(root, chr)),
+              Misc.toLocal(
+                "gendustry.chromosome." + GeneSampleInfo
+                  .getChromosomeName(root, chr)
+              ),
               Misc.toLocal("gendustry.label.template.missing"),
               EnumChatFormatting.RESET
             )
 
       } catch {
         case e: Throwable =>
-          Gendustry.logWarnException("Exception while generating template tooltip", e)
+          Gendustry.logWarnException(
+            "Exception while generating template tooltip",
+            e
+          )
           tip += "Error"
       }
     } else {

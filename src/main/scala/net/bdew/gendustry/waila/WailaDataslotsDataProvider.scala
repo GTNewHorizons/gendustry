@@ -21,31 +21,74 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
 import net.minecraftforge.fluids.FluidStack
 
-object WailaDataSlotsDataProvider extends BaseDataProvider(classOf[TileDataSlots]) {
-  override def getNBTTag(player: EntityPlayerMP, te: TileDataSlots, tag: NBTTagCompound, world: World, x: Int, y: Int, z: Int) = {
-    tag.setTag("gendustry_dataslots", Misc.applyMutator(new NBTTagCompound) {
-      te.doSave(UpdateKind.GUI, _)
-    })
+object WailaDataSlotsDataProvider
+    extends BaseDataProvider(classOf[TileDataSlots]) {
+  override def getNBTTag(
+      player: EntityPlayerMP,
+      te: TileDataSlots,
+      tag: NBTTagCompound,
+      world: World,
+      x: Int,
+      y: Int,
+      z: Int
+  ) = {
+    tag.setTag(
+      "gendustry_dataslots",
+      Misc.applyMutator(new NBTTagCompound) {
+        te.doSave(UpdateKind.GUI, _)
+      }
+    )
     tag
   }
 
-  override def getBodyStrings(target: TileDataSlots, stack: ItemStack, acc: IWailaDataAccessor, cfg: IWailaConfigHandler) = {
+  override def getBodyStrings(
+      target: TileDataSlots,
+      stack: ItemStack,
+      acc: IWailaDataAccessor,
+      cfg: IWailaConfigHandler
+  ) = {
     if (acc.getNBTData.hasKey("gendustry_dataslots")) {
-      target.doLoad(UpdateKind.GUI, acc.getNBTData.getCompoundTag("gendustry_dataslots"))
+      target.doLoad(
+        UpdateKind.GUI,
+        acc.getNBTData.getCompoundTag("gendustry_dataslots")
+      )
       target.dataSlots.values flatMap {
         case slot: DataSlotPower =>
-          Some("%s / %s %s".format(DecFormat.round(slot.stored * Config.powerShowMultiplier), DecFormat.round(slot.capacity * Config.powerShowMultiplier), Config.powerShowUnits))
+          Some(
+            "%s / %s %s".format(
+              DecFormat.round(slot.stored * Config.powerShowMultiplier),
+              DecFormat.round(slot.capacity * Config.powerShowMultiplier),
+              Config.powerShowUnits
+            )
+          )
 
         case slot: DataSlotTankRestricted =>
           if (slot.getFluid != null && slot.getFluid.getFluid != null) {
-            Some("%s / %s mB %s".format(DecFormat.round(slot.getFluidAmount), DecFormat.round(slot.size), slot.getFluid.getLocalizedName))
+            Some(
+              "%s / %s mB %s".format(
+                DecFormat.round(slot.getFluidAmount),
+                DecFormat.round(slot.size),
+                slot.getFluid.getLocalizedName
+              )
+            )
           } else {
-            Some("0 / %s mB %s".format(DecFormat.round(slot.size), new FluidStack(slot.filterFluid, 0).getLocalizedName))
+            Some(
+              "0 / %s mB %s".format(
+                DecFormat.round(slot.size),
+                new FluidStack(slot.filterFluid, 0).getLocalizedName
+              )
+            )
           }
 
         case slot: DataSlotTank =>
           if (slot.getFluid != null && slot.getFluid.getFluid != null) {
-            Some("%s / %s mB %s".format(DecFormat.round(slot.getFluidAmount), DecFormat.round(slot.size), slot.getFluid.getLocalizedName))
+            Some(
+              "%s / %s mB %s".format(
+                DecFormat.round(slot.getFluidAmount),
+                DecFormat.round(slot.size),
+                slot.getFluid.getLocalizedName
+              )
+            )
           } else {
             None
           }

@@ -15,7 +15,11 @@ import net.bdew.gendustry.Gendustry
 import net.bdew.gendustry.compat.ForestryHelper
 import net.bdew.gendustry.config.Tuning
 import net.bdew.gendustry.custom.{CustomFlowerAlleles, CustomHives}
-import net.bdew.gendustry.fluids.{LiquidDNASources, MutagenSources, ProteinSources}
+import net.bdew.gendustry.fluids.{
+  LiquidDNASources,
+  MutagenSources,
+  ProteinSources
+}
 import net.bdew.lib.recipes._
 import net.bdew.lib.recipes.gencfg.GenericConfigLoader
 import net.bdew.lib.recipes.lootlist.LootListLoader
@@ -42,11 +46,15 @@ class Loader extends RecipeLoader with GenericConfigLoader with LootListLoader {
 
   override def resolveCondition(cond: Condition) = cond match {
     case CndHaveRoot(root) => ForestryHelper.haveRoot(root)
-    case _ => super.resolveCondition(cond)
+    case _                 => super.resolveCondition(cond)
   }
 
   def resolveFluid(s: FluidSpec) =
-    new FluidStack(Option(FluidRegistry.getFluid(s.id)).getOrElse(error("Fluid %s not found", s.id)), s.amount)
+    new FluidStack(
+      Option(FluidRegistry.getFluid(s.id))
+        .getOrElse(error("Fluid %s not found", s.id)),
+      s.amount
+    )
 
   override def processRecipeStatement(s: RecipeStatement): Unit = s match {
     case RsMutagen(st, mb) =>
@@ -68,13 +76,18 @@ class Loader extends RecipeLoader with GenericConfigLoader with LootListLoader {
       }
 
     case RsAssembly(rec, id, power, out, cnt) =>
-      Gendustry.logDebug("Adding assembly recipe: %s + %d mj => %s * %d", rec, power, out, cnt)
+      Gendustry.logDebug(
+        "Adding assembly recipe: %s + %d mj => %s * %d",
+        rec,
+        power,
+        out,
+        cnt
+      )
       val outStack = getConcreteStack(out, cnt)
-      val stacks = rec.map {
-        case (c, n) =>
-          val s = getConcreteStackNoWildcard(currCharMap(c), n)
-          Gendustry.logDebug("%s -> %s", c, s)
-          s
+      val stacks = rec.map { case (c, n) =>
+        val s = getConcreteStackNoWildcard(currCharMap(c), n)
+        Gendustry.logDebug("%s -> %s", c, s)
+        s
       }
       Gendustry.logDebug("Output: %s", outStack)
       AssemblyRecipeManager.INSTANCE.addRecipe(id, power, outStack, stacks: _*)
@@ -85,7 +98,9 @@ class Loader extends RecipeLoader with GenericConfigLoader with LootListLoader {
 
       // forestry API is stupid and requires a hashmap, build one for it
       val outStacks = new java.util.HashMap[ItemStack, java.lang.Float]
-      resolveLootList(out).foreach(x => outStacks.put(x._2, x._1.toFloat / 100F))
+      resolveLootList(out).foreach(x =>
+        outStacks.put(x._2, x._1.toFloat / 100f)
+      )
 
       val inStack = getConcreteStackNoWildcard(stack)
 
@@ -94,13 +109,24 @@ class Loader extends RecipeLoader with GenericConfigLoader with LootListLoader {
       Gendustry.logDebug("Done %s -> %s", inStack, outStacks)
 
     case RsSqueezer(in, fluid, time, out, chance) =>
-      Gendustry.logDebug("Adding squeezer recipe: %s => %s + %s", in, fluid, out)
+      Gendustry.logDebug(
+        "Adding squeezer recipe: %s => %s + %s",
+        in,
+        fluid,
+        out
+      )
 
       val inStack = getConcreteStackNoWildcard(in)
       val outStack = if (out != null) getConcreteStackNoWildcard(out) else null
       val outFluid = resolveFluid(fluid)
 
-      RecipeManagers.squeezerManager.addRecipe(time, Array(inStack), outFluid, outStack, chance)
+      RecipeManagers.squeezerManager.addRecipe(
+        time,
+        Array(inStack),
+        outFluid,
+        outStack,
+        chance
+      )
 
       Gendustry.logDebug("Done %s -> %s + %s", inStack, outStack, outFluid)
 

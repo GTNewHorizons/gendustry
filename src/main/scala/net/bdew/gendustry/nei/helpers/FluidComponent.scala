@@ -17,8 +17,12 @@ import net.bdew.lib.gui.{Point, Rect, Texture}
 import net.minecraftforge.fluids.FluidStack
 import org.lwjgl.opengl.GL11
 
-class FluidComponent(rect: Rect, fStack: FluidStack, capacity: Int) extends RecipeComponent(rect) {
-  def getTooltip = List(fStack.getFluid.getLocalizedName(fStack), "%s mB".format(DecFormat.round(fStack.amount)))
+class FluidComponent(rect: Rect, fStack: FluidStack, capacity: Int)
+    extends RecipeComponent(rect) {
+  def getTooltip = List(
+    fStack.getFluid.getLocalizedName(fStack),
+    "%s mB".format(DecFormat.round(fStack.amount))
+  )
 
   def mouseClick(button: Int) = button match {
     case 0 => GuiCraftingRecipe.openRecipeGui("liquid", fStack)
@@ -39,10 +43,20 @@ class FluidComponent(rect: Rect, fStack: FluidStack, capacity: Int) extends Reci
 
       while (fillHeight > 0) {
         if (fillHeight > 16) {
-          NEIDrawTarget.drawTexture(new Rect(oRect.x, oRect.y2 - 16 - yStart, oRect.w, 16), icon)
+          NEIDrawTarget.drawTexture(
+            new Rect(oRect.x, oRect.y2 - 16 - yStart, oRect.w, 16),
+            icon
+          )
           fillHeight -= 16
         } else {
-          NEIDrawTarget.drawTextureInterpolate(new Rect(oRect.x, oRect.y2 - 16 - yStart, oRect.w, 16), icon, 0, 1 - fillHeight / 16, 1, 1)
+          NEIDrawTarget.drawTextureInterpolate(
+            new Rect(oRect.x, oRect.y2 - 16 - yStart, oRect.w, 16),
+            icon,
+            0,
+            1 - fillHeight / 16,
+            1,
+            1
+          )
           fillHeight = 0
         }
         yStart = yStart + 16

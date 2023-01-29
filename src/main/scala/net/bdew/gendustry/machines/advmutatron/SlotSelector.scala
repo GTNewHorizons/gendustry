@@ -14,9 +14,13 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.Slot
 import net.minecraft.item.ItemStack
 
-class SlotSelector(inv: TileMutatronAdv, slot: Int, x: Int, y: Int) extends Slot(inv, slot, x, y) with SlotClickable {
+class SlotSelector(inv: TileMutatronAdv, slot: Int, x: Int, y: Int)
+    extends Slot(inv, slot, x, y)
+    with SlotClickable {
   def onClick(button: Int, mods: Int, player: EntityPlayer): ItemStack = {
-    if (button == 0 && mods == 0 && !inv.getWorldObj.isRemote && !inv.isWorking && getHasStack) {
+    if (
+      button == 0 && mods == 0 && !inv.getWorldObj.isRemote && !inv.isWorking && getHasStack
+    ) {
       inv.setMutation(getSlotIndex)
     }
     return null

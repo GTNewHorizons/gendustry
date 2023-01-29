@@ -14,7 +14,10 @@ import net.bdew.lib.gui.GuiProvider
 import net.bdew.lib.machine.{Machine, ProcessorMachine}
 import net.minecraft.entity.player.EntityPlayer
 
-object MachineMutatronAdv extends Machine("MutatronAdv", BlockMutatronAdv) with GuiProvider with ProcessorMachine {
+object MachineMutatronAdv
+    extends Machine("MutatronAdv", BlockMutatronAdv)
+    with GuiProvider
+    with ProcessorMachine {
   def guiId = 6
   type TEClass = TileMutatronAdv
 
@@ -25,6 +28,8 @@ object MachineMutatronAdv extends Machine("MutatronAdv", BlockMutatronAdv) with 
   lazy val deathChanceArtificial = tuning.getFloat("DeathChanceArtificial")
 
   @SideOnly(Side.CLIENT)
-  def getGui(te: TileMutatronAdv, player: EntityPlayer) = new GuiMutatronAdv(te, player)
-  def getContainer(te: TileMutatronAdv, player: EntityPlayer) = new ContainerMutatronAdv(te, player)
+  def getGui(te: TileMutatronAdv, player: EntityPlayer) =
+    new GuiMutatronAdv(te, player)
+  def getContainer(te: TileMutatronAdv, player: EntityPlayer) =
+    new ContainerMutatronAdv(te, player)
 }

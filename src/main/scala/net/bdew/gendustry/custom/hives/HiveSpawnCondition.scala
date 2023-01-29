@@ -30,18 +30,29 @@ case class ConditionAbove(blocks: BlockFilter) extends HiveSpawnCondition {
 
 case class ConditionNextTo(blocks: BlockFilter) extends HiveSpawnCondition {
   override def isValidLocation(world: World, x: Int, y: Int, z: Int): Boolean =
-    blocks.matches(world, x + 1, y, z) || blocks.matches(world, x - 1, y, z) || blocks.matches(world, x, y, z + 1) || blocks.matches(world, x, y, z - 1)
+    blocks.matches(world, x + 1, y, z) || blocks.matches(
+      world,
+      x - 1,
+      y,
+      z
+    ) || blocks.matches(world, x, y, z + 1) || blocks.matches(
+      world,
+      x,
+      y,
+      z - 1
+    )
   override def getDescription: String = "Next To " + blocks.getDesctiption
 }
 
 case class ConditionNear(blocks: BlockFilter) extends HiveSpawnCondition {
-  override def isValidLocation(world: World, x: Int, y: Int, z: Int): Boolean = (
-    blocks.matches(world, x + 1, y, z)
-      || blocks.matches(world, x - 1, y, z)
-      || blocks.matches(world, x, y + 1, z)
-      || blocks.matches(world, x, y - 1, z)
-      || blocks.matches(world, x, y, z + 1)
-      || blocks.matches(world, x, y, z - 1)
+  override def isValidLocation(world: World, x: Int, y: Int, z: Int): Boolean =
+    (
+      blocks.matches(world, x + 1, y, z)
+        || blocks.matches(world, x - 1, y, z)
+        || blocks.matches(world, x, y + 1, z)
+        || blocks.matches(world, x, y - 1, z)
+        || blocks.matches(world, x, y, z + 1)
+        || blocks.matches(world, x, y, z - 1)
     )
   override def getDescription: String = "Near " + blocks.getDesctiption
 }

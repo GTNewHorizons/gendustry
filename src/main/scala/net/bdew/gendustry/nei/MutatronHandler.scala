@@ -35,14 +35,23 @@ class MutatronHandler extends BaseRecipeHandler(5, 13) {
 
   import scala.collection.JavaConversions._
 
-  class MutatronRecipe(val mutation: IMutation) extends CachedRecipeWithComponents {
+  class MutatronRecipe(val mutation: IMutation)
+      extends CachedRecipeWithComponents {
     val getResult = position(getRecipeStack(2, mutation), 142, 41)
     val in1 = position(getRecipeStack(0, mutation), 60, 30)
     val in2 = position(getRecipeStack(1, mutation), 60, 53)
     val labware = position(new ItemStack(Items.labware), 98, 17)
 
-    components :+= new FluidComponent(mutagenRect, new FluidStack(Fluids.mutagen, MachineMutatron.mutagenPerItem), MachineMutatron.tankSize)
-    components :+= new PowerComponent(mjRect, MachineMutatron.mjPerItem, MachineMutatron.maxStoredEnergy)
+    components :+= new FluidComponent(
+      mutagenRect,
+      new FluidStack(Fluids.mutagen, MachineMutatron.mutagenPerItem),
+      MachineMutatron.tankSize
+    )
+    components :+= new PowerComponent(
+      mjRect,
+      MachineMutatron.mjPerItem,
+      MachineMutatron.maxStoredEnergy
+    )
 
     override def getIngredients = List(in1, in2, labware)
   }
@@ -50,34 +59,53 @@ class MutatronHandler extends BaseRecipeHandler(5, 13) {
   def getRecipeStack(slot: Int, mutation: IMutation): ItemStack = {
     val root = mutation.getRoot
     val individual = slot match {
-      case 0 => root.templateAsIndividual(root.getTemplate(mutation.getAllele0.getUID))
-      case 1 => root.templateAsIndividual(root.getTemplate(mutation.getAllele1.getUID))
+      case 0 =>
+        root.templateAsIndividual(root.getTemplate(mutation.getAllele0.getUID))
+      case 1 =>
+        root.templateAsIndividual(root.getTemplate(mutation.getAllele1.getUID))
       case 2 => root.templateAsIndividual(mutation.getTemplate)
     }
     individual.analyze()
     (root, slot) match {
-      case (bees: IBeeRoot, 0) => bees.getMemberStack(individual, EnumBeeType.PRINCESS.ordinal())
-      case (bees: IBeeRoot, 1) => bees.getMemberStack(individual, EnumBeeType.DRONE.ordinal())
-      case (bees: IBeeRoot, 2) => bees.getMemberStack(individual, EnumBeeType.QUEEN.ordinal())
-      case (trees: ITreeRoot, 0) => trees.getMemberStack(individual, EnumGermlingType.SAPLING.ordinal())
-      case (trees: ITreeRoot, 1) => trees.getMemberStack(individual, EnumGermlingType.POLLEN.ordinal())
-      case (trees: ITreeRoot, 2) => trees.getMemberStack(individual, EnumGermlingType.SAPLING.ordinal())
+      case (bees: IBeeRoot, 0) =>
+        bees.getMemberStack(individual, EnumBeeType.PRINCESS.ordinal())
+      case (bees: IBeeRoot, 1) =>
+        bees.getMemberStack(individual, EnumBeeType.DRONE.ordinal())
+      case (bees: IBeeRoot, 2) =>
+        bees.getMemberStack(individual, EnumBeeType.QUEEN.ordinal())
+      case (trees: ITreeRoot, 0) =>
+        trees.getMemberStack(individual, EnumGermlingType.SAPLING.ordinal())
+      case (trees: ITreeRoot, 1) =>
+        trees.getMemberStack(individual, EnumGermlingType.POLLEN.ordinal())
+      case (trees: ITreeRoot, 2) =>
+        trees.getMemberStack(individual, EnumGermlingType.SAPLING.ordinal())
       case (root: ISpeciesRoot, _) => root.getMemberStack(individual, 0)
     }
   }
 
   def canShowMutation(mutation: IMutation) = {
-    MachineMutatron.mutatronOverrides(GeneticsHelper.getMutationSpecies(mutation).getUID) match {
-      case EnumMutationSetting.ENABLED => true
-      case EnumMutationSetting.DISABLED => false
+    MachineMutatron.mutatronOverrides(
+      GeneticsHelper.getMutationSpecies(mutation).getUID
+    ) match {
+      case EnumMutationSetting.ENABLED      => true
+      case EnumMutationSetting.DISABLED     => false
       case EnumMutationSetting.REQUIREMENTS => true
     }
   }
 
   def getMutationRequirementsDisplay(mutation: IMutation) = {
-    if (MachineMutatron.mutatronOverrides(GeneticsHelper.getMutationSpecies(mutation).getUID) == EnumMutationSetting.REQUIREMENTS)
-      List(EnumChatFormatting.RED.toString + EnumChatFormatting.UNDERLINE + Misc.toLocal("gendustry.req.message")) ++
-        (GeneticsHelper.safeMutationConditions(mutation) map (EnumChatFormatting.RED + _))
+    if (
+      MachineMutatron.mutatronOverrides(
+        GeneticsHelper.getMutationSpecies(mutation).getUID
+      ) == EnumMutationSetting.REQUIREMENTS
+    )
+      List(
+        EnumChatFormatting.RED.toString + EnumChatFormatting.UNDERLINE + Misc
+          .toLocal("gendustry.req.message")
+      ) ++
+        (GeneticsHelper.safeMutationConditions(
+          mutation
+        ) map (EnumChatFormatting.RED + _))
     else
       List()
   }
@@ -89,20 +117,29 @@ class MutatronHandler extends BaseRecipeHandler(5, 13) {
   }
 
   def addAllRecipes() {
-    for ((_, root) <- AlleleManager.alleleRegistry.getSpeciesRoot; mutation <- root.getMutations(false) if canShowMutation(mutation)) {
+    for (
+      (_, root) <- AlleleManager.alleleRegistry.getSpeciesRoot;
+      mutation <- root.getMutations(false) if canShowMutation(mutation)
+    ) {
       arecipes.add(new MutatronRecipe(mutation))
     }
   }
 
   override def loadUsageRecipes(outputId: String, results: AnyRef*): Unit = {
     Some(outputId, results) collect {
-      case ("liquid", Seq(x: FluidStack)) if x.getFluid == Fluids.mutagen => addAllRecipes()
-      case ("item", Seq(IStackBlock(x))) if x == Fluids.mutagen.getBlock => addAllRecipes()
+      case ("liquid", Seq(x: FluidStack)) if x.getFluid == Fluids.mutagen =>
+        addAllRecipes()
+      case ("item", Seq(IStackBlock(x))) if x == Fluids.mutagen.getBlock =>
+        addAllRecipes()
       case ("item", Seq(IStack(x))) if x == Items.labware => addAllRecipes()
       case ("item", Seq(x: ItemStack)) =>
         val individual = AlleleManager.alleleRegistry.getIndividual(x)
         if (individual != null) {
-          for (mutation <- GeneticsCache.speciesUsedMutations(individual.getGenome.getPrimary) if canShowMutation(mutation))
+          for (
+            mutation <- GeneticsCache.speciesUsedMutations(
+              individual.getGenome.getPrimary
+            ) if canShowMutation(mutation)
+          )
             arecipes.add(new MutatronRecipe(mutation))
         }
       case ("Mutatron", _) => addAllRecipes()
@@ -114,19 +151,37 @@ class MutatronHandler extends BaseRecipeHandler(5, 13) {
       case ("item", Seq(x: ItemStack)) =>
         val individual = AlleleManager.alleleRegistry.getIndividual(x)
         if (individual != null) {
-          for (mutation <- GeneticsCache.speciesResultMutations(individual.getGenome.getPrimary) if canShowMutation(mutation))
+          for (
+            mutation <- GeneticsCache.speciesResultMutations(
+              individual.getGenome.getPrimary
+            ) if canShowMutation(mutation)
+          )
             arecipes.add(new MutatronRecipe(mutation))
         }
       case ("Mutatron", _) => addAllRecipes()
     }
   }
 
-  override def handleItemTooltip(gui: GuiRecipe[_], stack: ItemStack, tip: util.List[String], recipe: Int): util.List[String] = {
+  override def handleItemTooltip(
+      gui: GuiRecipe[_],
+      stack: ItemStack,
+      tip: util.List[String],
+      recipe: Int
+  ): util.List[String] = {
     if (stack == getRecipe(recipe).labware.item)
-      tip += Misc.toLocalF("gendustry.label.consume", MachineMutatron.labwareConsumeChance.toInt)
+      tip += Misc.toLocalF(
+        "gendustry.label.consume",
+        MachineMutatron.labwareConsumeChance.toInt
+      )
     if (stack == getRecipe(recipe).getResult.item) {
-      tip += Misc.toLocalF("gendustry.label.mutatron.degrade", MachineMutatron.degradeChanceNatural.toInt)
-      tip += Misc.toLocalF("gendustry.label.mutatron.death", MachineMutatron.deathChanceArtificial.toInt)
+      tip += Misc.toLocalF(
+        "gendustry.label.mutatron.degrade",
+        MachineMutatron.degradeChanceNatural.toInt
+      )
+      tip += Misc.toLocalF(
+        "gendustry.label.mutatron.death",
+        MachineMutatron.deathChanceArtificial.toInt
+      )
       tip ++= getMutationRequirementsDisplay(getRecipe(recipe).mutation)
     }
     super.handleItemTooltip(gui, stack, tip, recipe)

@@ -15,13 +15,17 @@ import net.minecraft.entity.player.EntityPlayer
 trait ContainerRSControllable extends ContainerDataSlots {
   val dataSource: TileRSControllable
 
-  /**
-   * This implementation is piggybacking on vanilla Packet102WindowClick
-   * This is the fake slot number, and shouldn't be used by anything else
-   */
+  /** This implementation is piggybacking on vanilla Packet102WindowClick This
+    * is the fake slot number, and shouldn't be used by anything else
+    */
   final val RSMODE_SLOT_NUM = 1000
 
-  override def slotClick(slotNum: Int, button: Int, modifiers: Int, player: EntityPlayer) =
+  override def slotClick(
+      slotNum: Int,
+      button: Int,
+      modifiers: Int,
+      player: EntityPlayer
+  ) =
     if (slotNum == RSMODE_SLOT_NUM) {
       dataSource.rsmode := RSMode(button)
       null

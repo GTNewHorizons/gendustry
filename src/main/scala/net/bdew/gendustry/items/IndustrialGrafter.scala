@@ -27,7 +27,11 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack, ItemTool}
 import net.minecraft.world.World
 
-object IndustrialGrafter extends ItemTool(0, Item.ToolMaterial.IRON, new util.HashSet[Block]) with NamedItem with ItemPowered with IToolGrafter {
+object IndustrialGrafter
+    extends ItemTool(0, Item.ToolMaterial.IRON, new util.HashSet[Block])
+    with NamedItem
+    with ItemPowered
+    with IToolGrafter {
   def name = "IndustrialGrafter"
   lazy val cfg = Tuning.getSection("Items").getSection("IndustrialGrafter")
   lazy val mjPerCharge = cfg.getInt("MjPerCharge")
@@ -43,26 +47,64 @@ object IndustrialGrafter extends ItemTool(0, Item.ToolMaterial.IRON, new util.Ha
 
   override def getDigSpeed(stack: ItemStack, block: Block, meta: Int) =
     if (!hasCharges(stack))
-      0.1F
+      0.1f
     else if (block.getMaterial == Material.leaves)
       efficiencyOnProperMaterial
     else
-      0.1F
+      0.1f
 
-  override def onBlockDestroyed(stack: ItemStack, world: World, block: Block, x: Int, y: Int, z: Int, player: EntityLivingBase): Boolean = {
+  override def onBlockDestroyed(
+      stack: ItemStack,
+      world: World,
+      block: Block,
+      x: Int,
+      y: Int,
+      z: Int,
+      player: EntityLivingBase
+  ): Boolean = {
     if (block.getMaterial == Material.leaves) {
-      if (!world.isRemote && player.isInstanceOf[EntityPlayer] && !player.isSneaking) {
-        for (dx <- -1 * aoe to aoe;
-             dy <- -1 * aoe to aoe;
-             dz <- -1 * aoe to aoe
-             if dy + y > 0 && dy + y < world.getHeight && (dx != 0 || dy != 0 || dz != 0)) {
+      if (
+        !world.isRemote && player
+          .isInstanceOf[EntityPlayer] && !player.isSneaking
+      ) {
+        for (
+          dx <- -1 * aoe to aoe;
+          dy <- -1 * aoe to aoe;
+          dz <- -1 * aoe to aoe
+          if dy + y > 0 && dy + y < world.getHeight && (dx != 0 || dy != 0 || dz != 0)
+        ) {
           val bl = world.getBlock(x + dx, y + dy, z + dz)
-          if (bl != null && bl.getMaterial == Material.leaves && hasCharges(stack)) {
+          if (
+            bl != null && bl.getMaterial == Material.leaves && hasCharges(stack)
+          ) {
             val meta = world.getBlockMetadata(x + dx, y + dy, z + dz)
-            bl.onBlockHarvested(world, x + dx, y + dy, z + dz, meta, player.asInstanceOf[EntityPlayer])
-            if (bl.removedByPlayer(world, player.asInstanceOf[EntityPlayer], x + dx, y + dy, z + dz, false)) {
+            bl.onBlockHarvested(
+              world,
+              x + dx,
+              y + dy,
+              z + dz,
+              meta,
+              player.asInstanceOf[EntityPlayer]
+            )
+            if (
+              bl.removedByPlayer(
+                world,
+                player.asInstanceOf[EntityPlayer],
+                x + dx,
+                y + dy,
+                z + dz,
+                false
+              )
+            ) {
               useCharge(stack, 1, player)
-              bl.harvestBlock(world, player.asInstanceOf[EntityPlayer], x + dx, y + dy, z + dz, meta)
+              bl.harvestBlock(
+                world,
+                player.asInstanceOf[EntityPlayer],
+                x + dx,
+                y + dy,
+                z + dz,
+                meta
+              )
             }
           }
         }
@@ -73,13 +115,25 @@ object IndustrialGrafter extends ItemTool(0, Item.ToolMaterial.IRON, new util.Ha
       return false
   }
 
-  override def hitEntity(stack: ItemStack, target: EntityLivingBase, player: EntityLivingBase): Boolean = false
+  override def hitEntity(
+      stack: ItemStack,
+      target: EntityLivingBase,
+      player: EntityLivingBase
+  ): Boolean = false
 
-  override def addInformation(stack: ItemStack, player: EntityPlayer, l: util.List[_], par4: Boolean) = {
+  override def addInformation(
+      stack: ItemStack,
+      player: EntityPlayer,
+      l: util.List[_],
+      par4: Boolean
+  ) = {
     import scala.collection.JavaConverters._
     val tip = l.asInstanceOf[util.List[String]].asScala
 
-    tip += Misc.toLocalF("gendustry.label.charges", getCharge(stack) / mjPerCharge)
+    tip += Misc.toLocalF(
+      "gendustry.label.charges",
+      getCharge(stack) / mjPerCharge
+    )
   }
 
   override def getSubItems(item: Item, tabs: CreativeTabs, l: util.List[_]) {
@@ -90,10 +144,21 @@ object IndustrialGrafter extends ItemTool(0, Item.ToolMaterial.IRON, new util.Ha
   }
 
   override def getItemEnchantability: Int = 0
-  override def getIsRepairable(stack1: ItemStack, stack2: ItemStack): Boolean = false
-  override def isBookEnchantable(stack1: ItemStack, stack2: ItemStack): Boolean = false
+  override def getIsRepairable(stack1: ItemStack, stack2: ItemStack): Boolean =
+    false
+  override def isBookEnchantable(
+      stack1: ItemStack,
+      stack2: ItemStack
+  ): Boolean = false
 
-  def getSaplingModifier(stack: ItemStack, world: World, player: EntityPlayer, x: Int, y: Int, z: Int): Float = if (hasCharges(stack)) saplingModifier else 0
+  def getSaplingModifier(
+      stack: ItemStack,
+      world: World,
+      player: EntityPlayer,
+      x: Int,
+      y: Int,
+      z: Int
+  ): Float = if (hasCharges(stack)) saplingModifier else 0
 
   @SideOnly(Side.CLIENT)
   override def registerIcons(reg: IIconRegister) {

@@ -30,22 +30,38 @@ class TransposerHandler extends BaseRecipeHandler(5, 13) {
 
   import scala.collection.JavaConversions._
 
-  class TransposerRecipe(blankStack: ItemStack, outStack: ItemStack, templateStack: ItemStack) extends CachedRecipeWithComponents {
+  class TransposerRecipe(
+      blankStack: ItemStack,
+      outStack: ItemStack,
+      templateStack: ItemStack
+  ) extends CachedRecipeWithComponents {
     val getResult = position(outStack, 137, 49)
     val blank = position(blankStack, 41, 49)
     val template = position(templateStack, 74, 28)
     val labware = position(new ItemStack(Items.labware), 98, 28)
 
-    components :+= new PowerComponent(mjRect, MachineTransposer.mjPerItem, MachineTransposer.maxStoredEnergy)
+    components :+= new PowerComponent(
+      mjRect,
+      MachineTransposer.mjPerItem,
+      MachineTransposer.maxStoredEnergy
+    )
 
     override def getIngredients = List(template, blank, labware)
   }
 
   def addRecipe(template: ItemStack) = template match {
     case IStack(GeneSample) =>
-      arecipes.add(new TransposerRecipe(new ItemStack(Items.geneSampleBlank), template, template))
+      arecipes.add(
+        new TransposerRecipe(
+          new ItemStack(Items.geneSampleBlank),
+          template,
+          template
+        )
+      )
     case IStack(GeneTemplate) =>
-      arecipes.add(new TransposerRecipe(new ItemStack(GeneTemplate), template, template))
+      arecipes.add(
+        new TransposerRecipe(new ItemStack(GeneTemplate), template, template)
+      )
   }
 
   def getRecipe(i: Int) = arecipes.get(i).asInstanceOf[TransposerRecipe]
@@ -81,7 +97,7 @@ class TransposerHandler extends BaseRecipeHandler(5, 13) {
 
   override def loadUsageRecipes(outputId: String, results: AnyRef*): Unit = {
     Some(outputId, results) collect {
-      case ("item", Seq(IStack(Items.labware))) => addAllRecipes()
+      case ("item", Seq(IStack(Items.labware)))         => addAllRecipes()
       case ("item", Seq(IStack(Items.geneSampleBlank))) => addSampleRecipe()
       case ("item", Seq(stack: ItemStack)) if stack.getItem == GeneSample =>
         addRecipe(stack)
@@ -108,9 +124,17 @@ class TransposerHandler extends BaseRecipeHandler(5, 13) {
     }
   }
 
-  override def handleItemTooltip(gui: GuiRecipe[_], stack: ItemStack, tip: util.List[String], recipe: Int): util.List[String] = {
+  override def handleItemTooltip(
+      gui: GuiRecipe[_],
+      stack: ItemStack,
+      tip: util.List[String],
+      recipe: Int
+  ): util.List[String] = {
     if (stack == getRecipe(recipe).labware.item)
-      tip += Misc.toLocalF("gendustry.label.consume", MachineTransposer.labwareConsumeChance.toInt)
+      tip += Misc.toLocalF(
+        "gendustry.label.consume",
+        MachineTransposer.labwareConsumeChance.toInt
+      )
     super.handleItemTooltip(gui, stack, tip, recipe)
   }
 

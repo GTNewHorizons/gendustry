@@ -10,20 +10,52 @@
 package net.bdew.gendustry.machines.mproducer
 
 import net.bdew.gendustry.Gendustry
-import net.bdew.gendustry.gui.{Textures, WidgetPowerCustom, WidgetProgressBarNEI}
+import net.bdew.gendustry.gui.{
+  Textures,
+  WidgetPowerCustom,
+  WidgetProgressBarNEI
+}
 import net.bdew.lib.Misc
 import net.bdew.lib.gui.widgets.{WidgetFluidGauge, WidgetLabel}
 import net.bdew.lib.gui.{BaseScreen, Color, Rect, Texture}
 import net.minecraft.entity.player.EntityPlayer
 
-class GuiMutagenProducer(val te: TileMutagenProducer, player: EntityPlayer) extends BaseScreen(new ContainerMutagenProducer(te, player), 176, 166) {
-  val background = Texture(Gendustry.modId, "textures/gui/mutagenproducer.png", rect)
+class GuiMutagenProducer(val te: TileMutagenProducer, player: EntityPlayer)
+    extends BaseScreen(new ContainerMutagenProducer(te, player), 176, 166) {
+  val background =
+    Texture(Gendustry.modId, "textures/gui/mutagenproducer.png", rect)
 
   override def initGui() {
     super.initGui()
-    widgets.add(new WidgetProgressBarNEI(new Rect(79, 41, 53, 15), Textures.greenProgress(53), te.progress, "MutagenProducer"))
-    widgets.add(new WidgetPowerCustom(new Rect(8, 19, 16, 58), Textures.powerFill, te.power))
-    widgets.add(new WidgetFluidGauge(new Rect(152, 19, 16, 58), Textures.tankOverlay, te.tank))
-    widgets.add(new WidgetLabel(Misc.toLocal("tile.gendustry.mutagen_producer.name"), 8, 6, Color.darkGray))
+    widgets.add(
+      new WidgetProgressBarNEI(
+        new Rect(79, 41, 53, 15),
+        Textures.greenProgress(53),
+        te.progress,
+        "MutagenProducer"
+      )
+    )
+    widgets.add(
+      new WidgetPowerCustom(
+        new Rect(8, 19, 16, 58),
+        Textures.powerFill,
+        te.power
+      )
+    )
+    widgets.add(
+      new WidgetFluidGauge(
+        new Rect(152, 19, 16, 58),
+        Textures.tankOverlay,
+        te.tank
+      )
+    )
+    widgets.add(
+      new WidgetLabel(
+        Misc.toLocal("tile.gendustry.mutagen_producer.name"),
+        8,
+        6,
+        Color.darkGray
+      )
+    )
   }
 }

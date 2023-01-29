@@ -33,15 +33,20 @@ class SamplerHandler extends BaseRecipeHandler(5, 13) {
 
   import net.bdew.gendustry.misc.GeneticsCache.SampleOrdering
 
-import scala.collection.JavaConversions._
+  import scala.collection.JavaConversions._
 
-  class SamplerRecipe(sample: GeneSampleInfo, input: ItemStack) extends CachedRecipeWithComponents {
+  class SamplerRecipe(sample: GeneSampleInfo, input: ItemStack)
+      extends CachedRecipeWithComponents {
     val getResult = position(GeneSample.newStack(sample), 137, 49)
     val individual = position(input, 41, 49)
     val sampleBlank = position(new ItemStack(Items.geneSampleBlank), 74, 28)
     val labware = position(new ItemStack(Items.labware), 98, 28)
 
-    components :+= new PowerComponent(mjRect, MachineSampler.mjPerItem, MachineSampler.maxStoredEnergy)
+    components :+= new PowerComponent(
+      mjRect,
+      MachineSampler.mjPerItem,
+      MachineSampler.maxStoredEnergy
+    )
 
     override def getIngredients = List(individual, sampleBlank, labware)
   }
@@ -51,8 +56,10 @@ import scala.collection.JavaConversions._
     val individual = root.templateAsIndividual(root.getTemplate(species.getUID))
     individual.analyze()
     return root match {
-      case bees: IBeeRoot => bees.getMemberStack(individual, EnumBeeType.DRONE.ordinal())
-      case trees: ITreeRoot => trees.getMemberStack(individual, EnumGermlingType.SAPLING.ordinal())
+      case bees: IBeeRoot =>
+        bees.getMemberStack(individual, EnumBeeType.DRONE.ordinal())
+      case trees: ITreeRoot =>
+        trees.getMemberStack(individual, EnumGermlingType.SAPLING.ordinal())
       case _ => root.getMemberStack(individual, 0)
     }
   }
@@ -64,7 +71,10 @@ import scala.collection.JavaConversions._
   }
 
   def addAllRecipes() {
-    for (info <- GeneticsCache.geneSamples; species <- GeneticsCache.speciesChromosomes(info)) {
+    for (
+      info <- GeneticsCache.geneSamples;
+      species <- GeneticsCache.speciesChromosomes(info)
+    ) {
       arecipes.add(new SamplerRecipe(info, getRecipeStack(species)))
     }
   }
@@ -72,19 +82,31 @@ import scala.collection.JavaConversions._
   override def loadUsageRecipes(outputId: String, results: AnyRef*): Unit = {
     Some(outputId, results) collect {
       case ("item", Seq(IStack(x))) if x == Items.labware => addAllRecipes()
-      case ("item", Seq(IStack(x))) if x == Items.geneSampleBlank => addAllRecipes()
+      case ("item", Seq(IStack(x))) if x == Items.geneSampleBlank =>
+        addAllRecipes()
       case ("item", Seq(stack: ItemStack)) =>
         val individual = AlleleManager.alleleRegistry.getIndividual(stack)
         if (individual != null) {
           val root = individual.getGenome.getSpeciesRoot
           var alleles = collection.SortedSet.empty[GeneSampleInfo]
-          for ((chromosome, n) <- individual.getGenome.getChromosomes.zipWithIndex if chromosome != null) {
-            if (chromosome.getPrimaryAllele != null && !AlleleManager.alleleRegistry.isBlacklisted(chromosome.getPrimaryAllele.getUID))
+          for (
+            (chromosome, n) <- individual.getGenome.getChromosomes.zipWithIndex
+            if chromosome != null
+          ) {
+            if (
+              chromosome.getPrimaryAllele != null && !AlleleManager.alleleRegistry
+                .isBlacklisted(chromosome.getPrimaryAllele.getUID)
+            )
               alleles += GeneSampleInfo(root, n, chromosome.getPrimaryAllele)
-            if (chromosome.getSecondaryAllele != null && !AlleleManager.alleleRegistry.isBlacklisted(chromosome.getSecondaryAllele.getUID))
+            if (
+              chromosome.getSecondaryAllele != null && !AlleleManager.alleleRegistry
+                .isBlacklisted(chromosome.getSecondaryAllele.getUID)
+            )
               alleles += GeneSampleInfo(root, n, chromosome.getSecondaryAllele)
           }
-          alleles.foreach(sample => arecipes.add(new SamplerRecipe(sample, stack)))
+          alleles.foreach(sample =>
+            arecipes.add(new SamplerRecipe(sample, stack))
+          )
         }
       case ("Sampler", _) => addAllRecipes()
     }
@@ -105,9 +127,17 @@ import scala.collection.JavaConversions._
     }
   }
 
-  override def handleItemTooltip(gui: GuiRecipe[_], stack: ItemStack, tip: util.List[String], recipe: Int): util.List[String] = {
+  override def handleItemTooltip(
+      gui: GuiRecipe[_],
+      stack: ItemStack,
+      tip: util.List[String],
+      recipe: Int
+  ): util.List[String] = {
     if (stack == getRecipe(recipe).labware.item)
-      tip += Misc.toLocalF("gendustry.label.consume", MachineSampler.labwareConsumeChance.toInt)
+      tip += Misc.toLocalF(
+        "gendustry.label.consume",
+        MachineSampler.labwareConsumeChance.toInt
+      )
     super.handleItemTooltip(gui, stack, tip, recipe)
   }
 

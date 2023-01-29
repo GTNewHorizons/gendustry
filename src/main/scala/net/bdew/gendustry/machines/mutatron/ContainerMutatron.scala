@@ -14,7 +14,9 @@ import net.bdew.lib.gui.{BaseContainer, SlotValidating}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 
-class ContainerMutatron(val te: TileMutatron, player: EntityPlayer) extends BaseContainer(te) with ContainerDataSlots {
+class ContainerMutatron(val te: TileMutatron, player: EntityPlayer)
+    extends BaseContainer(te)
+    with ContainerDataSlots {
   lazy val dataSource = te
 
   addSlotToContainer(new SlotValidating(te, 0, 60, 30))
@@ -25,7 +27,12 @@ class ContainerMutatron(val te: TileMutatron, player: EntityPlayer) extends Base
 
   te.lastPlayer := player.getGameProfile
 
-  override def slotClick(slotNum: Int, button: Int, modifiers: Int, player: EntityPlayer): ItemStack = {
+  override def slotClick(
+      slotNum: Int,
+      button: Int,
+      modifiers: Int,
+      player: EntityPlayer
+  ): ItemStack = {
     te.lastPlayer := player.getGameProfile
     super.slotClick(slotNum, button, modifiers, player)
   }

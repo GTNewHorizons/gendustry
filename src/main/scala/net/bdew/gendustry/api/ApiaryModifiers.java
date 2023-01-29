@@ -1,9 +1,6 @@
 /*
- * Copyright (c) bdew, 2013 - 2014
- * https://github.com/bdew/gendustry
- *
- * This mod is distributed under the terms of the Minecraft Mod Public
- * License 1.0, or MMPL. Please check the contents of the license located in
+ * Copyright (c) bdew, 2013 - 2014 https://github.com/bdew/gendustry This mod is distributed under the terms of the
+ * Minecraft Mod Public License 1.0, or MMPL. Please check the contents of the license located in
  * http://bdew.net/minecraft-mod-public-license/
  */
 
@@ -15,14 +12,14 @@ import net.minecraft.world.biome.BiomeGenBase;
  * Stores current modifiers from all upgrades in an apiary
  */
 public class ApiaryModifiers {
+
     /**
      * Territory modifier, multiplicative
      */
     public float territory = 1;
 
     /**
-     * Mutation chance modifier, multiplicative
-     * max safe = 10 (degenerating - offspring become unnatural)
+     * Mutation chance modifier, multiplicative max safe = 10 (degenerating - offspring become unnatural)
      */
     public float mutation = 1;
 
@@ -32,8 +29,8 @@ public class ApiaryModifiers {
     public float lifespan = 1;
 
     /**
-     * Production modifier - increases chance to get products each tick, multiplicative
-     * max safe = 10 (overworked - becomes unnatural)
+     * Production modifier - increases chance to get products each tick, multiplicative max safe = 10 (overworked -
+     * becomes unnatural)
      */
     public float production = 1;
 

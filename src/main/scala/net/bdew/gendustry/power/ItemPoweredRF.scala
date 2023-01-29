@@ -17,19 +17,34 @@ import net.bdew.lib.Misc
 import net.bdew.lib.power.ItemPoweredBase
 import net.minecraft.item.ItemStack
 
-@Optional.Interface(modid = PowerProxy.TE_MOD_ID, iface = "cofh.api.energy.IEnergyContainerItem")
+@Optional.Interface(
+  modid = PowerProxy.TE_MOD_ID,
+  iface = "cofh.api.energy.IEnergyContainerItem"
+)
 trait ItemPoweredRF extends ItemPoweredBase with IEnergyContainerItem {
   private lazy val ratio = Tuning.getSection("Power").getFloat("RF_MJ_Ratio")
 
-  def receiveEnergy(container: ItemStack, maxReceive: Int, simulate: Boolean): Int = {
+  def receiveEnergy(
+      container: ItemStack,
+      maxReceive: Int,
+      simulate: Boolean
+  ): Int = {
     if (!PowerProxy.RFEnabled) return 0
     val charge = getCharge(container)
-    val canCharge = Misc.clamp(maxCharge.toFloat - charge, 0F, maxReceive.toFloat / ratio).floor.toInt
+    val canCharge = Misc
+      .clamp(maxCharge.toFloat - charge, 0f, maxReceive.toFloat / ratio)
+      .floor
+      .toInt
     if (!simulate) setCharge(container, charge + canCharge)
     return (canCharge * ratio).round
   }
 
-  def extractEnergy(container: ItemStack, maxExtract: Int, simulate: Boolean): Int = 0
-  def getEnergyStored(container: ItemStack): Int = (getCharge(container) * ratio).round
+  def extractEnergy(
+      container: ItemStack,
+      maxExtract: Int,
+      simulate: Boolean
+  ): Int = 0
+  def getEnergyStored(container: ItemStack): Int =
+    (getCharge(container) * ratio).round
   def getMaxEnergyStored(container: ItemStack): Int = (maxCharge * ratio).round
 }

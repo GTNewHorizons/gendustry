@@ -9,7 +9,11 @@
 
 package net.bdew.gendustry.compat.triggers
 
-import buildcraft.api.statements.{IStatementContainer, IStatementParameter, ITriggerExternal}
+import buildcraft.api.statements.{
+  IStatementContainer,
+  IStatementParameter,
+  ITriggerExternal
+}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.gendustry.Gendustry
 import net.bdew.lib.Misc
@@ -18,7 +22,11 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.IIcon
 import net.minecraftforge.common.util.ForgeDirection
 
-abstract class BaseTrigger[T](val id: String, ordering: String, tileClass: Class[T]) extends ITriggerExternal {
+abstract class BaseTrigger[T](
+    val id: String,
+    ordering: String,
+    tileClass: Class[T]
+) extends ITriggerExternal {
   var icon: IIcon = null
   override def getUniqueTag = "gendustry." + ordering + "." + id
 
@@ -36,7 +44,12 @@ abstract class BaseTrigger[T](val id: String, ordering: String, tileClass: Class
   override def maxParameters() = 0
   override def minParameters() = 0
 
-  override def isTriggerActive(target: TileEntity, side: ForgeDirection, source: IStatementContainer, parameters: Array[IStatementParameter]) =
+  override def isTriggerActive(
+      target: TileEntity,
+      side: ForgeDirection,
+      source: IStatementContainer,
+      parameters: Array[IStatementParameter]
+  ) =
     if (tileClass.isInstance(target))
       getState(side, target.asInstanceOf[T])
     else

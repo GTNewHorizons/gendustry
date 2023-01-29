@@ -14,7 +14,8 @@ import net.bdew.gendustry.gui.rscontrol.RSMode
 import net.bdew.lib.gui._
 
 object Textures {
-  val texture = new ScaledResourceLocation(Gendustry.modId, "textures/gui/widgets.png", 256)
+  val texture =
+    new ScaledResourceLocation(Gendustry.modId, "textures/gui/widgets.png", 256)
   val tankOverlay = Texture(texture, 16, 0, 16, 58)
   val powerFill = Texture(texture, 0, 0, 16, 58)
   val slotSelect = Texture(texture, 64, 0, 18, 18)

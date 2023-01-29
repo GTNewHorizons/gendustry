@@ -20,7 +20,8 @@ import net.minecraftforge.oredict.OreDictionary
 
 import scala.collection.mutable
 
-class FluidSourceWrapper(fluidId: String, registry: FluidSourceRegistry) extends IFluidSourceRegistry {
+class FluidSourceWrapper(fluidId: String, registry: FluidSourceRegistry)
+    extends IFluidSourceRegistry {
   private val values = mutable.Map.empty[Item, mutable.Map[Int, Int]]
   private var merged = false
 
@@ -49,24 +50,46 @@ class FluidSourceWrapper(fluidId: String, registry: FluidSourceRegistry) extends
 
   override def add(item: ItemStack, value: Int): Boolean = {
     if (item == null || item.getItem == null) {
-      Gendustry.logError("Ignoring invalid fluid source API call from %s - null item", Misc.getActiveModId)
+      Gendustry.logError(
+        "Ignoring invalid fluid source API call from %s - null item",
+        Misc.getActiveModId
+      )
       false
     } else if (merged) {
-      Gendustry.logError("Ignoring invalid fluid source API call from %s - registry cannot be modified after postInit", Misc.getActiveModId)
+      Gendustry.logError(
+        "Ignoring invalid fluid source API call from %s - registry cannot be modified after postInit",
+        Misc.getActiveModId
+      )
       false
     } else {
-      Gendustry.logInfo("Registering %s source from %s: %s (%s) -> %d mb", fluidId, Misc.getActiveModId, item.getUnlocalizedName, item.getItemDamage, value)
-      values.getOrElseUpdate(item.getItem, mutable.Map.empty) += (item.getItemDamage -> value)
+      Gendustry.logInfo(
+        "Registering %s source from %s: %s (%s) -> %d mb",
+        fluidId,
+        Misc.getActiveModId,
+        item.getUnlocalizedName,
+        item.getItemDamage,
+        value
+      )
+      values.getOrElseUpdate(
+        item.getItem,
+        mutable.Map.empty
+      ) += (item.getItemDamage -> value)
       true
     }
   }
 
-  override def add(item: Item, value: Int): Boolean = add(new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE), value)
-  override def add(block: Block, value: Int): Boolean = add(new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE), value)
+  override def add(item: Item, value: Int): Boolean =
+    add(new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE), value)
+  override def add(block: Block, value: Int): Boolean =
+    add(new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE), value)
 
   def doMerge(): Unit = {
-    val tmp = for (key <- registry.values.keySet ++ values.keySet)
-      yield key -> (values.getOrElse(key, mutable.Map.empty) ++ registry.values.getOrElse(key, mutable.Map.empty))
+    val tmp =
+      for (key <- registry.values.keySet ++ values.keySet)
+        yield key -> (values.getOrElse(
+          key,
+          mutable.Map.empty
+        ) ++ registry.values.getOrElse(key, mutable.Map.empty))
     registry.values.clear()
     values.clear()
     merged = true

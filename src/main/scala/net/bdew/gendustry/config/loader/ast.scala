@@ -35,19 +35,39 @@ case class RsLiquidDNA(st: StackRef, mb: Int) extends RecipeStatement
 case class RsProtein(st: StackRef, mb: Int) extends RecipeStatement
 
 // BC Assembly Table
-case class RsAssembly(rec: List[(Char, Int)], id: String, power: Int, result: StackRef, cnt: Int) extends CraftingStatement
+case class RsAssembly(
+    rec: List[(Char, Int)],
+    id: String,
+    power: Int,
+    result: StackRef,
+    cnt: Int
+) extends CraftingStatement
 
 // Forestry Centrifuge
-case class RsCentrifuge(st: StackRef, out: List[(Double, StackRef)], time: Int) extends RecipeStatement
+case class RsCentrifuge(st: StackRef, out: List[(Double, StackRef)], time: Int)
+    extends RecipeStatement
 
 // Forestry Squeezer
-case class RsSqueezer(st: StackRef, fluid: FluidSpec, time: Int, remnants: StackRef, chance: Int) extends RecipeStatement
+case class RsSqueezer(
+    st: StackRef,
+    fluid: FluidSpec,
+    time: Int,
+    remnants: StackRef,
+    chance: Int
+) extends RecipeStatement
 
 // === Mutations ===
 
 abstract class MutationRequirement
 
-case class RsMutation(parent1: String, parent2: String, result: String, chance: Float, secret: Boolean, requirements: List[MutationRequirement]) extends RecipeStatement
+case class RsMutation(
+    parent1: String,
+    parent2: String,
+    result: String,
+    chance: Float,
+    secret: Boolean,
+    requirements: List[MutationRequirement]
+) extends RecipeStatement
 
 case class MReqTemperature(temperature: String) extends MutationRequirement
 
@@ -60,4 +80,3 @@ case class MReqBiome(biome: String) extends MutationRequirement
 // === Conditions ===
 
 case class CndHaveRoot(name: String) extends Condition
-

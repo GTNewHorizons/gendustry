@@ -11,12 +11,16 @@ package net.bdew.gendustry.config.loader
 
 import net.bdew.lib.recipes.{ConfigStatement, StackRef}
 
-case class CSFlowerAllele(id: String, definition: List[FlowerAlleleDefStatement]) extends ConfigStatement
+case class CSFlowerAllele(
+    id: String,
+    definition: List[FlowerAlleleDefStatement]
+) extends ConfigStatement
 
 trait FlowerAlleleDefStatement
 
 case class FADAccepts(accepts: List[StackRef]) extends FlowerAlleleDefStatement
 
-case class FADSpread(block: StackRef, weight: Double) extends FlowerAlleleDefStatement
+case class FADSpread(block: StackRef, weight: Double)
+    extends FlowerAlleleDefStatement
 
 case class FADDominant(dominant: Boolean) extends FlowerAlleleDefStatement

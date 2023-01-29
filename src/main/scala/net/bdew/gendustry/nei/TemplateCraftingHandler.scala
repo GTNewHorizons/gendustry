@@ -21,7 +21,11 @@ class TemplateCraftingHandler extends ShapelessRecipeHandler {
 
   def addRecipe() {
     import scala.collection.JavaConversions._
-    val rec = List(new ItemStack(GeneTemplate), new ItemStack(GeneSample), new ItemStack(GeneSample))
+    val rec = List(
+      new ItemStack(GeneTemplate),
+      new ItemStack(GeneSample),
+      new ItemStack(GeneSample)
+    )
     val out = new ItemStack(GeneTemplate)
     arecipes.add(new CachedShapelessRecipe(rec, out))
   }
@@ -37,11 +41,21 @@ class TemplateCraftingHandler extends ShapelessRecipeHandler {
   }
 
   override def drawExtras(recipe: Int) = {
-    GuiDraw.fontRenderer.drawSplitString(Misc.toLocal("gendustry.label.template.crafting"), 5, 65, 155, 0x404040)
+    GuiDraw.fontRenderer.drawSplitString(
+      Misc.toLocal("gendustry.label.template.crafting"),
+      5,
+      65,
+      155,
+      0x404040
+    )
   }
 
   override def recipiesPerPage() = 1
-  override def hasOverlay(gui: GuiContainer, container: Container, recipe: Int) = false
+  override def hasOverlay(
+      gui: GuiContainer,
+      container: Container,
+      recipe: Int
+  ) = false
   override def loadTransferRects() {}
   override def getRecipeName = Misc.toLocal("item.gendustry.GeneTemplate.name")
 }

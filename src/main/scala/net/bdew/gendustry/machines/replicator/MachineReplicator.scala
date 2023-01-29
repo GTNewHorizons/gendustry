@@ -14,7 +14,10 @@ import net.bdew.lib.gui.GuiProvider
 import net.bdew.lib.machine.{Machine, ProcessorMachine}
 import net.minecraft.entity.player.EntityPlayer
 
-object MachineReplicator extends Machine("Replicator", BlockReplicator) with GuiProvider with ProcessorMachine {
+object MachineReplicator
+    extends Machine("Replicator", BlockReplicator)
+    with GuiProvider
+    with ProcessorMachine {
   def guiId = 10
   type TEClass = TileReplicator
 
@@ -26,6 +29,8 @@ object MachineReplicator extends Machine("Replicator", BlockReplicator) with Gui
   lazy val makePristineBees = tuning.getBoolean("MakePristineBees")
 
   @SideOnly(Side.CLIENT)
-  def getGui(te: TileReplicator, player: EntityPlayer) = new GuiReplicator(te, player)
-  def getContainer(te: TileReplicator, player: EntityPlayer) = new ContainerReplicator(te, player)
+  def getGui(te: TileReplicator, player: EntityPlayer) =
+    new GuiReplicator(te, player)
+  def getContainer(te: TileReplicator, player: EntityPlayer) =
+    new ContainerReplicator(te, player)
 }

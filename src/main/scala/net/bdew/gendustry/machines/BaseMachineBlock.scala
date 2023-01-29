@@ -39,7 +39,8 @@ class BaseMachineBlock(name: String) extends Block(MachineMaterial) {
 
   @SideOnly(Side.CLIENT)
   override def registerBlockIcons(reg: IIconRegister) {
-    bottomIcon = reg.registerIcon(Misc.iconName(Gendustry.modId, name, "bottom"))
+    bottomIcon =
+      reg.registerIcon(Misc.iconName(Gendustry.modId, name, "bottom"))
     topIcon = reg.registerIcon(Misc.iconName(Gendustry.modId, name, "top"))
     blockIcon = reg.registerIcon(Misc.iconName(Gendustry.modId, name, "side"))
   }

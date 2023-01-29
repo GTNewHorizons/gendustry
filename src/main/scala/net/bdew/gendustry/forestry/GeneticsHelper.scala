@@ -29,12 +29,18 @@ import net.minecraft.world.World
 object GeneticsHelper {
   val random = new Random
 
-  def checkIndividualType(root: ISpeciesRoot, stack: ItemStack, slot: Int): Boolean = {
+  def checkIndividualType(
+      root: ISpeciesRoot,
+      stack: ItemStack,
+      slot: Int
+  ): Boolean = {
     (root, slot) match {
       case (bees: IBeeRoot, 0) => bees.getType(stack) == EnumBeeType.PRINCESS
       case (bees: IBeeRoot, 1) => bees.getType(stack) == EnumBeeType.DRONE
-      case (trees: ITreeRoot, 0) => trees.getType(stack) == EnumGermlingType.SAPLING
-      case (trees: ITreeRoot, 1) => trees.getType(stack) == EnumGermlingType.POLLEN
+      case (trees: ITreeRoot, 0) =>
+        trees.getType(stack) == EnumGermlingType.SAPLING
+      case (trees: ITreeRoot, 1) =>
+        trees.getType(stack) == EnumGermlingType.POLLEN
       case _ => true
     }
   }
@@ -46,13 +52,21 @@ object GeneticsHelper {
     return checkIndividualType(root, stack, slot)
   }
 
-  def checkMutation(m: IMutation, s1: IAlleleSpecies, s2: IAlleleSpecies): Boolean = {
+  def checkMutation(
+      m: IMutation,
+      s1: IAlleleSpecies,
+      s2: IAlleleSpecies
+  ): Boolean = {
     if (m.getAllele0 == s1 && m.getAllele1 == s2) return true
     if (m.getAllele0 == s2 && m.getAllele1 == s1) return true
     return false
   }
 
-  def getValidMutations(fromStack: ItemStack, toStack: ItemStack, beeHousing: IBeeHousing): Seq[IMutation] = {
+  def getValidMutations(
+      fromStack: ItemStack,
+      toStack: ItemStack,
+      beeHousing: IBeeHousing
+  ): Seq[IMutation] = {
     val emptyMutations = Seq.empty[IMutation]
 
     if (fromStack == null || toStack == null) return emptyMutations
@@ -74,27 +88,45 @@ object GeneticsHelper {
 
     val mutations = root.getCombinations(fromSpecies).asScala
 
-    return mutations.filter(checkMutation(_, fromSpecies, toSpecies)).toSeq filter { mutation =>
-      (MachineMutatron.mutatronOverrides(getMutationSpecies(mutation).getUID), mutation) match {
-        case (EnumMutationSetting.ENABLED, _) => true
+    return mutations
+      .filter(checkMutation(_, fromSpecies, toSpecies))
+      .toSeq filter { mutation =>
+      (
+        MachineMutatron.mutatronOverrides(getMutationSpecies(mutation).getUID),
+        mutation
+      ) match {
+        case (EnumMutationSetting.ENABLED, _)  => true
         case (EnumMutationSetting.DISABLED, _) => false
         case (EnumMutationSetting.REQUIREMENTS, beeMutation: IBeeMutation) =>
-          //Have to use the deprecated version because of not-updated other mods
-          beeMutation.getChance(beeHousing, fromSpecies.asInstanceOf[IAlleleBeeSpecies], toSpecies.asInstanceOf[IAlleleBeeSpecies],
-            fromIndividual.getGenome.asInstanceOf[IBeeGenome], toIndividual.getGenome.asInstanceOf[IBeeGenome]) > 0
+          // Have to use the deprecated version because of not-updated other mods
+          beeMutation.getChance(
+            beeHousing,
+            fromSpecies.asInstanceOf[IAlleleBeeSpecies],
+            toSpecies.asInstanceOf[IAlleleBeeSpecies],
+            fromIndividual.getGenome.asInstanceOf[IBeeGenome],
+            toIndividual.getGenome.asInstanceOf[IBeeGenome]
+          ) > 0
         case _ => true
       }
     }
   }
 
-  def isPotentialMutationPair(fromStack: ItemStack, toStack: ItemStack, beeHousing: IBeeHousing): Boolean = {
+  def isPotentialMutationPair(
+      fromStack: ItemStack,
+      toStack: ItemStack,
+      beeHousing: IBeeHousing
+  ): Boolean = {
     if (fromStack == null && toStack == null) return false
     if (toStack == null) return isValidItemForSlot(fromStack, 0)
     if (fromStack == null) return isValidItemForSlot(toStack, 1)
     return getValidMutations(fromStack, toStack, beeHousing).nonEmpty
   }
 
-  def getMutationResult(fromStack: ItemStack, toStack: ItemStack, beeHousing: IBeeHousing): ItemStack = {
+  def getMutationResult(
+      fromStack: ItemStack,
+      toStack: ItemStack,
+      beeHousing: IBeeHousing
+  ): ItemStack = {
     val valid = getValidMutations(fromStack, toStack, beeHousing)
     if (valid.isEmpty) return null
 
@@ -124,7 +156,11 @@ object GeneticsHelper {
     return getFinalMutationResult(selected, fromStack, true)
   }
 
-  def getFinalMutationResult(selected: IMutation, fromStack: ItemStack, applyDecay: Boolean): ItemStack = {
+  def getFinalMutationResult(
+      selected: IMutation,
+      fromStack: ItemStack,
+      applyDecay: Boolean
+  ): ItemStack = {
     val root = selected.getRoot
     val individual = root.templateAsIndividual(selected.getTemplate)
 
@@ -146,7 +182,10 @@ object GeneticsHelper {
       return res
   }
 
-  def applyMutationDecayChance(result: ItemStack, original: ItemStack): ItemStack = {
+  def applyMutationDecayChance(
+      result: ItemStack,
+      original: ItemStack
+  ): ItemStack = {
     val root = AlleleManager.alleleRegistry.getSpeciesRoot(result)
     root match {
       case bees: IBeeRoot =>
@@ -169,9 +208,18 @@ object GeneticsHelper {
     }
   }
 
-  def addMutationToTracker(in1: ItemStack, in2: ItemStack, out: ItemStack, player: GameProfile, world: World) {
+  def addMutationToTracker(
+      in1: ItemStack,
+      in2: ItemStack,
+      out: ItemStack,
+      player: GameProfile,
+      world: World
+  ) {
     val root = AlleleManager.alleleRegistry.getSpeciesRoot(in1)
-    if (root == null || !root.isMember(in1) || !root.isMember(in2) || !root.isMember(out)) return
+    if (
+      root == null || !root.isMember(in1) || !root.isMember(in2) || !root
+        .isMember(out)
+    ) return
     val sp1 = root.getMember(in1).getGenome.getPrimary
     val sp2 = root.getMember(in2).getGenome.getPrimary
     val spR = root.getMember(out).getGenome.getPrimary
@@ -179,9 +227,13 @@ object GeneticsHelper {
 
     import scala.collection.JavaConverters._
 
-    root.getCombinations(sp1).asScala.filter(x => {
-      checkMutation(x, sp1, sp2) && getMutationSpecies(x) == spR
-    }).foreach(tracker.registerMutation)
+    root
+      .getCombinations(sp1)
+      .asScala
+      .filter(x => {
+        checkMutation(x, sp1, sp2) && getMutationSpecies(x) == spR
+      })
+      .foreach(tracker.registerMutation)
   }
 
   def individualFromTemplate(tpl: ItemStack, pristine: Boolean = false) = {
@@ -200,14 +252,20 @@ object GeneticsHelper {
       case trees: ITreeRoot =>
         trees.getMemberStack(individual, EnumGermlingType.SAPLING.ordinal())
       case butterflies: IButterflyRoot =>
-        butterflies.getMemberStack(individual, EnumFlutterType.BUTTERFLY.ordinal())
+        butterflies.getMemberStack(
+          individual,
+          EnumFlutterType.BUTTERFLY.ordinal()
+        )
       case other: ISpeciesRoot =>
         other.getMemberStack(individual, 0)
     }
   }
 
   def templateFromSpeciesUID(uid: String) = {
-    val root = AlleleManager.alleleRegistry.getAllele(uid).asInstanceOf[IAlleleSpecies].getRoot
+    val root = AlleleManager.alleleRegistry
+      .getAllele(uid)
+      .asInstanceOf[IAlleleSpecies]
+      .getRoot
     val template = root.getTemplate(uid)
     val item = new ItemStack(GeneTemplate)
 
@@ -217,25 +275,30 @@ object GeneticsHelper {
     item
   }
 
-  /**
-   * Returns the list of chromosomes as a map, filtering out unused ones
-   */
+  /** Returns the list of chromosomes as a map, filtering out unused ones
+    */
   def getCleanKaryotype(root: ISpeciesRoot) = (
     root.getKaryotype
       filter { x => root.getDefaultTemplate()(x.ordinal()) != null }
       map { x => x.ordinal() -> x }
-    ).toMap
+  ).toMap
 
   def getMutationSpecies(m: IMutation) =
-    m.getTemplate()(m.getRoot.getKaryotypeKey.ordinal()).asInstanceOf[IAlleleSpecies]
+    m.getTemplate()(m.getRoot.getKaryotypeKey.ordinal())
+      .asInstanceOf[IAlleleSpecies]
 
-  lazy val leafBlocks = Set(GameRegistry.findBlock("minecraft", "leaves"), GameRegistry.findBlock("minecraft", "leaves2"))
+  lazy val leafBlocks = Set(
+    GameRegistry.findBlock("minecraft", "leaves"),
+    GameRegistry.findBlock("minecraft", "leaves2")
+  )
 
   def getErsatzPollen(bl: Block, meta: Int): Option[IIndividual] = {
     if (leafBlocks.contains(bl)) {
       val fixedMeta = bl.damageDropped(meta)
       import scala.collection.JavaConversions._
-      AlleleManager.ersatzSaplings.find({ case (stack, _) => stack.getItemDamage == fixedMeta }) map (_._2)
+      AlleleManager.ersatzSaplings.find({ case (stack, _) =>
+        stack.getItemDamage == fixedMeta
+      }) map (_._2)
     } else None
   }
 
@@ -246,7 +309,13 @@ object GeneticsHelper {
       Option(m.getSpecialConditions) map (_.toList) getOrElse List.empty
     } catch {
       case t: Throwable =>
-        Gendustry.logWarnException("Error getting conditions of mutation %s + %s => %s", t, m.getAllele0.getUID, m.getAllele1.getUID, getMutationSpecies(m).getUID)
+        Gendustry.logWarnException(
+          "Error getting conditions of mutation %s + %s => %s",
+          t,
+          m.getAllele0.getUID,
+          m.getAllele1.getUID,
+          getMutationSpecies(m).getUID
+        )
         List.empty
     }
 }

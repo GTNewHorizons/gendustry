@@ -19,11 +19,22 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumChatFormatting
 
 object WailaApiaryDataProvider extends BaseDataProvider(classOf[TileApiary]) {
-  override def getBodyStrings(target: TileApiary, stack: ItemStack, acc: IWailaDataAccessor, cfg: IWailaConfigHandler) = {
+  override def getBodyStrings(
+      target: TileApiary,
+      stack: ItemStack,
+      acc: IWailaDataAccessor,
+      cfg: IWailaConfigHandler
+  ) = {
     var strings = target.errorConditions.toList.sortBy(_.getID) map { err =>
       EnumChatFormatting.RED + Misc.toLocal("for." + err.getDescription)
     }
-    strings :+= Misc.toLocalF("gendustry.label.control", Misc.toLocal("gendustry.rsmode." + target.rsmode.value.toString.toLowerCase(Locale.US)))
+    strings :+= Misc.toLocalF(
+      "gendustry.label.control",
+      Misc.toLocal(
+        "gendustry.rsmode." + target.rsmode.value.toString
+          .toLowerCase(Locale.US)
+      )
+    )
 
     if (target.queen :!= null)
       strings :+= target.queen.getDisplayName

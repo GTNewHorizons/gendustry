@@ -1,19 +1,17 @@
 /*
- * Copyright (c) bdew, 2013 - 2014
- * https://github.com/bdew/gendustry
- *
- * This mod is distributed under the terms of the Minecraft Mod Public
- * License 1.0, or MMPL. Please check the contents of the license located in
+ * Copyright (c) bdew, 2013 - 2014 https://github.com/bdew/gendustry This mod is distributed under the terms of the
+ * Minecraft Mod Public License 1.0, or MMPL. Please check the contents of the license located in
  * http://bdew.net/minecraft-mod-public-license/
  */
 
 package net.bdew.gendustry.api.blocks;
 
-import net.minecraft.item.ItemStack;
-
 import java.util.Map;
 
+import net.minecraft.item.ItemStack;
+
 public interface IAdvancedMutatron extends IMutatron {
+
     /**
      * @return List of possible mutations for current inventory
      */

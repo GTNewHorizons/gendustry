@@ -34,77 +34,135 @@ object CustomHives {
     definitions :+= definition
   }
 
-  def getSingleStatement[T <: HiveDefStatement](definition: CSHiveDefinition, cls: Class[T]) = {
+  def getSingleStatement[T <: HiveDefStatement](
+      definition: CSHiveDefinition,
+      cls: Class[T]
+  ) = {
     val l = Misc.filterType(definition.definition, cls)
     if (l.size > 1)
-      Gendustry.logWarn("Multiple entries of type %s in BeeHive definition '%s' - all but the first one will be ignored", cls.getSimpleName, definition.id)
+      Gendustry.logWarn(
+        "Multiple entries of type %s in BeeHive definition '%s' - all but the first one will be ignored",
+        cls.getSimpleName,
+        definition.id
+      )
     l.headOption
   }
 
   def resolveFilter(f: BlockFilterDef) = f match {
-    case BlockFilterDefAir => BlockFilterAir
-    case BlockFilterDefLeaves => BlockFilterLeaves
+    case BlockFilterDefAir         => BlockFilterAir
+    case BlockFilterDefLeaves      => BlockFilterLeaves
     case BlockFilterDefReplaceable => BlockFilterReplaceable
     case BlockFilterRef(list) =>
       val blocks = for {
         ref <- list
         stack <- TuningLoader.loader.getAllConcreteStacks(ref)
       } yield {
-          if (stack == null || stack.getItem == null || !stack.getItem.isInstanceOf[ItemBlock]) {
-            Gendustry.logWarn("Error resolving filter %s - stackref %s does not resolve to a block", f, ref)
-            None
-          } else {
-            Some(Block.getBlockFromItem(stack.getItem) -> (if (stack.getItemDamage == OreDictionary.WILDCARD_VALUE) -1 else stack.getItemDamage))
-          }
+        if (
+          stack == null || stack.getItem == null || !stack.getItem
+            .isInstanceOf[ItemBlock]
+        ) {
+          Gendustry.logWarn(
+            "Error resolving filter %s - stackref %s does not resolve to a block",
+            f,
+            ref
+          )
+          None
+        } else {
+          Some(
+            Block
+              .getBlockFromItem(stack.getItem) -> (if (
+                                                     stack.getItemDamage == OreDictionary.WILDCARD_VALUE
+                                                   ) -1
+                                                   else stack.getItemDamage)
+          )
         }
+      }
       BlockFilterList(blocks.flatten.toSet)
   }
 
   def registerHives(): Unit = {
 
-    val validBiomes = BiomeGenBase.getBiomeGenArray.filterNot(null == _).map(x => x.biomeName.toLowerCase(Locale.US) -> x).toMap
+    val validBiomes = BiomeGenBase.getBiomeGenArray
+      .filterNot(null == _)
+      .map(x => x.biomeName.toLowerCase(Locale.US) -> x)
+      .toMap
 
     for (definition <- definitions) {
       Gendustry.logDebug("Processing Beehive definition: %s", definition)
 
-      val failedCondition = Misc.filterType(definition.definition, classOf[HDSpawnIf]) find (c => !TuningLoader.loader.resolveCondition(c.condition))
+      val failedCondition =
+        Misc.filterType(definition.definition, classOf[HDSpawnIf]) find (c =>
+          !TuningLoader.loader.resolveCondition(c.condition)
+        )
 
       if (failedCondition.isDefined) {
-        Gendustry.logDebug("Condition unmet: %s - not registering", failedCondition.get.condition)
+        Gendustry.logDebug(
+          "Condition unmet: %s - not registering",
+          failedCondition.get.condition
+        )
       } else {
-        val spawnChance = getSingleStatement(definition, classOf[HDSpawnChance]) map (_.chance) getOrElse 1F
+        val spawnChance = getSingleStatement(
+          definition,
+          classOf[HDSpawnChance]
+        ) map (_.chance) getOrElse 1f
 
-        val range = getSingleStatement(definition, classOf[HDYRange]) getOrElse HDYRange(0, 255)
+        val range = getSingleStatement(
+          definition,
+          classOf[HDYRange]
+        ) getOrElse HDYRange(0, 255)
 
-        val biomeNames = (Misc.filterType(definition.definition, classOf[HDBiomes]) flatMap (_.biomes) map (_.toLowerCase(Locale.US))).toSet
+        val biomeNames = (Misc.filterType(
+          definition.definition,
+          classOf[HDBiomes]
+        ) flatMap (_.biomes) map (_.toLowerCase(Locale.US))).toSet
         val biomes =
           if (biomeNames.isEmpty || biomeNames.contains("all"))
             validBiomes.values.toSet
           else
             validBiomes.filterKeys(biomeNames.contains).values.toSet
 
-        val temperatureNames = (Misc.filterType(definition.definition, classOf[HDTemperature]) flatMap (_.temperatures) map (_.toLowerCase(Locale.US))).toSet
+        val temperatureNames = (Misc.filterType(
+          definition.definition,
+          classOf[HDTemperature]
+        ) flatMap (_.temperatures) map (_.toLowerCase(Locale.US))).toSet
         val temperatures =
           if (temperatureNames.isEmpty || temperatureNames.contains("all"))
             EnumTemperature.values().toSet
           else
-            EnumTemperature.values().filter(x => temperatureNames.contains(x.getName.toLowerCase(Locale.US))).toSet
+            EnumTemperature
+              .values()
+              .filter(x =>
+                temperatureNames.contains(x.getName.toLowerCase(Locale.US))
+              )
+              .toSet
 
-        val humidityNames = (Misc.filterType(definition.definition, classOf[HDHumidity]) flatMap (_.humidityLevels) map (_.toLowerCase(Locale.US))).toSet
+        val humidityNames = (Misc.filterType(
+          definition.definition,
+          classOf[HDHumidity]
+        ) flatMap (_.humidityLevels) map (_.toLowerCase(Locale.US))).toSet
         val humidities =
           if (humidityNames.isEmpty || humidityNames.contains("all"))
             EnumHumidity.values().toSet
           else
-            EnumHumidity.values().filter(x => humidityNames.contains(x.getName.toLowerCase(Locale.US))).toSet
+            EnumHumidity
+              .values()
+              .filter(x =>
+                humidityNames.contains(x.getName.toLowerCase(Locale.US))
+              )
+              .toSet
 
-
-        var conditions = (for (condition <- Misc.filterType(definition.definition, classOf[HiveDefCondition])) yield {
+        var conditions = (for (
+          condition <- Misc.filterType(
+            definition.definition,
+            classOf[HiveDefCondition]
+          )
+        ) yield {
           condition match {
-            case HDLocationUnder(f) => Some(ConditionUnder(resolveFilter(f)))
-            case HDLocationAbove(f) => Some(ConditionAbove(resolveFilter(f)))
+            case HDLocationUnder(f)  => Some(ConditionUnder(resolveFilter(f)))
+            case HDLocationAbove(f)  => Some(ConditionAbove(resolveFilter(f)))
             case HDLocationNextTo(f) => Some(ConditionNextTo(resolveFilter(f)))
-            case HDLocationNear(f) => Some(ConditionNear(resolveFilter(f)))
-            case HDReplace(f) => Some(ConditionReplace(resolveFilter(f)))
+            case HDLocationNear(f)   => Some(ConditionNear(resolveFilter(f)))
+            case HDReplace(f)        => Some(ConditionReplace(resolveFilter(f)))
             case _ =>
               Gendustry.logWarn("Unknown condition %s", condition)
               None
@@ -115,23 +173,45 @@ object CustomHives {
           conditions :+= ConditionReplace(BlockFilterAir)
         }
 
-        val drops = (for (drop <- Misc.filterType(definition.definition, classOf[HDDrops]).flatMap(_.drops)) yield {
-          val stacks = drop.additional map (ref => TuningLoader.loader.getConcreteStackNoWildcard(ref))
+        val drops = (for (
+          drop <- Misc
+            .filterType(definition.definition, classOf[HDDrops])
+            .flatMap(_.drops)
+        ) yield {
+          val stacks = drop.additional map (ref =>
+            TuningLoader.loader.getConcreteStackNoWildcard(ref)
+          )
           val species = AlleleManager.alleleRegistry.getAllele(drop.uid)
 
           if (species.isInstanceOf[IAlleleBeeSpecies]) {
-            Some(HiveDrop(drop.chance, species.asInstanceOf[IAlleleBeeSpecies], drop.ignobleShare, stacks))
+            Some(
+              HiveDrop(
+                drop.chance,
+                species.asInstanceOf[IAlleleBeeSpecies],
+                drop.ignobleShare,
+                stacks
+              )
+            )
           } else {
-            Gendustry.logWarn("%s is not a valid bee species in hive definition %s", drop.uid, definition.id)
+            Gendustry.logWarn(
+              "%s is not a valid bee species in hive definition %s",
+              drop.uid,
+              definition.id
+            )
             None
           }
         }).flatten
 
         if (drops.isEmpty) {
-          Gendustry.logWarn("Hive definition %s contains no valid drops", definition.id)
+          Gendustry.logWarn(
+            "Hive definition %s contains no valid drops",
+            definition.id
+          )
         }
 
-        val spawnDebug = Misc.filterType(definition.definition, classOf[HDSpawnDebug]).exists(_.debug)
+        val spawnDebug = Misc
+          .filterType(definition.definition, classOf[HDSpawnDebug])
+          .exists(_.debug)
 
         val hive = HiveDescription(
           id = definition.id,
@@ -148,20 +228,38 @@ object CustomHives {
 
         Gendustry.logDebug("Registering hive definition: %s", hive)
 
-        HiveManager.hiveRegistry.registerHive("Gendustry:" + definition.id, hive)
+        HiveManager.hiveRegistry.registerHive(
+          "Gendustry:" + definition.id,
+          hive
+        )
 
         hives += definition.id -> hive
 
-        val sideTexture = getSingleStatement(definition, classOf[HDSideTexture]) map (_.loc) getOrElse
+        val sideTexture = getSingleStatement(
+          definition,
+          classOf[HDSideTexture]
+        ) map (_.loc) getOrElse
           Misc.iconName(Gendustry.modId, "beehives", definition.id, "side")
 
-        val topTexture = getSingleStatement(definition, classOf[HDTopTexture]) map (_.loc) getOrElse
+        val topTexture = getSingleStatement(
+          definition,
+          classOf[HDTopTexture]
+        ) map (_.loc) getOrElse
           Misc.iconName(Gendustry.modId, "beehives", definition.id, "top")
 
-        val bottomTexture = getSingleStatement(definition, classOf[HDTopTexture]) map (_.loc) getOrElse topTexture
+        val bottomTexture = getSingleStatement(
+          definition,
+          classOf[HDTopTexture]
+        ) map (_.loc) getOrElse topTexture
 
-        val lightLevel = getSingleStatement(definition, classOf[HDLight]) map (_.level) getOrElse 0
-        val color = getSingleStatement(definition, classOf[HDColor]) map (_.color) getOrElse 0xFFFFFF
+        val lightLevel = getSingleStatement(
+          definition,
+          classOf[HDLight]
+        ) map (_.level) getOrElse 0
+        val color = getSingleStatement(
+          definition,
+          classOf[HDColor]
+        ) map (_.color) getOrElse 0xffffff
 
         val block = BeeHive(
           hiveId = definition.id,

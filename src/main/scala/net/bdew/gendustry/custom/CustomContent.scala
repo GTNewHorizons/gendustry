@@ -30,29 +30,58 @@ object CustomContent {
 
   def registerBranches() {
     Gendustry.logDebug("Registering branches")
-    val added = (Tuning.getOrAddSection("Branches").filterType(classOf[ConfigSection]) collect {
-      case (_, cfg) =>
-        Gendustry.logDebug("%s -> %s (%s)", cfg.getString("Parent"), cfg.getString("UID"), cfg.getString("Scientific"))
-        val cls = reg.createAndRegisterClassification(EnumClassLevel.GENUS, cfg.getString("UID"), cfg.getString("Scientific"))
-        reg.getClassification("family." + cfg.getString("Parent")).addMemberGroup(cls)
+    val added = (Tuning
+      .getOrAddSection("Branches")
+      .filterType(classOf[ConfigSection]) collect { case (_, cfg) =>
+      Gendustry.logDebug(
+        "%s -> %s (%s)",
+        cfg.getString("Parent"),
+        cfg.getString("UID"),
+        cfg.getString("Scientific")
+      )
+      val cls = reg.createAndRegisterClassification(
+        EnumClassLevel.GENUS,
+        cfg.getString("UID"),
+        cfg.getString("Scientific")
+      )
+      reg
+        .getClassification("family." + cfg.getString("Parent"))
+        .addMemberGroup(cls)
     }).size
     Gendustry.logInfo("Registered %d branches", added)
   }
 
   def registerSpecies() {
     Gendustry.logDebug("Registering bees")
-    val added = (Tuning.getOrAddSection("Bees").filterType(classOf[ConfigSection]) collect {
-      case (uid, cfg) =>
-        if (cfg.hasValue("RequireMod") && !Misc.haveModVersion(cfg.getString("RequireMod"))) {
-          Gendustry.logInfo("Not registering species '%s' - required mod '%s' is not loaded", uid, cfg.getString("RequireMod"))
-        } else if (cfg.hasValue("RequireOreDict") && OreDictionary.getOres(cfg.getString("RequireOreDict")).size() == 0) {
-          Gendustry.logInfo("Not registering species '%s' - required ore dictionary entry '%s' not found", uid, cfg.getString("RequireOreDict"))
-        } else {
-          val species = new BeeSpecies(cfg, uid)
-          Gendustry.logDebug("Registering %s", species.getUID)
-          reg.registerAllele(species, EnumBeeChromosome.SPECIES)
-          mySpecies +:= species
-        }
+    val added = (Tuning
+      .getOrAddSection("Bees")
+      .filterType(classOf[ConfigSection]) collect { case (uid, cfg) =>
+      if (
+        cfg.hasValue("RequireMod") && !Misc.haveModVersion(
+          cfg.getString("RequireMod")
+        )
+      ) {
+        Gendustry.logInfo(
+          "Not registering species '%s' - required mod '%s' is not loaded",
+          uid,
+          cfg.getString("RequireMod")
+        )
+      } else if (
+        cfg.hasValue("RequireOreDict") && OreDictionary
+          .getOres(cfg.getString("RequireOreDict"))
+          .size() == 0
+      ) {
+        Gendustry.logInfo(
+          "Not registering species '%s' - required ore dictionary entry '%s' not found",
+          uid,
+          cfg.getString("RequireOreDict")
+        )
+      } else {
+        val species = new BeeSpecies(cfg, uid)
+        Gendustry.logDebug("Registering %s", species.getUID)
+        reg.registerAllele(species, EnumBeeChromosome.SPECIES)
+        mySpecies +:= species
+      }
     }).size
     Gendustry.logInfo("Registered %d bees", added)
   }
@@ -68,25 +97,34 @@ object CustomContent {
     val added = TuningLoader.loader.mutations count { st =>
       try {
 
-        Gendustry.logDebug("Registering mutation %s + %s = %s", st.parent1, st.parent2, st.result)
+        Gendustry.logDebug(
+          "Registering mutation %s + %s = %s",
+          st.parent1,
+          st.parent2,
+          st.result
+        )
 
         val mutation = new BeeMutation(
           lookupBeeSpecies(st.parent1),
           lookupBeeSpecies(st.parent2),
           lookupBeeSpecies(st.result),
-          st.chance)
+          st.chance
+        )
 
         if (st.secret) mutation.isSecret = true
 
         st.requirements foreach {
           case MReqHumidity(hum: String) =>
-            mutation.reqHumidity = Some(EnumHumidity.valueOf(hum.toUpperCase(Locale.US)))
+            mutation.reqHumidity =
+              Some(EnumHumidity.valueOf(hum.toUpperCase(Locale.US)))
           case MReqTemperature(temp: String) =>
-            mutation.reqTemperature = Some(EnumTemperature.valueOf(temp.toUpperCase(Locale.US)))
+            mutation.reqTemperature =
+              Some(EnumTemperature.valueOf(temp.toUpperCase(Locale.US)))
           case MReqBlock(ref: StackBlock) =>
             val stack = TuningLoader.loader.getConcreteStack(ref)
             val block = Block.getBlockFromItem(stack.getItem)
-            if (block == null) sys.error("Invalid block reference: %s".format(ref))
+            if (block == null)
+              sys.error("Invalid block reference: %s".format(ref))
             mutation.reqBlock = Some(block)
             if (stack.getItemDamage != OreDictionary.WILDCARD_VALUE)
               mutation.reqBlockMeta = Some(stack.getItemDamage)

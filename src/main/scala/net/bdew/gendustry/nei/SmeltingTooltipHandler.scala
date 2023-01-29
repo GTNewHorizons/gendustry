@@ -19,9 +19,24 @@ import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.item.ItemStack
 
 class SmeltingTooltipHandler extends IContainerTooltipHandler {
-  override def handleItemDisplayName(gui: GuiContainer, stack: ItemStack, tip: util.List[String]) = tip
-  override def handleTooltip(gui: GuiContainer, mouseX: Int, mouseY: Int, tip: util.List[String]) = tip
-  override def handleItemTooltip(gui: GuiContainer, itemStack: ItemStack, mouseX: Int, mouseY: Int, tip: util.List[String]) = {
+  override def handleItemDisplayName(
+      gui: GuiContainer,
+      stack: ItemStack,
+      tip: util.List[String]
+  ) = tip
+  override def handleTooltip(
+      gui: GuiContainer,
+      mouseX: Int,
+      mouseY: Int,
+      tip: util.List[String]
+  ) = tip
+  override def handleItemTooltip(
+      gui: GuiContainer,
+      itemStack: ItemStack,
+      mouseX: Int,
+      mouseY: Int,
+      tip: util.List[String]
+  ) = {
     if (gui.isInstanceOf[GuiRecipe[_]] && itemStack != null) {
       val gr = gui.asInstanceOf[GuiRecipe[_]]
       val handler = gr.currenthandlers.get(gr.recipetype)

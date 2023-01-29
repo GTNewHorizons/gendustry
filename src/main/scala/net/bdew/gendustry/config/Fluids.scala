@@ -19,34 +19,48 @@ import net.bdew.gendustry.misc.GendustryCreativeTabs
 import net.bdew.lib.Misc
 import net.bdew.lib.config.FluidManager
 import net.minecraft.item.ItemStack
-import net.minecraftforge.fluids.{Fluid, FluidContainerRegistry, FluidRegistry, FluidStack}
+import net.minecraftforge.fluids.{
+  Fluid,
+  FluidContainerRegistry,
+  FluidRegistry,
+  FluidStack
+}
 
 object Fluids extends FluidManager {
   val emptyBucket = new ItemStack(GameRegistry.findItem("minecraft", "bucket"))
   val emptyCan = new ItemStack(ForestryItems.canEmpty)
 
-  def registerFluid(id: String,
-                    luminosity: Int = 0,
-                    density: Int = 1000,
-                    temperature: Int = 295,
-                    viscosity: Int = 1000,
-                    isGaseous: Boolean = false): Fluid = {
+  def registerFluid(
+      id: String,
+      luminosity: Int = 0,
+      density: Int = 1000,
+      temperature: Int = 295,
+      viscosity: Int = 1000,
+      isGaseous: Boolean = false
+  ): Fluid = {
 
-    val ownFluid = if (FluidRegistry.isFluidRegistered(id.toLowerCase(Locale.US))) {
-      Gendustry.logDebug("Fluid %s already registered, using existing (%s)", id, FluidRegistry.getFluid(id))
-      false
-    } else {
-      Gendustry.logDebug("Registering fluid %s", id)
-      val newFluid = new Fluid(id)
-      newFluid.setUnlocalizedName((Misc.getActiveModId + "." + id).toLowerCase(Locale.US))
-      newFluid.setLuminosity(luminosity)
-      newFluid.setDensity(density)
-      newFluid.setTemperature(temperature)
-      newFluid.setViscosity(viscosity)
-      newFluid.setGaseous(isGaseous)
-      FluidRegistry.registerFluid(newFluid)
-      true
-    }
+    val ownFluid =
+      if (FluidRegistry.isFluidRegistered(id.toLowerCase(Locale.US))) {
+        Gendustry.logDebug(
+          "Fluid %s already registered, using existing (%s)",
+          id,
+          FluidRegistry.getFluid(id)
+        )
+        false
+      } else {
+        Gendustry.logDebug("Registering fluid %s", id)
+        val newFluid = new Fluid(id)
+        newFluid.setUnlocalizedName(
+          (Misc.getActiveModId + "." + id).toLowerCase(Locale.US)
+        )
+        newFluid.setLuminosity(luminosity)
+        newFluid.setDensity(density)
+        newFluid.setTemperature(temperature)
+        newFluid.setViscosity(viscosity)
+        newFluid.setGaseous(isGaseous)
+        FluidRegistry.registerFluid(newFluid)
+        true
+      }
     val fluid = FluidRegistry.getFluid(id.toLowerCase(Locale.US))
     if (fluid.getBlock == null) {
       val block = new BlockFluid(fluid, ownFluid)
@@ -54,13 +68,31 @@ object Fluids extends FluidManager {
       block.setCreativeTab(GendustryCreativeTabs.main)
       fluid.setBlock(block)
     }
-    if (FluidContainerRegistry.fillFluidContainer(new FluidStack(fluid, 1000), emptyBucket) == null) {
+    if (
+      FluidContainerRegistry.fillFluidContainer(
+        new FluidStack(fluid, 1000),
+        emptyBucket
+      ) == null
+    ) {
       val bucket = Items.regItem(new ItemFluidBucket(fluid), id + "Bucket")
-      FluidContainerRegistry.registerFluidContainer(fluid, new ItemStack(bucket), emptyBucket)
+      FluidContainerRegistry.registerFluidContainer(
+        fluid,
+        new ItemStack(bucket),
+        emptyBucket
+      )
     }
-    if (FluidContainerRegistry.fillFluidContainer(new FluidStack(fluid, 1000), emptyCan) == null) {
+    if (
+      FluidContainerRegistry.fillFluidContainer(
+        new FluidStack(fluid, 1000),
+        emptyCan
+      ) == null
+    ) {
       val can = Items.regItem(new ItemFluidCan(fluid), id + "Can")
-      FluidContainerRegistry.registerFluidContainer(fluid, new ItemStack(can), emptyCan)
+      FluidContainerRegistry.registerFluidContainer(
+        fluid,
+        new ItemStack(can),
+        emptyCan
+      )
     }
     return fluid
   }

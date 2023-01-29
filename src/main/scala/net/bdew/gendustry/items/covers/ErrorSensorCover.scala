@@ -31,19 +31,22 @@ trait ErrorSensor {
 
 object ErrorSensorNoError extends ErrorSensor {
   override def id: String = "noError"
-  override def isActive(te: IErrorLogicSource): Boolean = !te.getErrorLogic.hasErrors
+  override def isActive(te: IErrorLogicSource): Boolean =
+    !te.getErrorLogic.hasErrors
   override def getUnLocalizedName: String = "gendustry.cover.error.none"
 }
 
 object ErrorSensorAnyError extends ErrorSensor {
   override def id: String = "anyError"
-  override def isActive(te: IErrorLogicSource): Boolean = te.getErrorLogic.hasErrors
+  override def isActive(te: IErrorLogicSource): Boolean =
+    te.getErrorLogic.hasErrors
   override def getUnLocalizedName: String = "gendustry.cover.error.any"
 }
 
 case class ErrorSensorForestry(state: IErrorState) extends ErrorSensor {
   override def id: String = state.getUniqueName
-  override def isActive(te: IErrorLogicSource): Boolean = te.getErrorLogic.contains(state)
+  override def isActive(te: IErrorLogicSource): Boolean =
+    te.getErrorLogic.contains(state)
   override def getUnLocalizedName: String = "for." + state.getDescription
 }
 
@@ -71,12 +74,17 @@ object ErrorSensors {
 object ErrorSensorCover extends SimpleItem("ErrorSensorCover") with ItemCover {
   override def isCoverTicking: Boolean = false
 
-  override def getCoverIcon(te: TileCoverable, side: ForgeDirection, cover: ItemStack): IIcon =
+  override def getCoverIcon(
+      te: TileCoverable,
+      side: ForgeDirection,
+      cover: ItemStack
+  ): IIcon =
     if (isEmittingSignal(te, side, cover)) itemIconOn else itemIcon
 
   override def getSpriteNumber = 0
 
-  override def isValidTile(te: TileCoverable, stack: ItemStack) = te.isInstanceOf[IErrorLogicSource]
+  override def isValidTile(te: TileCoverable, stack: ItemStack) =
+    te.isInstanceOf[IErrorLogicSource]
 
   def getErrorSensor(stack: ItemStack): Option[ErrorSensor] = {
     if (stack.hasTagCompound) {
@@ -97,7 +105,11 @@ object ErrorSensorCover extends SimpleItem("ErrorSensorCover") with ItemCover {
     copy
   }
 
-  override def isEmittingSignal(te: TileCoverable, side: ForgeDirection, cover: ItemStack): Boolean = {
+  override def isEmittingSignal(
+      te: TileCoverable,
+      side: ForgeDirection,
+      cover: ItemStack
+  ): Boolean = {
     for {
       tile <- Misc.asInstanceOpt(te, classOf[IErrorLogicSource])
       sensor <- getErrorSensor(cover)
@@ -107,9 +119,19 @@ object ErrorSensorCover extends SimpleItem("ErrorSensorCover") with ItemCover {
     false
   }
 
-  override def onInstall(te: TileCoverable, side: ForgeDirection, cover: ItemStack, player: EntityPlayerMP): ItemStack = {
+  override def onInstall(
+      te: TileCoverable,
+      side: ForgeDirection,
+      cover: ItemStack,
+      player: EntityPlayerMP
+  ): ItemStack = {
     val sensor = ErrorSensors.sensors.head
-    player.addChatComponentMessage(L("gendustry.cover.error.message", L(sensor.getUnLocalizedName).setColor(Color.YELLOW)))
+    player.addChatComponentMessage(
+      L(
+        "gendustry.cover.error.message",
+        L(sensor.getUnLocalizedName).setColor(Color.YELLOW)
+      )
+    )
     player.addChatComponentMessage(L("gendustry.cover.error.hint"))
     setErrorSensor(cover, sensor)
   }
@@ -117,15 +139,30 @@ object ErrorSensorCover extends SimpleItem("ErrorSensorCover") with ItemCover {
   override def onRemove(cover: ItemStack): ItemStack =
     clearErrorSensor(cover)
 
-  override def clickCover(te: TileCoverable, side: ForgeDirection, cover: ItemStack, player: EntityPlayer): Boolean = {
+  override def clickCover(
+      te: TileCoverable,
+      side: ForgeDirection,
+      cover: ItemStack,
+      player: EntityPlayer
+  ): Boolean = {
     if (player.inventory.getCurrentItem != null) return false
     if (!player.worldObj.isRemote) {
       val current = getErrorSensor(cover) getOrElse ErrorSensors.sensors.head
       val next = Misc.nextInSeq(ErrorSensors.sensors, current)
       te.covers(side) := setErrorSensor(cover, next)
       te.onCoversChanged()
-      player.addChatComponentMessage(L("gendustry.cover.error.message", L(next.getUnLocalizedName).setColor(Color.YELLOW)))
-      te.getWorldObject.notifyBlockOfNeighborChange(te.xCoord + side.offsetX, te.yCoord + side.offsetY, te.zCoord + side.offsetZ, te.getBlockType)
+      player.addChatComponentMessage(
+        L(
+          "gendustry.cover.error.message",
+          L(next.getUnLocalizedName).setColor(Color.YELLOW)
+        )
+      )
+      te.getWorldObject.notifyBlockOfNeighborChange(
+        te.xCoord + side.offsetX,
+        te.yCoord + side.offsetY,
+        te.zCoord + side.offsetZ,
+        te.getBlockType
+      )
     }
     true
   }
@@ -134,7 +171,9 @@ object ErrorSensorCover extends SimpleItem("ErrorSensorCover") with ItemCover {
 
   @SideOnly(Side.CLIENT)
   override def registerIcons(reg: IIconRegister) {
-    itemIconOn = reg.registerIcon(Misc.iconName(Gendustry.modId, "covers", "error_on"))
-    itemIcon = reg.registerIcon(Misc.iconName(Gendustry.modId, "covers", "error_off"))
+    itemIconOn =
+      reg.registerIcon(Misc.iconName(Gendustry.modId, "covers", "error_on"))
+    itemIcon =
+      reg.registerIcon(Misc.iconName(Gendustry.modId, "covers", "error_off"))
   }
 }

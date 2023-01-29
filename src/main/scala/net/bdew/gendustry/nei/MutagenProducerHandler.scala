@@ -24,15 +24,24 @@ class MutagenProducerHandler extends BaseRecipeHandler(5, 13) {
   val mutagenRect = new Rect(152, 19, 16, 58)
   val mjRect = new Rect(8, 19, 16, 58)
 
-  class MutagenProducerRecipe(val in: ItemStack, val out: Int) extends CachedRecipeWithComponents {
+  class MutagenProducerRecipe(val in: ItemStack, val out: Int)
+      extends CachedRecipeWithComponents {
 
     import scala.collection.JavaConversions._
 
     val inPositioned = position(in, 44, 41)
     val getResult = null
 
-    components :+= new FluidComponent(mutagenRect, new FluidStack(Fluids.mutagen, out), MachineMutagenProducer.tankSize)
-    components :+= new PowerComponent(mjRect, MachineMutagenProducer.mjPerItem, MachineMutagenProducer.maxStoredEnergy)
+    components :+= new FluidComponent(
+      mutagenRect,
+      new FluidStack(Fluids.mutagen, out),
+      MachineMutagenProducer.tankSize
+    )
+    components :+= new PowerComponent(
+      mjRect,
+      MachineMutagenProducer.mjPerItem,
+      MachineMutagenProducer.maxStoredEnergy
+    )
 
     override def getIngredients = List(inPositioned)
   }
@@ -50,8 +59,10 @@ class MutagenProducerHandler extends BaseRecipeHandler(5, 13) {
 
   override def loadCraftingRecipes(outputId: String, results: AnyRef*): Unit = {
     Some(outputId, results) collect {
-      case ("liquid", Seq(x: FluidStack)) if x.getFluid == Fluids.mutagen => addAllRecipes()
-      case ("item", Seq(IStackBlock(x))) if x == Fluids.mutagen.getBlock => addAllRecipes()
+      case ("liquid", Seq(x: FluidStack)) if x.getFluid == Fluids.mutagen =>
+        addAllRecipes()
+      case ("item", Seq(IStackBlock(x))) if x == Fluids.mutagen.getBlock =>
+        addAllRecipes()
       case ("MutagenProducer", _) => addAllRecipes()
     }
   }

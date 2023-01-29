@@ -24,7 +24,11 @@ import net.bdew.gendustry.compat.triggers.TriggerProvider
 import net.bdew.gendustry.compat.{ForestryHelper, PowerProxy}
 import net.bdew.gendustry.config._
 import net.bdew.gendustry.config.loader.TuningLoader
-import net.bdew.gendustry.custom.{CustomContent, CustomFlowerAlleles, CustomHives}
+import net.bdew.gendustry.custom.{
+  CustomContent,
+  CustomFlowerAlleles,
+  CustomHives
+}
 import net.bdew.gendustry.forestry.GeneRecipe
 import net.bdew.gendustry.gui.HintIcons
 import net.bdew.gendustry.machines.apiary.GendustryErrorStates
@@ -35,7 +39,14 @@ import net.minecraft.command.CommandHandler
 import net.minecraftforge.oredict.RecipeSorter
 import org.apache.logging.log4j.Logger
 
-@Mod(modid = Gendustry.modId, version = "GRADLETOKEN_VERSION", name = "Gendustry", dependencies = "required-after:Forestry@[4.0.0.0,);after:BuildCraft|energy;after:BuildCraft|Silicon;after:IC2;after:CoFHCore;after:BinnieCore;after:ExtraBees;after:ExtraTrees;after:MineFactoryReloaded;after:MagicBees;required-after:bdlib@[1.9.4.109,)", modLanguage = "scala")
+@Mod(
+  modid = Gendustry.modId,
+  version = "GRADLETOKEN_VERSION",
+  name = "Gendustry",
+  dependencies =
+    "required-after:Forestry@[4.0.0.0,);after:BuildCraft|energy;after:BuildCraft|Silicon;after:IC2;after:CoFHCore;after:BinnieCore;after:ExtraBees;after:ExtraTrees;after:MineFactoryReloaded;after:MagicBees;required-after:bdlib@[1.9.4.109,)",
+  modLanguage = "scala"
+)
 object Gendustry {
   var log: Logger = null
   var instance = this
@@ -49,8 +60,10 @@ object Gendustry {
   def logInfo(msg: String, args: Any*) = log.info(msg.format(args: _*))
   def logWarn(msg: String, args: Any*) = log.warn(msg.format(args: _*))
   def logError(msg: String, args: Any*) = log.error(msg.format(args: _*))
-  def logWarnException(msg: String, t: Throwable, args: Any*) = log.warn(msg.format(args: _*), t)
-  def logErrorException(msg: String, t: Throwable, args: Any*) = log.error(msg.format(args: _*), t)
+  def logWarnException(msg: String, t: Throwable, args: Any*) =
+    log.warn(msg.format(args: _*), t)
+  def logErrorException(msg: String, t: Throwable, args: Any*) =
+    log.error(msg.format(args: _*), t)
 
   @EventHandler
   def preInit(event: FMLPreInitializationEvent) {
@@ -92,11 +105,26 @@ object Gendustry {
     NetworkRegistry.INSTANCE.registerGuiHandler(this, Config.guiHandler)
 
     GameRegistry.addRecipe(new GeneRecipe)
-    RecipeSorter.register("gendustry:GeneCopyRecipe", classOf[GeneRecipe], RecipeSorter.Category.SHAPELESS, "")
+    RecipeSorter.register(
+      "gendustry:GeneCopyRecipe",
+      classOf[GeneRecipe],
+      RecipeSorter.Category.SHAPELESS,
+      ""
+    )
 
-    if (Tuning.getSection("Power").getSection("RedstoneCharging").getBoolean("Enabled")) {
+    if (
+      Tuning
+        .getSection("Power")
+        .getSection("RedstoneCharging")
+        .getBoolean("Enabled")
+    ) {
       GameRegistry.addRecipe(new ChargeRecipe)
-      RecipeSorter.register("gendustry:ChargeRecipe", classOf[ChargeRecipe], RecipeSorter.Category.SHAPELESS, "")
+      RecipeSorter.register(
+        "gendustry:ChargeRecipe",
+        classOf[ChargeRecipe],
+        RecipeSorter.Category.SHAPELESS,
+        ""
+      )
     }
 
     Upgrades.init()
@@ -104,9 +132,15 @@ object Gendustry {
       CustomContent.registerBranches()
       CustomContent.registerSpecies()
     } else {
-      logInfo("Apiculture module seems to be disabled in Forestry, not registering custom bees")
+      logInfo(
+        "Apiculture module seems to be disabled in Forestry, not registering custom bees"
+      )
     }
-    FMLInterModComms.sendMessage("Waila", "register", "net.bdew.gendustry.waila.WailaHandler.loadCallback")
+    FMLInterModComms.sendMessage(
+      "Waila",
+      "register",
+      "net.bdew.gendustry.waila.WailaHandler.loadCallback"
+    )
   }
 
   @EventHandler
@@ -127,7 +161,8 @@ object Gendustry {
 
   @EventHandler
   def serverStarting(event: FMLServerStartingEvent) {
-    val commandHandler = event.getServer.getCommandManager.asInstanceOf[CommandHandler]
+    val commandHandler =
+      event.getServer.getCommandManager.asInstanceOf[CommandHandler]
     commandHandler.registerCommand(new CommandGiveTemplate)
     commandHandler.registerCommand(new CommandGiveSample)
     commandHandler.registerCommand(new CommandDumpAlleles)

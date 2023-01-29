@@ -17,24 +17,38 @@ object TriggerPower0 extends BaseTrigger("power0", "z1", classOf[TilePowered]) {
   def getState(side: ForgeDirection, tile: TilePowered) = tile.power.stored == 0
 }
 
-object TriggerPower25 extends BaseTrigger("power25", "z2", classOf[TilePowered]) {
-  def getState(side: ForgeDirection, tile: TilePowered) = tile.power.stored / tile.power.capacity >= 0.25
+object TriggerPower25
+    extends BaseTrigger("power25", "z2", classOf[TilePowered]) {
+  def getState(side: ForgeDirection, tile: TilePowered) =
+    tile.power.stored / tile.power.capacity >= 0.25
 }
 
-object TriggerPower50 extends BaseTrigger("power50", "z3", classOf[TilePowered]) {
-  def getState(side: ForgeDirection, tile: TilePowered) = tile.power.stored / tile.power.capacity >= 0.5
+object TriggerPower50
+    extends BaseTrigger("power50", "z3", classOf[TilePowered]) {
+  def getState(side: ForgeDirection, tile: TilePowered) =
+    tile.power.stored / tile.power.capacity >= 0.5
 }
 
-object TriggerPower75 extends BaseTrigger("power75", "z4", classOf[TilePowered]) {
-  def getState(side: ForgeDirection, tile: TilePowered) = tile.power.stored / tile.power.capacity >= 0.75
+object TriggerPower75
+    extends BaseTrigger("power75", "z4", classOf[TilePowered]) {
+  def getState(side: ForgeDirection, tile: TilePowered) =
+    tile.power.stored / tile.power.capacity >= 0.75
 }
 
-object TriggerPower100 extends BaseTrigger("power100", "z5", classOf[TilePowered]) {
-  def getState(side: ForgeDirection, tile: TilePowered) = tile.power.stored / tile.power.capacity >= 1
+object TriggerPower100
+    extends BaseTrigger("power100", "z5", classOf[TilePowered]) {
+  def getState(side: ForgeDirection, tile: TilePowered) =
+    tile.power.stored / tile.power.capacity >= 1
 }
 
 object PowerTriggers {
-  val triggers = Seq(TriggerPower0, TriggerPower25, TriggerPower50, TriggerPower75, TriggerPower100)
+  val triggers = Seq(
+    TriggerPower0,
+    TriggerPower25,
+    TriggerPower50,
+    TriggerPower75,
+    TriggerPower100
+  )
   def register() {
     triggers.foreach(StatementManager.registerStatement)
   }

@@ -18,13 +18,20 @@ import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.world.World
 
 class ChargeRecipe extends IRecipe {
-  lazy val redstoneValue = Tuning.getSection("Power").getSection("RedstoneCharging").getInt("RedstoneValue")
+  lazy val redstoneValue = Tuning
+    .getSection("Power")
+    .getSection("RedstoneCharging")
+    .getInt("RedstoneValue")
 
-  def matches(inv: InventoryCrafting, world: World): Boolean = getCraftingResult(inv) != null
+  def matches(inv: InventoryCrafting, world: World): Boolean =
+    getCraftingResult(inv) != null
   def getCraftingResult(inv: InventoryCrafting): ItemStack = {
     var tool: ItemStack = null
     var redstone = 0
-    for (i <- 0 until 3; j <- 0 until 3; stack <- Option(inv.getStackInRowAndColumn(i, j))) {
+    for (
+      i <- 0 until 3; j <- 0 until 3;
+      stack <- Option(inv.getStackInRowAndColumn(i, j))
+    ) {
       if (stack.getItem.isInstanceOf[ItemPowered])
         tool = stack
       else if (stack.getItem == Items.redstone)

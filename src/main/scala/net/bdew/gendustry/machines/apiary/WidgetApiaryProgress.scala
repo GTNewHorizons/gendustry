@@ -16,7 +16,8 @@ import net.bdew.lib.gui.{Point, Rect}
 
 import scala.collection.mutable
 
-class WidgetApiaryProgress(val rect: Rect, progress: DataSlotFloat) extends Widget {
+class WidgetApiaryProgress(val rect: Rect, progress: DataSlotFloat)
+    extends Widget {
   val texture = Textures.whiteProgress(rect.w)
 
   override def handleTooltip(p: Point, tip: mutable.MutableList[String]) {

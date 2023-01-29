@@ -39,7 +39,11 @@ class ImprinterHandler extends BaseRecipeHandler(5, 13) {
     val template = position(tpl, 74, 28)
     val labware = position(new ItemStack(Items.labware), 98, 28)
 
-    components :+= new PowerComponent(mjRect, MachineImprinter.mjPerItem, MachineImprinter.maxStoredEnergy)
+    components :+= new PowerComponent(
+      mjRect,
+      MachineImprinter.mjPerItem,
+      MachineImprinter.maxStoredEnergy
+    )
 
     override def getIngredients = List(input, template, labware)
   }
@@ -50,7 +54,8 @@ class ImprinterHandler extends BaseRecipeHandler(5, 13) {
     val tpl = root match {
       case bees: IBeeRoot => bees.getTemplate("forestry.speciesForest").clone()
       case trees: ITreeRoot => trees.getTemplate("forestry.treeOak").clone()
-      case flies: IButterflyRoot => flies.getTemplate("forestry.lepiCabbageWhite").clone()
+      case flies: IButterflyRoot =>
+        flies.getTemplate("forestry.lepiCabbageWhite").clone()
     }
 
     if (modded) {
@@ -62,8 +67,10 @@ class ImprinterHandler extends BaseRecipeHandler(5, 13) {
     individual.analyze()
 
     root match {
-      case bees: IBeeRoot => bees.getMemberStack(individual, EnumBeeType.PRINCESS.ordinal())
-      case trees: ITreeRoot => trees.getMemberStack(individual, EnumGermlingType.SAPLING.ordinal())
+      case bees: IBeeRoot =>
+        bees.getMemberStack(individual, EnumBeeType.PRINCESS.ordinal())
+      case trees: ITreeRoot =>
+        trees.getMemberStack(individual, EnumGermlingType.SAPLING.ordinal())
       case flies: IButterflyRoot => flies.getMemberStack(individual, 0)
     }
   }
@@ -76,7 +83,8 @@ class ImprinterHandler extends BaseRecipeHandler(5, 13) {
 
   def addExample() {
     val bees = AlleleManager.alleleRegistry.getSpeciesRoot("rootBees")
-    val cult = AlleleManager.alleleRegistry.getAllele("forestry.speciesCultivated")
+    val cult =
+      AlleleManager.alleleRegistry.getAllele("forestry.speciesCultivated")
     val template = new ItemStack(GeneTemplate)
     GeneTemplate.addSample(template, GeneSampleInfo(bees, 0, cult))
     arecipes.add(new ImprinterRecipe(template))
@@ -95,14 +103,22 @@ class ImprinterHandler extends BaseRecipeHandler(5, 13) {
   }
 
   override def loadCraftingRecipes(outputId: String, results: AnyRef*): Unit = {
-    Some(outputId, results) collect {
-      case ("Imprinter", _) => addExample()
+    Some(outputId, results) collect { case ("Imprinter", _) =>
+      addExample()
     }
   }
 
-  override def handleItemTooltip(gui: GuiRecipe[_], stack: ItemStack, tip: util.List[String], recipe: Int): util.List[String] = {
+  override def handleItemTooltip(
+      gui: GuiRecipe[_],
+      stack: ItemStack,
+      tip: util.List[String],
+      recipe: Int
+  ): util.List[String] = {
     if (stack == getRecipe(recipe).labware.item)
-      tip += Misc.toLocalF("gendustry.label.consume", MachineImprinter.labwareConsumeChance.toInt)
+      tip += Misc.toLocalF(
+        "gendustry.label.consume",
+        MachineImprinter.labwareConsumeChance.toInt
+      )
     super.handleItemTooltip(gui, stack, tip, recipe)
   }
 

@@ -24,15 +24,24 @@ class LiquifierHandler extends BaseRecipeHandler(5, 13) {
   val proteinRect = new Rect(152, 19, 16, 58)
   val mjRect = new Rect(8, 19, 16, 58)
 
-  class LiquifierRecipe(val in: ItemStack, val out: Int) extends CachedRecipeWithComponents {
+  class LiquifierRecipe(val in: ItemStack, val out: Int)
+      extends CachedRecipeWithComponents {
 
     import scala.collection.JavaConversions._
 
     val inPositioned = position(in, 44, 41)
     val getResult = null
 
-    components :+= new FluidComponent(proteinRect, new FluidStack(Fluids.protein, out), MachineLiquifier.tankSize)
-    components :+= new PowerComponent(mjRect, MachineLiquifier.mjPerItem, MachineLiquifier.maxStoredEnergy)
+    components :+= new FluidComponent(
+      proteinRect,
+      new FluidStack(Fluids.protein, out),
+      MachineLiquifier.tankSize
+    )
+    components :+= new PowerComponent(
+      mjRect,
+      MachineLiquifier.mjPerItem,
+      MachineLiquifier.maxStoredEnergy
+    )
 
     override def getIngredients = List(inPositioned)
   }
@@ -50,8 +59,10 @@ class LiquifierHandler extends BaseRecipeHandler(5, 13) {
 
   override def loadCraftingRecipes(outputId: String, results: AnyRef*): Unit = {
     Some(outputId, results) collect {
-      case ("liquid", Seq(x: FluidStack)) if x.getFluid == Fluids.protein => addAllRecipes()
-      case ("item", Seq(IStackBlock(x))) if x == Fluids.protein.getBlock => addAllRecipes()
+      case ("liquid", Seq(x: FluidStack)) if x.getFluid == Fluids.protein =>
+        addAllRecipes()
+      case ("item", Seq(IStackBlock(x))) if x == Fluids.protein.getBlock =>
+        addAllRecipes()
       case ("Liquifier", _) => addAllRecipes()
     }
   }

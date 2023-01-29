@@ -13,7 +13,9 @@ import net.bdew.lib.data.base.ContainerDataSlots
 import net.bdew.lib.gui.{BaseContainer, SlotValidating}
 import net.minecraft.entity.player.EntityPlayer
 
-class ContainerExtractor(val te: TileExtractor, player: EntityPlayer) extends BaseContainer(te) with ContainerDataSlots {
+class ContainerExtractor(val te: TileExtractor, player: EntityPlayer)
+    extends BaseContainer(te)
+    with ContainerDataSlots {
   lazy val dataSource = te
 
   addSlotToContainer(new SlotValidating(te, te.slots.inIndividual, 44, 41))

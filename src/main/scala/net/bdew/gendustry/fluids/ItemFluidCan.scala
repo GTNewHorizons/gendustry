@@ -19,10 +19,13 @@ import net.minecraft.item.Item
 import net.minecraftforge.fluids.Fluid
 
 class ItemFluidCan(fluid: Fluid) extends Item {
-  setUnlocalizedName(Gendustry.modId + "." + fluid.getName.toLowerCase(Locale.US) + ".can")
+  setUnlocalizedName(
+    Gendustry.modId + "." + fluid.getName.toLowerCase(Locale.US) + ".can"
+  )
 
   @SideOnly(Side.CLIENT)
   override def registerIcons(reg: IIconRegister) {
-    itemIcon = reg.registerIcon(Misc.iconName(Gendustry.modId, "can", fluid.getName))
+    itemIcon =
+      reg.registerIcon(Misc.iconName(Gendustry.modId, "can", fluid.getName))
   }
 }

@@ -27,16 +27,26 @@ object BeeIconProvider extends IIconProvider {
 
     icons = Array.fill(EnumBeeType.values().length, 3)(null)
 
-    EnumBeeType.values().filter(_ != EnumBeeType.NONE).foreach(beeType => {
-      icons(beeType.ordinal())(0) = register.registerIcon(Misc.iconName("forestry", "bees", iconType, beeType + ".outline"))
+    EnumBeeType
+      .values()
+      .filter(_ != EnumBeeType.NONE)
+      .foreach(beeType => {
+        icons(beeType.ordinal())(0) = register.registerIcon(
+          Misc.iconName("forestry", "bees", iconType, beeType + ".outline")
+        )
 
-      if (beeType == EnumBeeType.LARVAE)
-        icons(beeType.ordinal())(1) = register.registerIcon(Misc.iconName("forestry", "bees", iconType, beeType + ".body"))
-      else
-        icons(beeType.ordinal())(1) = register.registerIcon(Misc.iconName("forestry", "bees", iconType, "body1"))
+        if (beeType == EnumBeeType.LARVAE)
+          icons(beeType.ordinal())(1) = register.registerIcon(
+            Misc.iconName("forestry", "bees", iconType, beeType + ".body")
+          )
+        else
+          icons(beeType.ordinal())(1) = register
+            .registerIcon(Misc.iconName("forestry", "bees", iconType, "body1"))
 
-      icons(beeType.ordinal())(2) = register.registerIcon(Misc.iconName("forestry", "bees", iconType, beeType + ".body2"))
-    })
+        icons(beeType.ordinal())(2) = register.registerIcon(
+          Misc.iconName("forestry", "bees", iconType, beeType + ".body2")
+        )
+      })
   }
 
   override def getIcon(texUID: Short) = null

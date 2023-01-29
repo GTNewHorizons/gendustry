@@ -13,8 +13,10 @@ import forestry.api.genetics.AlleleManager
 import net.bdew.gendustry.Gendustry
 
 object ForestryHelper {
-  def haveRoot(root: String) = AlleleManager.alleleRegistry.getSpeciesRoot("root" + root) != null
-  def getRoot(root: String) = AlleleManager.alleleRegistry.getSpeciesRoot("root" + root)
+  def haveRoot(root: String) =
+    AlleleManager.alleleRegistry.getSpeciesRoot("root" + root) != null
+  def getRoot(root: String) =
+    AlleleManager.alleleRegistry.getSpeciesRoot("root" + root)
 
   def logAvailableRoots() {
     import scala.collection.JavaConversions._

@@ -20,11 +20,15 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.util.ForgeDirection
 
-@Optional.Interface(modid = PowerProxy.IC2_MOD_ID, iface = "ic2.api.energy.tile.IEnergySink")
+@Optional.Interface(
+  modid = PowerProxy.IC2_MOD_ID,
+  iface = "ic2.api.energy.tile.IEnergySink"
+)
 trait TilePoweredEU extends TilePoweredBase with IEnergySink {
   var sentLoaded = false
   private lazy val ratio = Tuning.getSection("Power").getFloat("EU_MJ_Ratio")
-  lazy val sinkTier = Tuning.getSection("Power").getSection("EU").getInt("SinkTier")
+  lazy val sinkTier =
+    Tuning.getSection("Power").getSection("EU").getInt("SinkTier")
 
   if (PowerProxy.haveIC2 && PowerProxy.EUEnabled)
     serverTick.listen(sendLoad)
@@ -57,14 +61,22 @@ trait TilePoweredEU extends TilePoweredBase with IEnergySink {
     }
   }
 
-  override def getDemandedEnergy = Misc.clamp(power.capacity - power.stored, 0F, power.maxReceive) * ratio
+  override def getDemandedEnergy =
+    Misc.clamp(power.capacity - power.stored, 0f, power.maxReceive) * ratio
   override def getSinkTier = sinkTier
-  override def injectEnergy(directionFrom: ForgeDirection, amount: Double, p3: Double) = {
+  override def injectEnergy(
+      directionFrom: ForgeDirection,
+      amount: Double,
+      p3: Double
+  ) = {
     // IC2 is borked and is ignoring the return value, we need to store everything otherwise energy will be wasted
     // We go around power.inject so that all energy can be added
     power.stored += (amount / ratio).toFloat
     power.parent.dataSlotChanged(power)
     0
   }
-  override def acceptsEnergyFrom(emitter: TileEntity, direction: ForgeDirection) = PowerProxy.EUEnabled
+  override def acceptsEnergyFrom(
+      emitter: TileEntity,
+      direction: ForgeDirection
+  ) = PowerProxy.EUEnabled
 }

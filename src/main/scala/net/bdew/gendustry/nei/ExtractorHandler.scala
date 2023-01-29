@@ -33,14 +33,23 @@ class ExtractorHandler extends BaseRecipeHandler(5, 13) {
 
   import scala.collection.JavaConversions._
 
-  class ExtractorRecipe(val in: ItemStack, val out: Int) extends CachedRecipeWithComponents {
+  class ExtractorRecipe(val in: ItemStack, val out: Int)
+      extends CachedRecipeWithComponents {
 
     val inPositioned = position(in, 44, 41)
     val labware = position(new ItemStack(Items.labware), 94, 19)
     val getResult = null
 
-    components :+= new FluidComponent(dnaRect, new FluidStack(Fluids.dna, out), MachineExtractor.tankSize)
-    components :+= new PowerComponent(mjRect, MachineExtractor.mjPerItem, MachineExtractor.maxStoredEnergy)
+    components :+= new FluidComponent(
+      dnaRect,
+      new FluidStack(Fluids.dna, out),
+      MachineExtractor.tankSize
+    )
+    components :+= new PowerComponent(
+      mjRect,
+      MachineExtractor.mjPerItem,
+      MachineExtractor.maxStoredEnergy
+    )
 
     override def getIngredients = List(inPositioned, labware)
   }
@@ -73,9 +82,14 @@ class ExtractorHandler extends BaseRecipeHandler(5, 13) {
           )
         case butterflies: IButterflyRoot =>
           List(
-            butterflies.getMemberStack(individual, EnumFlutterType.BUTTERFLY.ordinal()),
-            butterflies.getMemberStack(individual, EnumFlutterType.SERUM.ordinal()),
-            butterflies.getMemberStack(individual, EnumFlutterType.CATERPILLAR.ordinal())
+            butterflies
+              .getMemberStack(individual, EnumFlutterType.BUTTERFLY.ordinal()),
+            butterflies
+              .getMemberStack(individual, EnumFlutterType.SERUM.ordinal()),
+            butterflies.getMemberStack(
+              individual,
+              EnumFlutterType.CATERPILLAR.ordinal()
+            )
           )
         case _ => List.empty
       }
@@ -83,15 +97,24 @@ class ExtractorHandler extends BaseRecipeHandler(5, 13) {
   }
 
   def addAllRecipes() {
-    val species = Misc.filterType(AlleleManager.alleleRegistry.getRegisteredAlleles.values(), classOf[IAlleleSpecies])
-    val stacks = species.flatMap(getRecipeIndividuals).filter(LiquidDNASources.getValue(_) > 0)
-    stacks.foreach(x => arecipes.add(new ExtractorRecipe(x, LiquidDNASources.getValue(x))))
+    val species = Misc.filterType(
+      AlleleManager.alleleRegistry.getRegisteredAlleles.values(),
+      classOf[IAlleleSpecies]
+    )
+    val stacks = species
+      .flatMap(getRecipeIndividuals)
+      .filter(LiquidDNASources.getValue(_) > 0)
+    stacks.foreach(x =>
+      arecipes.add(new ExtractorRecipe(x, LiquidDNASources.getValue(x)))
+    )
   }
 
   override def loadCraftingRecipes(outputId: String, results: AnyRef*): Unit = {
     Some(outputId, results) collect {
-      case ("liquid", Seq(x: FluidStack)) if x.getFluid == Fluids.dna => addAllRecipes()
-      case ("item", Seq(IStackBlock(x))) if x == Fluids.dna.getBlock => addAllRecipes()
+      case ("liquid", Seq(x: FluidStack)) if x.getFluid == Fluids.dna =>
+        addAllRecipes()
+      case ("item", Seq(IStackBlock(x))) if x == Fluids.dna.getBlock =>
+        addAllRecipes()
       case ("Extractor", _) => addAllRecipes()
     }
   }
@@ -103,9 +126,19 @@ class ExtractorHandler extends BaseRecipeHandler(5, 13) {
     }
   }
 
-  override def handleItemTooltip(gui: GuiRecipe[_], stack: ItemStack, tip: util.List[String], recipe: Int): util.List[String] = {
+  override def handleItemTooltip(
+      gui: GuiRecipe[_],
+      stack: ItemStack,
+      tip: util.List[String],
+      recipe: Int
+  ): util.List[String] = {
     if (stack == getRecipe(recipe).labware.item)
-      tip.add(Misc.toLocalF("gendustry.label.consume", MachineExtractor.labwareConsumeChance.toInt))
+      tip.add(
+        Misc.toLocalF(
+          "gendustry.label.consume",
+          MachineExtractor.labwareConsumeChance.toInt
+        )
+      )
     super.handleItemTooltip(gui, stack, tip, recipe)
   }
 

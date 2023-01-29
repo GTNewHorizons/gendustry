@@ -15,4 +15,3 @@ object ForestryItems {
   lazy val honeydew = GameRegistry.findItem("Forestry", "honeydew")
   lazy val canEmpty = GameRegistry.findItem("Forestry", "canEmpty")
 }
-

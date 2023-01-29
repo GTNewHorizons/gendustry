@@ -27,7 +27,11 @@ import net.minecraft.item.{Item, ItemStack, ItemTool}
 import net.minecraft.world.World
 import net.minecraftforge.common.ForgeHooks
 
-object IndustrialScoop extends ItemTool(0, Item.ToolMaterial.IRON, new util.HashSet[Block]) with NamedItem with ItemPowered with IToolScoop {
+object IndustrialScoop
+    extends ItemTool(0, Item.ToolMaterial.IRON, new util.HashSet[Block])
+    with NamedItem
+    with ItemPowered
+    with IToolScoop {
   def name = "IndustrialScoop"
   lazy val cfg = Tuning.getSection("Items").getSection("IndustrialScoop")
   lazy val mjPerCharge = cfg.getInt("MjPerCharge")
@@ -44,36 +48,79 @@ object IndustrialScoop extends ItemTool(0, Item.ToolMaterial.IRON, new util.Hash
 
   override def getDigSpeed(stack: ItemStack, block: Block, meta: Int) =
     if (!hasCharges(stack))
-      0.1F
+      0.1f
     else super.getDigSpeed(stack, block, meta)
 
-  override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, xOff: Float, yOff: Float, zOff: Float): Boolean = {
+  override def onItemUse(
+      stack: ItemStack,
+      player: EntityPlayer,
+      world: World,
+      x: Int,
+      y: Int,
+      z: Int,
+      side: Int,
+      xOff: Float,
+      yOff: Float,
+      zOff: Float
+  ): Boolean = {
     if (!player.isSneaking) return false
     if (world.isRemote) return true
     val block = world.getBlock(x, y, z)
-    if (block.getHarvestTool(world.getBlockMetadata(x, y, z)) == "scoop" && getCharge(stack) >= silktouchCharges && getCharge(stack) >= silktouchCharges) {
+    if (
+      block.getHarvestTool(
+        world.getBlockMetadata(x, y, z)
+      ) == "scoop" && getCharge(stack) >= silktouchCharges && getCharge(
+        stack
+      ) >= silktouchCharges
+    ) {
       useCharge(stack, silktouchCharges, player)
-      ItemUtils.dropItemToPlayer(world, player, new ItemStack(block, 1, block.getDamageValue(world, x, y, z)))
+      ItemUtils.dropItemToPlayer(
+        world,
+        player,
+        new ItemStack(block, 1, block.getDamageValue(world, x, y, z))
+      )
       world.setBlockToAir(x, y, z)
       true
     } else false
   }
 
-  override def onBlockDestroyed(stack: ItemStack, world: World, block: Block, x: Int, y: Int, z: Int, player: EntityLivingBase): Boolean = {
-    if (ForgeHooks.isToolEffective(stack, block, world.getBlockMetadata(x, y, z))) {
+  override def onBlockDestroyed(
+      stack: ItemStack,
+      world: World,
+      block: Block,
+      x: Int,
+      y: Int,
+      z: Int,
+      player: EntityLivingBase
+  ): Boolean = {
+    if (
+      ForgeHooks.isToolEffective(stack, block, world.getBlockMetadata(x, y, z))
+    ) {
       useCharge(stack, 1, player)
       return true
     }
     return false
   }
 
-  override def hitEntity(stack: ItemStack, target: EntityLivingBase, player: EntityLivingBase): Boolean = false
+  override def hitEntity(
+      stack: ItemStack,
+      target: EntityLivingBase,
+      player: EntityLivingBase
+  ): Boolean = false
 
-  override def addInformation(stack: ItemStack, player: EntityPlayer, l: util.List[_], par4: Boolean) = {
+  override def addInformation(
+      stack: ItemStack,
+      player: EntityPlayer,
+      l: util.List[_],
+      par4: Boolean
+  ) = {
     import scala.collection.JavaConverters._
     val tip = l.asInstanceOf[util.List[String]].asScala
 
-    tip += Misc.toLocalF("gendustry.label.charges", getCharge(stack) / mjPerCharge)
+    tip += Misc.toLocalF(
+      "gendustry.label.charges",
+      getCharge(stack) / mjPerCharge
+    )
   }
 
   override def getSubItems(item: Item, tabs: CreativeTabs, l: util.List[_]) {
@@ -84,8 +131,12 @@ object IndustrialScoop extends ItemTool(0, Item.ToolMaterial.IRON, new util.Hash
   }
 
   override def getItemEnchantability: Int = 0
-  override def getIsRepairable(stack1: ItemStack, stack2: ItemStack): Boolean = false
-  override def isBookEnchantable(stack1: ItemStack, stack2: ItemStack): Boolean = false
+  override def getIsRepairable(stack1: ItemStack, stack2: ItemStack): Boolean =
+    false
+  override def isBookEnchantable(
+      stack1: ItemStack,
+      stack2: ItemStack
+  ): Boolean = false
 
   @SideOnly(Side.CLIENT)
   override def registerIcons(reg: IIconRegister) {

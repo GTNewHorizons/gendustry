@@ -29,14 +29,28 @@ object MaterialBeehive extends Material(MapColor.stoneColor) {
 
 }
 
-case class BeeHive(hiveId: String, sideIconName: String, topIconName: String, bottomIconName: String, color: Int, lightLevel: Int, hive: HiveDescription)
-  extends SimpleBlock("BeeHive" + hiveId, MaterialBeehive) {
+case class BeeHive(
+    hiveId: String,
+    sideIconName: String,
+    topIconName: String,
+    bottomIconName: String,
+    color: Int,
+    lightLevel: Int,
+    hive: HiveDescription
+) extends SimpleBlock("BeeHive" + hiveId, MaterialBeehive) {
 
   setHardness(1.0f)
   setHarvestLevel("scoop", 0)
   lightValue = lightLevel
 
-  override def getDrops(world: World, x: Int, y: Int, z: Int, metadata: Int, fortune: Int): util.ArrayList[ItemStack] = {
+  override def getDrops(
+      world: World,
+      x: Int,
+      y: Int,
+      z: Int,
+      metadata: Int,
+      fortune: Int
+  ): util.ArrayList[ItemStack] = {
     val ret = new util.ArrayList[ItemStack]()
     val rng = new Random(world.rand)
 
@@ -45,7 +59,9 @@ case class BeeHive(hiveId: String, sideIconName: String, topIconName: String, bo
     val dropList = rng.shuffle(hive.drops)
 
     // Select random princess drop
-    dropList.find(drop => rng.nextInt(100) <= drop.getChance(world, x, y, z)) orElse {
+    dropList.find(drop =>
+      rng.nextInt(100) <= drop.getChance(world, x, y, z)
+    ) orElse {
       // if none are selected by RNG - ensure a princess is always dropped by selecting the one with highest chance
       dropList.sortBy(-_.getChance(world, x, y, z)).headOption
     } map { drop =>
@@ -53,12 +69,16 @@ case class BeeHive(hiveId: String, sideIconName: String, topIconName: String, bo
     }
 
     // Add random drone
-    dropList.find(drop => rng.nextInt(100) <= drop.getChance(world, x, y, z)) map { drop =>
+    dropList.find(drop =>
+      rng.nextInt(100) <= drop.getChance(world, x, y, z)
+    ) map { drop =>
       ret.addAll(drop.getDrones(world, x, y, z, fortune))
     }
 
     // And additional drops
-    dropList.find(drop => rng.nextInt(100) <= drop.getChance(world, x, y, z)) map { drop =>
+    dropList.find(drop =>
+      rng.nextInt(100) <= drop.getChance(world, x, y, z)
+    ) map { drop =>
       ret.addAll(drop.getAdditional(world, x, y, z, fortune))
     }
 
@@ -77,7 +97,8 @@ case class BeeHive(hiveId: String, sideIconName: String, topIconName: String, bo
       blockIcon
 
   @SideOnly(Side.CLIENT)
-  override def colorMultiplier(w: IBlockAccess, x: Int, y: Int, z: Int): Int = color
+  override def colorMultiplier(w: IBlockAccess, x: Int, y: Int, z: Int): Int =
+    color
 
   @SideOnly(Side.CLIENT)
   override def getRenderColor(meta: Int): Int = color

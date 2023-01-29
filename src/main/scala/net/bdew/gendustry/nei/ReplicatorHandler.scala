@@ -27,19 +27,40 @@ class ReplicatorHandler extends BaseRecipeHandler(5, 13) {
 
   import scala.collection.JavaConversions._
 
-  class ReplicatorRecipe(template: ItemStack, out: ItemStack) extends CachedRecipeWithComponents {
+  class ReplicatorRecipe(template: ItemStack, out: ItemStack)
+      extends CachedRecipeWithComponents {
     val getResult = position(out, 142, 41)
     val templateStack = position(template, 98, 17)
 
-    components :+= new FluidComponent(dnaRect, new FluidStack(Fluids.dna, MachineReplicator.dnaPerItem), MachineReplicator.dnaTankSize)
-    components :+= new FluidComponent(proteinRect, new FluidStack(Fluids.protein, MachineReplicator.proteinPerItem), MachineReplicator.proteinTankSize)
-    components :+= new PowerComponent(mjRect, MachineReplicator.mjPerItem, MachineReplicator.maxStoredEnergy)
+    components :+= new FluidComponent(
+      dnaRect,
+      new FluidStack(Fluids.dna, MachineReplicator.dnaPerItem),
+      MachineReplicator.dnaTankSize
+    )
+    components :+= new FluidComponent(
+      proteinRect,
+      new FluidStack(Fluids.protein, MachineReplicator.proteinPerItem),
+      MachineReplicator.proteinTankSize
+    )
+    components :+= new PowerComponent(
+      mjRect,
+      MachineReplicator.mjPerItem,
+      MachineReplicator.maxStoredEnergy
+    )
 
     override def getIngredients = List(templateStack)
   }
 
   def addRecipe(tpl: ItemStack) {
-    arecipes.add(new ReplicatorRecipe(tpl, GeneticsHelper.individualFromTemplate(tpl, MachineReplicator.makePristineBees)))
+    arecipes.add(
+      new ReplicatorRecipe(
+        tpl,
+        GeneticsHelper.individualFromTemplate(
+          tpl,
+          MachineReplicator.makePristineBees
+        )
+      )
+    )
   }
 
   def addRecipe(uid: String) {
@@ -60,16 +81,20 @@ class ReplicatorHandler extends BaseRecipeHandler(5, 13) {
 
   override def loadUsageRecipes(outputId: String, results: AnyRef*): Unit = {
     Some(outputId, results) collect {
-      case ("liquid", Seq(x: FluidStack)) if x.getFluid == Fluids.dna => addAllRecipes()
-      case ("liquid", Seq(x: FluidStack)) if x.getFluid == Fluids.protein => addAllRecipes()
-      case ("item", Seq(x: ItemStack)) if x.getItem == GeneTemplate && GeneTemplate.isComplete(x) => addRecipe(x)
+      case ("liquid", Seq(x: FluidStack)) if x.getFluid == Fluids.dna =>
+        addAllRecipes()
+      case ("liquid", Seq(x: FluidStack)) if x.getFluid == Fluids.protein =>
+        addAllRecipes()
+      case ("item", Seq(x: ItemStack))
+          if x.getItem == GeneTemplate && GeneTemplate.isComplete(x) =>
+        addRecipe(x)
       case ("Replicator", _) => addAllRecipes()
     }
   }
 
   override def loadCraftingRecipes(outputId: String, results: AnyRef*): Unit = {
-    Some(outputId, results) collect {
-      case ("Replicator", _) => addAllRecipes()
+    Some(outputId, results) collect { case ("Replicator", _) =>
+      addAllRecipes()
     }
   }
 

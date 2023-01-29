@@ -15,10 +15,23 @@ import net.bdew.gendustry.nei.NEIDrawTarget
 import net.bdew.lib.DecFormat
 import net.bdew.lib.gui.{Point, Rect}
 
-class PowerComponent(rect: Rect, power: Float, capacity: Float) extends RecipeComponent(rect) {
-  def getTooltip = List("%s %s".format(DecFormat.round(power * Config.powerShowMultiplier), Config.powerShowUnits))
+class PowerComponent(rect: Rect, power: Float, capacity: Float)
+    extends RecipeComponent(rect) {
+  def getTooltip = List(
+    "%s %s".format(
+      DecFormat.round(power * Config.powerShowMultiplier),
+      Config.powerShowUnits
+    )
+  )
   def mouseClick(button: Int) = false
   def render(offset: Point) {
-    NEIDrawTarget.drawTextureInterpolate(rect - offset, Textures.powerFill, 0, 1 - (power / capacity), 1, 1)
+    NEIDrawTarget.drawTextureInterpolate(
+      rect - offset,
+      Textures.powerFill,
+      0,
+      1 - (power / capacity),
+      1,
+      1
+    )
   }
 }

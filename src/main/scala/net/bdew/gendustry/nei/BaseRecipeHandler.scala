@@ -20,36 +20,71 @@ import net.bdew.lib.gui._
 import net.minecraft.item.ItemStack
 import org.lwjgl.opengl.GL11
 
-abstract class BaseRecipeHandler(val offX: Int, val offY: Int) extends TemplateRecipeHandler {
+abstract class BaseRecipeHandler(val offX: Int, val offY: Int)
+    extends TemplateRecipeHandler {
 
   import codechicken.lib.gui.GuiDraw._
 
   abstract class CachedRecipeWithComponents extends CachedRecipe {
     var components = List.empty[RecipeComponent]
-    def position(s: ItemStack, x: Int, y: Int) = new PositionedStack(s, x - offX, y - offY)
+    def position(s: ItemStack, x: Int, y: Int) =
+      new PositionedStack(s, x - offX, y - offY)
   }
 
   def addTransferRect(r: Rect, id: String) {
-    transferRects.add(new RecipeTransferRect(new Rectangle(r.x.round - offX, r.y.round - offY, r.w.round, r.h.round), id))
+    transferRects.add(
+      new RecipeTransferRect(
+        new Rectangle(r.x.round - offX, r.y.round - offY, r.w.round, r.h.round),
+        id
+      )
+    )
   }
 
   override def drawExtras(recipe: Int) {
-    for (component <- arecipes.get(recipe).asInstanceOf[CachedRecipeWithComponents].components)
+    for (
+      component <- arecipes
+        .get(recipe)
+        .asInstanceOf[CachedRecipeWithComponents]
+        .components
+    )
       component.render(Point(offX, offY))
     super.drawExtras(recipe)
   }
 
-  override def mouseClicked(gui: GuiRecipe[_], button: Int, recipe: Int): Boolean = {
-    val relative = getMousePosition - gui.getRecipePosition(recipe) +(offX, offY) -(gui.guiLeft, gui.guiTop)
-    for (component <- arecipes.get(recipe).asInstanceOf[CachedRecipeWithComponents].components)
-      if (component.rect.contains(relative) && component.mouseClick(button)) return true
+  override def mouseClicked(
+      gui: GuiRecipe[_],
+      button: Int,
+      recipe: Int
+  ): Boolean = {
+    val relative = getMousePosition - gui.getRecipePosition(
+      recipe
+    ) + (offX, offY) - (gui.guiLeft, gui.guiTop)
+    for (
+      component <- arecipes
+        .get(recipe)
+        .asInstanceOf[CachedRecipeWithComponents]
+        .components
+    )
+      if (component.rect.contains(relative) && component.mouseClick(button))
+        return true
     super.mouseClicked(gui, button, recipe)
   }
 
-  override def handleTooltip(gui: GuiRecipe[_], tip: util.List[String], recipe: Int) = {
+  override def handleTooltip(
+      gui: GuiRecipe[_],
+      tip: util.List[String],
+      recipe: Int
+  ) = {
     import scala.collection.JavaConversions._
-    val relative = getMousePosition - gui.getRecipePosition(recipe) +(offX, offY) -(gui.guiLeft, gui.guiTop)
-    for (component <- arecipes.get(recipe).asInstanceOf[CachedRecipeWithComponents].components)
+    val relative = getMousePosition - gui.getRecipePosition(
+      recipe
+    ) + (offX, offY) - (gui.guiLeft, gui.guiTop)
+    for (
+      component <- arecipes
+        .get(recipe)
+        .asInstanceOf[CachedRecipeWithComponents]
+        .components
+    )
       if (component.rect.contains(relative)) tip.addAll(component.getTooltip)
     super.handleTooltip(gui, tip, recipe)
   }

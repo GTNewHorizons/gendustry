@@ -40,15 +40,28 @@ class CommandGiveTemplate extends CommandBase {
     if (!validSpecies.contains(uid))
       throw new WrongUsageException("gendustry.givetemplate.usage")
 
-    val entity = player.entityDropItem(GeneticsHelper.templateFromSpeciesUID(uid), 0)
+    val entity =
+      player.entityDropItem(GeneticsHelper.templateFromSpeciesUID(uid), 0)
     entity.delayBeforeCanPickup = 0
 
-    CommandBase.func_152373_a(sender, this, "gendustry.givetemplate.success", uid, player.getDisplayName)
+    CommandBase.func_152373_a(
+      sender,
+      this,
+      "gendustry.givetemplate.success",
+      uid,
+      player.getDisplayName
+    )
   }
 
-  override def addTabCompletionOptions(sender: ICommandSender, params: Array[String]): util.List[_] = {
+  override def addTabCompletionOptions(
+      sender: ICommandSender,
+      params: Array[String]
+  ): util.List[_] = {
     if (params.length == 1)
-      return CommandBase.getListOfStringsMatchingLastWord(params, validSpecies: _*)
+      return CommandBase.getListOfStringsMatchingLastWord(
+        params,
+        validSpecies: _*
+      )
     return null
   }
 }

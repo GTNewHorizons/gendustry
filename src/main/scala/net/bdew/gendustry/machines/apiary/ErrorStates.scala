@@ -35,7 +35,9 @@ case class GendustryErrorState(name: String, id: Short) extends IErrorState {
 object GendustryErrorStates {
   val Disabled = GendustryErrorState("disabled", 500)
   def init() {
-    ForestryAPI.errorStateRegistry.registerErrorState(GendustryErrorStates.Disabled)
+    ForestryAPI.errorStateRegistry.registerErrorState(
+      GendustryErrorStates.Disabled
+    )
   }
 }
 

@@ -12,12 +12,17 @@ package net.bdew.gendustry.gui.rscontrol
 import net.bdew.lib.data.base.{TileDataSlots, UpdateKind}
 
 trait TileRSControllable extends TileDataSlots {
-  val rsmode = DataSlotRSMode("rsmode", this).setUpdate(UpdateKind.SAVE, UpdateKind.GUI, UpdateKind.WORLD)
+  val rsmode = DataSlotRSMode("rsmode", this).setUpdate(
+    UpdateKind.SAVE,
+    UpdateKind.GUI,
+    UpdateKind.WORLD
+  )
 
   def canWork = {
-    val powered = getWorldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)
+    val powered =
+      getWorldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)
     (rsmode :== RSMode.ALWAYS) ||
-      ((rsmode :== RSMode.RS_ON) && powered) ||
-      ((rsmode :== RSMode.RS_OFF) && !powered)
+    ((rsmode :== RSMode.RS_ON) && powered) ||
+    ((rsmode :== RSMode.RS_OFF) && !powered)
   }
 }

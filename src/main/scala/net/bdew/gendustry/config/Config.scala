@@ -29,7 +29,7 @@ object Config {
   var neiAddTransposerRecipes = false
 
   var powerShowUnits = "MJ"
-  var powerShowMultiplier = 1F
+  var powerShowMultiplier = 1f
 
   var renderBeeEffects = false
   var beeEffectFrequency = 2
@@ -39,24 +39,45 @@ object Config {
     c.load()
 
     try {
-      neiAddSamples = c.get("NEI", "Add Samples to Search", true).getBoolean(false)
+      neiAddSamples =
+        c.get("NEI", "Add Samples to Search", true).getBoolean(false)
 
-      neiAddMutagenProducerRecipes = c.get("NEI", "Add Mutagen Producer Recipes", true).getBoolean(false)
-      neiAddMutatronRecipes = c.get("NEI", "Add Mutatron Recipes", true).getBoolean(false)
-      neiAddSamplerRecipes = c.get("NEI", "Add Sampler Recipes", true).getBoolean(false)
-      neiAddImprinterRecipes = c.get("NEI", "Add Imprinter Recipes", true).getBoolean(false)
-      neiAddExtractorRecipes = c.get("NEI", "Add Extractor Recipes", true).getBoolean(false)
-      neiAddLiquifierRecipes = c.get("NEI", "Add Liquifier Recipes", true).getBoolean(false)
-      neiAddReplicatorRecipes = c.get("NEI", "Add Replicator Recipes", true).getBoolean(false)
-      neiAddTransposerRecipes = c.get("NEI", "Add Transposer Recipes", true).getBoolean(false)
+      neiAddMutagenProducerRecipes =
+        c.get("NEI", "Add Mutagen Producer Recipes", true).getBoolean(false)
+      neiAddMutatronRecipes =
+        c.get("NEI", "Add Mutatron Recipes", true).getBoolean(false)
+      neiAddSamplerRecipes =
+        c.get("NEI", "Add Sampler Recipes", true).getBoolean(false)
+      neiAddImprinterRecipes =
+        c.get("NEI", "Add Imprinter Recipes", true).getBoolean(false)
+      neiAddExtractorRecipes =
+        c.get("NEI", "Add Extractor Recipes", true).getBoolean(false)
+      neiAddLiquifierRecipes =
+        c.get("NEI", "Add Liquifier Recipes", true).getBoolean(false)
+      neiAddReplicatorRecipes =
+        c.get("NEI", "Add Replicator Recipes", true).getBoolean(false)
+      neiAddTransposerRecipes =
+        c.get("NEI", "Add Transposer Recipes", true).getBoolean(false)
 
-      renderBeeEffects = c.get("Rendering", "Render Bee Effects", true).getBoolean(false)
-      beeEffectFrequency = c.get("Rendering", "Bee Effects Frequency", 2, "Higher = less particles").getInt(2)
+      renderBeeEffects =
+        c.get("Rendering", "Render Bee Effects", true).getBoolean(false)
+      beeEffectFrequency = c
+        .get("Rendering", "Bee Effects Frequency", 2, "Higher = less particles")
+        .getInt(2)
 
       if (beeEffectFrequency <= 0) renderBeeEffects = false
 
-      powerShowUnits = c.get("Display", "PowerShowUnits", "RF", "Units to use when displaying power. Valid values: MJ, EU, RF").getString
-      if (powerShowUnits != "MJ") powerShowMultiplier = Tuning.getSection("Power").getFloat(powerShowUnits + "_MJ_Ratio")
+      powerShowUnits = c
+        .get(
+          "Display",
+          "PowerShowUnits",
+          "RF",
+          "Units to use when displaying power. Valid values: MJ, EU, RF"
+        )
+        .getString
+      if (powerShowUnits != "MJ")
+        powerShowMultiplier =
+          Tuning.getSection("Power").getFloat(powerShowUnits + "_MJ_Ratio")
     } finally {
       c.save()
     }
