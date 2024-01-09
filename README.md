@@ -1,4 +1,4 @@
-Gendustry
+Gendustry - this is the GTNH fork
 =========
 
 ### [Downloads and Docs](http://bdew.net/gendustry)
