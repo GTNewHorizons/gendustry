@@ -22,9 +22,6 @@ object BeeIconProvider extends IIconProvider {
 
   @SideOnly(Side.CLIENT)
   override def registerIcons(register: IIconRegister) {
-    if (icons != null)
-      return
-
     icons = Array.fill(EnumBeeType.values().length, 3)(null)
 
     EnumBeeType
