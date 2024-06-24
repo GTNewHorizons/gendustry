@@ -71,11 +71,11 @@ class BeeMutation(
       var processedChance = chance
       processedChance *= BeeModifiers
         .from(housing)
-        .getMutationModifier(genome0, genome1, processedChance)
+        .getMutationModifier(genome0, genome1, 1f)
       processedChance *= bkm.getBeeModifier.getMutationModifier(
         genome0,
         genome1,
-        processedChance
+        1f
       )
       processedChance
     }
