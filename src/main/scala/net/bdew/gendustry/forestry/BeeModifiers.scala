@@ -24,8 +24,8 @@ case class BeeModifiers(modifiers: Traversable[IBeeModifier])
       genome: IBeeGenome,
       currentModifier: Float
   ): Float =
-    modifiers.foldLeft(1f)((v, m) =>
-      m.getTerritoryModifier(genome, v * currentModifier)
+    modifiers.foldLeft(currentModifier)((v, m) =>
+      v * m.getTerritoryModifier(genome, v)
     )
 
   override def getMutationModifier(
@@ -33,8 +33,8 @@ case class BeeModifiers(modifiers: Traversable[IBeeModifier])
       mate: IBeeGenome,
       currentModifier: Float
   ): Float =
-    modifiers.foldLeft(1f)((v, m) =>
-      m.getMutationModifier(genome, mate, v * currentModifier)
+    modifiers.foldLeft(currentModifier)((v, m) =>
+      v * m.getMutationModifier(genome, mate, v)
     )
 
   override def getLifespanModifier(
@@ -42,32 +42,32 @@ case class BeeModifiers(modifiers: Traversable[IBeeModifier])
       mate: IBeeGenome,
       currentModifier: Float
   ): Float =
-    modifiers.foldLeft(1f)((v, m) =>
-      m.getLifespanModifier(genome, mate, v * currentModifier)
+    modifiers.foldLeft(currentModifier)((v, m) =>
+      v * m.getLifespanModifier(genome, mate, v)
     )
 
   override def getProductionModifier(
       genome: IBeeGenome,
       currentModifier: Float
   ): Float =
-    modifiers.foldLeft(1f)((v, m) =>
-      m.getProductionModifier(genome, v * currentModifier)
+    modifiers.foldLeft(currentModifier)((v, m) =>
+      v + m.getProductionModifier(genome, v)
     )
 
   override def getFloweringModifier(
       genome: IBeeGenome,
       currentModifier: Float
   ): Float =
-    modifiers.foldLeft(1f)((v, m) =>
-      m.getFloweringModifier(genome, v * currentModifier)
+    modifiers.foldLeft(currentModifier)((v, m) =>
+      v * m.getFloweringModifier(genome, v)
     )
 
   override def getGeneticDecay(
       genome: IBeeGenome,
       currentModifier: Float
   ): Float =
-    modifiers.foldLeft(1f)((v, m) =>
-      m.getGeneticDecay(genome, v * currentModifier)
+    modifiers.foldLeft(currentModifier)((v, m) =>
+      v * m.getGeneticDecay(genome, v)
     )
 
   override def isSealed: Boolean = modifiers.exists(_.isSealed)
