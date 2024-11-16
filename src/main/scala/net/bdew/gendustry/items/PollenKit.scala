@@ -11,6 +11,7 @@ package net.bdew.gendustry.items
 
 import forestry.api.arboriculture.{EnumGermlingType, ITreeRoot}
 import forestry.api.genetics.IPollinatable
+import forestry.arboriculture.tiles.TileLeaves
 import net.bdew.gendustry.forestry.GeneticsHelper
 import net.bdew.lib.block.BlockRef
 import net.bdew.lib.items.{ItemUtils, SimpleItem}
@@ -35,7 +36,13 @@ object PollenKit extends SimpleItem("PollenKit") {
     if (!world.isRemote) {
       if (player.inventory.getCurrentItem.getItem != this) return false
       val blockRef = BlockRef(x, y, z)
-      (blockRef.getTile[IPollinatable](world) map { te => te.getPollen }
+      (blockRef.getTile[IPollinatable](world) flatMap { te =>
+        te match {
+          case leaf: TileLeaves =>
+            Some(leaf.getTree)
+          case _ => None
+        }
+      }
       // If block is not IPollinatable, check for vanilla leafs conversion
         orElse (blockRef.block(world) flatMap { bl =>
           GeneticsHelper.getErsatzPollen(bl, blockRef.meta(world))
