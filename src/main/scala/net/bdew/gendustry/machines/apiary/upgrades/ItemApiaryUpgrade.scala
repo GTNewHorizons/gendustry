@@ -10,6 +10,7 @@
 package net.bdew.gendustry.machines.apiary.upgrades
 
 import java.util
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.gendustry.Gendustry
 import net.bdew.gendustry.api.ApiaryModifiers
@@ -136,12 +137,15 @@ object ItemApiaryUpgrade extends Item with IApiaryUpgrade with NamedItem {
       list: util.List[_],
       par4: Boolean
   ) {
-    // list.asInstanceOf[util.List[String]].addAll(getDisplayDetails(stack))
-    list
-      .asInstanceOf[util.List[String]]
-      .add(
-        EnumChatFormatting.RED + "DEPRECATED: Put in crafting table to get back !"
-      )
+    if (Loader.isModLoaded("dreamcraft")) {
+      list
+        .asInstanceOf[util.List[String]]
+        .add(
+          EnumChatFormatting.RED + "DEPRECATED: Put in crafting table to get back !"
+        )
+    } else {
+      list.asInstanceOf[util.List[String]].addAll(getDisplayDetails(stack))
+    }
   }
 
   def getMaxNumber(stack: ItemStack): Int = {

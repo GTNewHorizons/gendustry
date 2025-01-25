@@ -1,5 +1,6 @@
 package net.bdew.gendustry.custom
 
+import cpw.mods.fml.common.Loader;
 import net.bdew.lib.items.SimpleItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -14,10 +15,12 @@ object CustomUpgradeFrame extends SimpleItem("UpgradeFrame") {
       p_77624_3_ : util.List[_],
       p_77624_4_ : Boolean
   ): Unit = {
-    p_77624_3_
-      .asInstanceOf[util.List[String]]
-      .add(
-        EnumChatFormatting.RED + "DEPRECATED: Put in crafting table to get back !"
-      )
+    if (Loader.isModLoaded("dreamcraft")) {
+      p_77624_3_
+        .asInstanceOf[util.List[String]]
+        .add(
+          EnumChatFormatting.RED + "DEPRECATED: Put in crafting table to get back !"
+        )
+    }
   }
 }

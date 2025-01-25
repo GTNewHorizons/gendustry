@@ -13,6 +13,7 @@ import codechicken.nei.api.{API, IConfigureNEI}
 import codechicken.nei.guihook.GuiContainerManager
 import codechicken.nei.recipe.{ICraftingHandler, IUsageHandler}
 import cpw.mods.fml.common.event.FMLInterModComms
+import cpw.mods.fml.common.Loader;
 import net.bdew.gendustry.Gendustry
 import net.bdew.gendustry.config.Config
 import net.bdew.gendustry.custom.CustomUpgradeFrame
@@ -132,11 +133,13 @@ class NEIGendustryConfig extends IConfigureNEI {
 
     GuiContainerManager.addTooltipHandler(new SmeltingTooltipHandler)
 
-    API.hideItem(new ItemStack(BlockApiary))
-    val upgradelist = new util.ArrayList[ItemStack]()
-    ItemApiaryUpgrade.getSubItems(null, null, upgradelist)
-    for (i <- upgradelist.asScala.toList)
-      API.hideItem(i)
-    API.hideItem(new ItemStack(CustomUpgradeFrame))
+    if (Loader.isModLoaded("dreamcraft")) {
+      API.hideItem(new ItemStack(BlockApiary))
+      val upgradelist = new util.ArrayList[ItemStack]()
+      ItemApiaryUpgrade.getSubItems(null, null, upgradelist)
+      for (i <- upgradelist.asScala.toList)
+        API.hideItem(i)
+      API.hideItem(new ItemStack(CustomUpgradeFrame))
+    }
   }
 }
