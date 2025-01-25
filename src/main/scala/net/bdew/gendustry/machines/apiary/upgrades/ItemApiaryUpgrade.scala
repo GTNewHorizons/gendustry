@@ -137,12 +137,12 @@ object ItemApiaryUpgrade extends Item with IApiaryUpgrade with NamedItem {
       list: util.List[_],
       par4: Boolean
   ) {
-    if (Loader.isModLoaded("NEW_HORIZONS_CORE_MOD")) {
-    list
-      .asInstanceOf[util.List[String]]
-      .add(
-        EnumChatFormatting.RED + "DEPRECATED: Put in crafting table to get back !"
-      )
+    if (Loader.isModLoaded("dreamcraft")) {
+      list
+        .asInstanceOf[util.List[String]]
+        .add(
+          EnumChatFormatting.RED + "DEPRECATED: Put in crafting table to get back !"
+        )
     } else {
       list.asInstanceOf[util.List[String]].addAll(getDisplayDetails(stack))
     }

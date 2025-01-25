@@ -133,7 +133,7 @@ class NEIGendustryConfig extends IConfigureNEI {
 
     GuiContainerManager.addTooltipHandler(new SmeltingTooltipHandler)
 
-    if(Loader.isModLoaded("NEW_HORIZONS_CORE_MOD")) {
+    if (Loader.isModLoaded("dreamcraft")) {
       API.hideItem(new ItemStack(BlockApiary))
       val upgradelist = new util.ArrayList[ItemStack]()
       ItemApiaryUpgrade.getSubItems(null, null, upgradelist)

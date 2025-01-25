@@ -15,12 +15,12 @@ object CustomUpgradeFrame extends SimpleItem("UpgradeFrame") {
       p_77624_3_ : util.List[_],
       p_77624_4_ : Boolean
   ): Unit = {
-    if(Loader.isModLoaded("NEW_HORIZONS_CORE_MOD")) {
-    p_77624_3_
-      .asInstanceOf[util.List[String]]
-      .add(
+    if (Loader.isModLoaded("dreamcraft")) {
+      p_77624_3_
+        .asInstanceOf[util.List[String]]
+        .add(
           EnumChatFormatting.RED + "DEPRECATED: Put in crafting table to get back !"
-      )
+        )
     }
   }
 }
