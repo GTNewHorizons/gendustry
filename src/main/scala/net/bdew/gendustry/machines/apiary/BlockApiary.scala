@@ -9,6 +9,7 @@
 
 package net.bdew.gendustry.machines.apiary
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.gendustry.Gendustry
 import net.bdew.gendustry.gui.BlockGuiWrenchable
@@ -71,9 +72,14 @@ object BlockApiary
       player: EntityPlayer,
       advanced: Boolean
   ): List[String] = {
+    if(Loader.isModLoaded("NEW_HORIZONS_CORE_MOD")) {
     return List(
       EnumChatFormatting.RED + "DEPRECATED: Put in crafting table to get back !"
     )
+    }
+    else {
+      return List("")
+    }
     if (stack.hasTagCompound && stack.getTagCompound.hasKey("data")) {
       val data = stack.getTagCompound.getCompoundTag("data")
       val inv = BlockTooltipHelper.getInventory(data)
