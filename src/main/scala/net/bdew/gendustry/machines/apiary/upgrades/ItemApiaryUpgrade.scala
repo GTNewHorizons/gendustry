@@ -136,12 +136,15 @@ object ItemApiaryUpgrade extends Item with IApiaryUpgrade with NamedItem {
       list: util.List[_],
       par4: Boolean
   ) {
-    // list.asInstanceOf[util.List[String]].addAll(getDisplayDetails(stack))
+    if (Loader.isModLoaded("NEW_HORIZONS_CORE_MOD")) {
     list
       .asInstanceOf[util.List[String]]
       .add(
         EnumChatFormatting.RED + "DEPRECATED: Put in crafting table to get back !"
       )
+    } else {
+      list.asInstanceOf[util.List[String]].addAll(getDisplayDetails(stack))
+    }
   }
 
   def getMaxNumber(stack: ItemStack): Int = {
