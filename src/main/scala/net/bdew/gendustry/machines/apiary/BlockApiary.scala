@@ -73,9 +73,9 @@ object BlockApiary
       advanced: Boolean
   ): List[String] = {
     if(Loader.isModLoaded("NEW_HORIZONS_CORE_MOD")) {
-    return List(
+    return List (
       EnumChatFormatting.RED + "DEPRECATED: Put in crafting table to get back !"
-    )
+      )
     }
     else {
       return List("")
