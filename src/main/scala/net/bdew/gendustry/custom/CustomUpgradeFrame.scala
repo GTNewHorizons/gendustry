@@ -1,5 +1,6 @@
 package net.bdew.gendustry.custom
 
+import cpw.mods.fml.common.Loader;
 import net.bdew.lib.items.SimpleItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -14,12 +15,12 @@ object CustomUpgradeFrame extends SimpleItem("UpgradeFrame") {
       p_77624_3_ : util.List[_],
       p_77624_4_ : Boolean
   ): Unit = {
+    if(Loader.isModLoaded("NEW_HORIZONS_CORE_MOD")) {
     p_77624_3_
       .asInstanceOf[util.List[String]]
       .add(
-        if(Loader.isModLoaded("NEW_HORIZONS_CORE_MOD")) {
           EnumChatFormatting.RED + "DEPRECATED: Put in crafting table to get back !"
-        }
       )
+    }
   }
 }
