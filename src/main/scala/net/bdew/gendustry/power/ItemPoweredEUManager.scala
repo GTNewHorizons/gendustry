@@ -31,7 +31,7 @@ class ItemPoweredEUManager(item: ItemPoweredEU) extends IElectricItemManager {
       .floor
       .toInt
     if (!simulate) item.setCharge(itemStack, charge + canCharge)
-    return (canCharge * ratio).round
+    (canCharge * ratio).round
   }
 
   override def discharge(
@@ -41,7 +41,15 @@ class ItemPoweredEUManager(item: ItemPoweredEU) extends IElectricItemManager {
       ignoreTransferLimit: Boolean,
       externally: Boolean,
       simulate: Boolean
-  ) = 0
+  ) = ElectricItem.rawManager.discharge(
+    itemStack,
+    amount,
+    tier,
+    ignoreTransferLimit,
+    externally,
+    simulate
+  )
+
   override def getCharge(itemStack: ItemStack) =
     (item.getCharge(itemStack) * ratio).round
 
