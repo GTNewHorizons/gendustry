@@ -30,36 +30,38 @@ class ItemFluidBucket(fluid: Fluid) extends ItemBucket(fluid.getBlock) {
 
   setContainerItem(GameRegistry.findItem("minecraft", "bucket"))
 
-  MinecraftForge.EVENT_BUS.register(this)
-
-  @SubscribeEvent
-  def onBucketFill(event: FillBucketEvent) {
-    if (
-      event.world.getBlockMetadata(
-        event.target.blockX,
-        event.target.blockY,
-        event.target.blockZ
-      ) != 0
-    ) return
-    if (
-      event.world.getBlock(
-        event.target.blockX,
-        event.target.blockY,
-        event.target.blockZ
-      ) != fluid.getBlock
-    ) return
-    event.world.setBlockToAir(
-      event.target.blockX,
-      event.target.blockY,
-      event.target.blockZ
-    )
-    event.result = new ItemStack(this)
-    event.setResult(Result.ALLOW)
-  }
+  MinecraftForge.EVENT_BUS.register(new EventHandler())
 
   @SideOnly(Side.CLIENT)
   override def registerIcons(reg: IIconRegister) {
     itemIcon =
       reg.registerIcon(Misc.iconName(Gendustry.modId, "bucket", fluid.getName))
+  }
+
+  class EventHandler {
+    @SubscribeEvent
+    def onBucketFill(event: FillBucketEvent) {
+      if (
+        event.world.getBlockMetadata(
+          event.target.blockX,
+          event.target.blockY,
+          event.target.blockZ
+        ) != 0
+      ) return
+      if (
+        event.world.getBlock(
+          event.target.blockX,
+          event.target.blockY,
+          event.target.blockZ
+        ) != fluid.getBlock
+      ) return
+      event.world.setBlockToAir(
+        event.target.blockX,
+        event.target.blockY,
+        event.target.blockZ
+      )
+      event.result = new ItemStack(ItemFluidBucket.this)
+      event.setResult(Result.ALLOW)
+    }
   }
 }
