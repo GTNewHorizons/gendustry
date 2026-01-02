@@ -1,9 +1,9 @@
 // Add your dependencies here
 
 dependencies {
-    api("com.github.GTNewHorizons:NotEnoughItems:2.7.66-GTNH:dev")
+    api("com.github.GTNewHorizons:NotEnoughItems:2.8.48-GTNH:dev")
     api("com.github.GTNewHorizons:bdlib:1.11.0-GTNH:dev")
-    api("com.github.GTNewHorizons:ForestryMC:4.10.14:dev") {
+    api("com.github.GTNewHorizons:ForestryMC:4.11.4:dev") {
         exclude group: "net.industrial-craft", module: "industrialcraft-2"
         exclude group: "com.mod-buildcraft", module: "buildcraft"
     }
@@ -14,7 +14,7 @@ dependencies {
         transitive = false
     }
 
-    compileOnly("com.github.GTNewHorizons:waila:1.8.12:api") {
+    compileOnly("com.github.GTNewHorizons:waila:1.9.15:api") {
         transitive = false
     }
 
