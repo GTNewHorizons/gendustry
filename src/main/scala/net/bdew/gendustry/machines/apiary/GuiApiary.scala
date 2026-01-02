@@ -35,7 +35,7 @@ class GuiApiary(val te: TileApiary, player: EntityPlayer, cont: ContainerApiary)
     )
     widgets.add(
       new WidgetLabel(
-        Misc.toLocal("tile.gendustry.apiary.name"),
+        Misc.toLocal("gendustry.label.apiary.title"),
         8,
         6,
         Color.darkGray

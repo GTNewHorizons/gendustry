@@ -53,7 +53,7 @@ class GuiMutatronAdv(val te: TileMutatronAdv, player: EntityPlayer)
     widgets.add(new WidgetSelector(new Point(7, 84), te.selectedMutation, -1))
     widgets.add(
       new WidgetLabel(
-        Misc.toLocal("tile.gendustry.mutatron_adv.name"),
+        Misc.toLocal("gendustry.label.mutatron_adv.title"),
         8,
         6,
         Color.darkGray

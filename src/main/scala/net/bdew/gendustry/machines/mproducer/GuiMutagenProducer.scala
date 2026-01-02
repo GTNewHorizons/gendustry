@@ -51,7 +51,7 @@ class GuiMutagenProducer(val te: TileMutagenProducer, player: EntityPlayer)
     )
     widgets.add(
       new WidgetLabel(
-        Misc.toLocal("tile.gendustry.mutagen_producer.name"),
+        Misc.toLocal("gendustry.label.mutagen_producer.title"),
         8,
         6,
         Color.darkGray

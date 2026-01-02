@@ -58,7 +58,7 @@ class GuiReplicator(val te: TileReplicator, player: EntityPlayer)
     )
     widgets.add(
       new WidgetLabel(
-        Misc.toLocal("tile.gendustry.replicator.name"),
+        Misc.toLocal("gendustry.label.replicator.title"),
         8,
         6,
         Color.darkGray

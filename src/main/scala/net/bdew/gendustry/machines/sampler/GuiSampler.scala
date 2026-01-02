@@ -44,7 +44,7 @@ class GuiSampler(val te: TileSampler, player: EntityPlayer)
     )
     widgets.add(
       new WidgetLabel(
-        Misc.toLocal("tile.gendustry.sampler.name"),
+        Misc.toLocal("gendustry.label.sampler.title"),
         8,
         6,
         Color.darkGray

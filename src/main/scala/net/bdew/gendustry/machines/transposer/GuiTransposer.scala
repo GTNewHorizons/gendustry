@@ -44,7 +44,7 @@ class GuiTransposer(val te: TileTransposer, player: EntityPlayer)
     )
     widgets.add(
       new WidgetLabel(
-        Misc.toLocal("tile.gendustry.transposer.name"),
+        Misc.toLocal("gendustry.label.transposer.title"),
         8,
         6,
         Color.darkGray
