@@ -39,6 +39,14 @@ gendustry.upgrades.heater.name=加熱器升級
 gendustry.upgrades.sieve.name=篩子升級
 gendustry.upgrades.cooler.name=冷卻器升級
 
+gendustry.label.mutagen.title=誘變劑
+gendustry.label.mutagen_producer.title=誘變劑制造機
+gendustry.label.mutatron.title=突變方塊
+gendustry.label.mutatron_adv.title=高級突變方塊
+gendustry.label.apiary.title=工業蜂箱
+gendustry.label.imprinter.title=基因復制機
+gendustry.label.sampler.title=基因拓模機
+
 fluid.gendustry.mutagen=誘變劑
 
 gendustry.label.template.crafting=基因樣本可以被添加到模板中.在工作臺中就可以完成此操作.多個樣本可以一次添加到同一模板中.

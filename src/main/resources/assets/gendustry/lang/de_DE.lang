@@ -73,6 +73,17 @@ gendustry.upgrades.stabilizer.name=Gen-Stabilisierungs-Upgrade
 
 # ==== GUI AND TOOLTIPS ====
 
+gendustry.label.mutagen_producer.title=Mutagen-Erzeuger
+gendustry.label.mutatron.title=Mutatron
+gendustry.label.mutatron_adv.title=Erweitertes Mutatron
+gendustry.label.apiary.title=Industrieller Bienenstock
+gendustry.label.imprinter.title=Gen-Drucker
+gendustry.label.sampler.title=Gen-Abtaster
+gendustry.label.extractor.title=DNA-Extraktor
+gendustry.label.liquifier.title=Proteinverflüssiger
+gendustry.label.replicator.title=Genetischer Replikator
+gendustry.label.transposer.title=Genetischer Wandler
+
 gendustry.label.template.crafting=Genetische Proben können an jeder Werkbank zu einer Schablone hinzugefügt werden. Mehrere Proben können gleichzeitig hinzugefügt werden.
 
 gendustry.label.charges=Benutzungen: %s
