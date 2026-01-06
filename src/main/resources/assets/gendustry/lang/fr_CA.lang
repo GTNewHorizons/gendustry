@@ -75,6 +75,17 @@ gendustry.upgrades.stabilizer.name=Upgrade de stabilisateur génétique
 
 # ==== GUI AND TOOLTIPS ====
 
+gendustry.label.mutagen_producer.title=Producteur mutagène
+gendustry.label.mutatron.title=Mutatron
+gendustry.label.mutatron_adv.title=Mutatron avancé
+gendustry.label.apiary.title=Rucher industriel
+gendustry.label.imprinter.title=Imprimeur génétique
+gendustry.label.sampler.title=Échantillonneur génétique
+gendustry.label.extractor.title=Extracteur d'ADN
+gendustry.label.liquifier.title=Liquéfieur de protéine
+gendustry.label.replicator.title=Réplicateur génétique
+gendustry.label.transposer.title=Transposeur génétique
+
 gendustry.label.template.crafting=Les échantillons génétiques peuvent être ajoutés à un modèle. Combinez-les dans un établi. Plusieurs échantillons peuvent être ajoutés à la fois.
 
 gendustry.label.charges=Charges : %s

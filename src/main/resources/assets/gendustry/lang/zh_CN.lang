@@ -78,6 +78,17 @@ gendustry.upgrades.stabilizer.name=基因稳定升级
 
 # ==== GUI AND TOOLTIPS ====
 
+gendustry.label.mutagen_producer.title=诱变剂制造机
+gendustry.label.mutatron.title=诱变机
+gendustry.label.mutatron_adv.title=高级诱变机
+gendustry.label.apiary.title=工业蜂箱
+gendustry.label.imprinter.title=基因压印机
+gendustry.label.sampler.title=基因采样机
+gendustry.label.extractor.title=基因提取机
+gendustry.label.liquifier.title=蛋白质液化机
+gendustry.label.replicator.title=基因复制机
+gendustry.label.transposer.title=基因转换机
+
 gendustry.label.template.crafting=基因样本可以被添加到模板中. 在工作台中就可以完成此操作. 多个样本可以一次添加到同一模板中.
 
 gendustry.label.charges=充能: %s

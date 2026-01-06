@@ -51,7 +51,7 @@ class GuiLiquifier(val te: TileLiquifier, player: EntityPlayer)
     )
     widgets.add(
       new WidgetLabel(
-        Misc.toLocal("tile.gendustry.liquifier.name"),
+        Misc.toLocal("gendustry.label.liquifier.title"),
         8,
         6,
         Color.darkGray

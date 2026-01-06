@@ -44,7 +44,7 @@ class GuiImprinter(val te: TileImprinter, player: EntityPlayer)
     )
     widgets.add(
       new WidgetLabel(
-        Misc.toLocal("tile.gendustry.imprinter.name"),
+        Misc.toLocal("gendustry.label.imprinter.title"),
         8,
         6,
         Color.darkGray

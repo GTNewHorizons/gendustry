@@ -51,7 +51,7 @@ class GuiExtractor(val te: TileExtractor, player: EntityPlayer)
     )
     widgets.add(
       new WidgetLabel(
-        Misc.toLocal("tile.gendustry.extractor.name"),
+        Misc.toLocal("gendustry.label.extractor.title"),
         8,
         6,
         Color.darkGray
