@@ -29,7 +29,9 @@ item.gendustry.grafter.name=Промышленный садовый нож
 item.gendustry.scoop.name=Скупоратор MX200 турбо
 item.gendustry.ImportCover.name=Item Import Cover
 item.gendustry.EjectCover.name=Item Eject Cover
+item.gendustry.ErrorSensorCover.name=Error Sensor Cover
 item.gendustry.PollenKit.name=Набор для сбора пыльцы
+item.gendustry.HiveSpawnDebugger.name=Hive Spawning Debugger
 
 # ==== FLUIDS ====
 
@@ -53,6 +55,7 @@ item.gendustry.protein.can.name=Банка протеина
 
 # ==== UPGRADES ====
 
+item.gendustry.apiary.upgrade.name=Upgrade
 gendustry.upgrades.prod.name=Улучшение «Производство»
 gendustry.upgrades.life.name=Улучшение «Продолжительность жизни»
 gendustry.upgrades.flowering.name=Улучшение «Цветение»
@@ -71,7 +74,9 @@ gendustry.upgrades.cooler.name=Улучшение «Охлаждение»
 gendustry.upgrades.desert.name=Улучшение «Эмуляция пустыни»
 gendustry.upgrades.plains.name=Улучшение «Эмуляция равнин»
 gendustry.upgrades.jungle.name=Улучшение «Эмуляция джунглей»
+gendustry.upgrades.ocean.name=Ocean Emulation Upgrade
 gendustry.upgrades.stabilizer.name=Улучшение «Генетическая стабилизация»
+gendustry.upgrades.scrubber.name=Pollen Scrubber Upgrade
 
 # ==== GUI AND TOOLTIPS ====
 
@@ -144,7 +149,16 @@ gendustry.rsmode.never=Отключен
 gendustry.rsmode.rs_on=Включен по сигналу красного камня
 gendustry.rsmode.rs_off=Выключен  по сигналу красного камня
 
+gendustry.label.items=%s Items
+
 gendustry.label.shift=<Нажмите SHIFT для большей информации>
+
+gendustry.cover.label=Cover: %s
+
+gendustry.cover.error.message=Will emit redstone signal if %s is detected
+gendustry.cover.error.hint=(Click cover with empty hand to change)
+gendustry.cover.error.any=Any Error
+gendustry.cover.error.none=No Error
 
 # ==== CHROMOSOMES (should match forestry) ====
 
@@ -210,6 +224,8 @@ gendustry.req.humidity=Требуется влажность: %s
 gendustry.req.biome=Требуется биом: %s
 gendustry.req.block=Требуется блок: %s
 
+gendustry.req.message=Special Requirements
+
 # ==== BEE SPECIES ====
 gendustry.bees.species.black=Чёрная
 gendustry.bees.species.red=Красная
@@ -228,8 +244,12 @@ gendustry.bees.species.magenta=Сиреневая
 gendustry.bees.species.orange=Оранжевая
 gendustry.bees.species.white=Белая
 
+gendustry.bees.species.derpious=Derpious
+gendustry.bees.species.derpious.description=A curious specimen, seems to be mostly interested in spreading flowers and derping around.
+
 # ==== COMBS ====
 
+item.gendustry.HoneyComb.name=Colored Comb
 gendustry.honeycomb.black.name=Чёрная сота
 gendustry.honeycomb.red.name=Красная  сота
 gendustry.honeycomb.green.name=Зелёная сота
@@ -247,6 +267,7 @@ gendustry.honeycomb.magenta.name=Сиреневая сота
 gendustry.honeycomb.orange.name=Оранжевая сота
 gendustry.honeycomb.white.name=Белая сота
 
+item.gendustry.HoneyDrop.name=Colored Honey Drop
 gendustry.honeydrop.black.name=Чёрная капля мёда
 gendustry.honeydrop.red.name=Красная капля мёда
 gendustry.honeydrop.green.name=Зелёная капля мёда
@@ -267,6 +288,9 @@ gendustry.honeydrop.white.name=Белая капля мёда
 itemGroup.bdew.gendustry=Gendustry
 itemGroup.bdew.templates=Генетические шаблоны
 itemGroup.bdew.samples=Генетические образцы
+itemGroup.bdew.hives=Custom Beehives
+
+gendustry.errorstate.ok=No error
 
 for.gendustry.errorstate.disabled.description=Отключено
 for.gendustry.errorstate.disabled.help=Этот механизм отключен в настройках конфигурации
@@ -275,6 +299,7 @@ for.gendustry.errorstate.disabled.help=Этот механизм отключе�
 bdlib.label.empty=Пусто
 
 # ==== CUSTOM BEE SPECIES ====
+
 for.bees.custom.drone.gendustry.black=Чёрный трутень
 for.bees.custom.drone.gendustry.red=Красный трутень
 for.bees.custom.drone.gendustry.green=Зелёный трутень
