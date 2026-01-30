@@ -63,6 +63,12 @@ object GeneSample extends SimpleItem("GeneSample") {
       val info = getInfo(stack)
       tip += Misc.toLocal("gendustry.label.sample." + info.root.getUID)
       tip += info.getLocalizedName
+      val alleleUID = info.allele.getUID
+      val localizationKey = s"item.gendustry.GeneSample.${alleleUID}.tooltip"
+      val localizedText = Misc.toLocal(localizationKey)
+      if (localizedText != localizationKey) {
+        localizedText.split("\\\\n").foreach(line => tip += line)
+      }
     }
   }
 }

@@ -29,7 +29,9 @@ item.gendustry.grafter.name=Промышленный садовый нож
 item.gendustry.scoop.name=Скупоратор MX200 турбо
 item.gendustry.ImportCover.name=Item Import Cover
 item.gendustry.EjectCover.name=Item Eject Cover
+item.gendustry.ErrorSensorCover.name=Error Sensor Cover
 item.gendustry.PollenKit.name=Набор для сбора пыльцы
+item.gendustry.HiveSpawnDebugger.name=Hive Spawning Debugger
 
 # ==== FLUIDS ====
 
@@ -53,6 +55,7 @@ item.gendustry.protein.can.name=Банка протеина
 
 # ==== UPGRADES ====
 
+item.gendustry.apiary.upgrade.name=Upgrade
 gendustry.upgrades.prod.name=Улучшение «Производство»
 gendustry.upgrades.life.name=Улучшение «Продолжительность жизни»
 gendustry.upgrades.flowering.name=Улучшение «Цветение»
@@ -71,7 +74,9 @@ gendustry.upgrades.cooler.name=Улучшение «Охлаждение»
 gendustry.upgrades.desert.name=Улучшение «Эмуляция пустыни»
 gendustry.upgrades.plains.name=Улучшение «Эмуляция равнин»
 gendustry.upgrades.jungle.name=Улучшение «Эмуляция джунглей»
+gendustry.upgrades.ocean.name=Ocean Emulation Upgrade
 gendustry.upgrades.stabilizer.name=Улучшение «Генетическая стабилизация»
+gendustry.upgrades.scrubber.name=Pollen Scrubber Upgrade
 
 # ==== GUI AND TOOLTIPS ====
 
@@ -144,7 +149,16 @@ gendustry.rsmode.never=Отключен
 gendustry.rsmode.rs_on=Включен по сигналу красного камня
 gendustry.rsmode.rs_off=Выключен  по сигналу красного камня
 
+gendustry.label.items=%s Items
+
 gendustry.label.shift=<Нажмите SHIFT для большей информации>
+
+gendustry.cover.label=Cover: %s
+
+gendustry.cover.error.message=Will emit redstone signal if %s is detected
+gendustry.cover.error.hint=(Click cover with empty hand to change)
+gendustry.cover.error.any=Any Error
+gendustry.cover.error.none=No Error
 
 # ==== CHROMOSOMES (should match forestry) ====
 
@@ -210,6 +224,8 @@ gendustry.req.humidity=Требуется влажность: %s
 gendustry.req.biome=Требуется биом: %s
 gendustry.req.block=Требуется блок: %s
 
+gendustry.req.message=Special Requirements
+
 # ==== BEE SPECIES ====
 gendustry.bees.species.black=Чёрная
 gendustry.bees.species.red=Красная
@@ -228,8 +244,12 @@ gendustry.bees.species.magenta=Сиреневая
 gendustry.bees.species.orange=Оранжевая
 gendustry.bees.species.white=Белая
 
+gendustry.bees.species.derpious=Derpious
+gendustry.bees.species.derpious.description=A curious specimen, seems to be mostly interested in spreading flowers and derping around.
+
 # ==== COMBS ====
 
+item.gendustry.HoneyComb.name=Colored Comb
 gendustry.honeycomb.black.name=Чёрная сота
 gendustry.honeycomb.red.name=Красная  сота
 gendustry.honeycomb.green.name=Зелёная сота
@@ -247,6 +267,7 @@ gendustry.honeycomb.magenta.name=Сиреневая сота
 gendustry.honeycomb.orange.name=Оранжевая сота
 gendustry.honeycomb.white.name=Белая сота
 
+item.gendustry.HoneyDrop.name=Colored Honey Drop
 gendustry.honeydrop.black.name=Чёрная капля мёда
 gendustry.honeydrop.red.name=Красная капля мёда
 gendustry.honeydrop.green.name=Зелёная капля мёда
@@ -267,6 +288,9 @@ gendustry.honeydrop.white.name=Белая капля мёда
 itemGroup.bdew.gendustry=Gendustry
 itemGroup.bdew.templates=Генетические шаблоны
 itemGroup.bdew.samples=Генетические образцы
+itemGroup.bdew.hives=Custom Beehives
+
+gendustry.errorstate.ok=No error
 
 for.gendustry.errorstate.disabled.description=Отключено
 for.gendustry.errorstate.disabled.help=Этот механизм отключен в настройках конфигурации
@@ -274,7 +298,110 @@ for.gendustry.errorstate.disabled.help=Этот механизм отключе�
 #this will be moved to bdlib at some point
 bdlib.label.empty=Пусто
 
+# ==== TOOLTIPS ====
+
+item.gendustry.GeneSample.forestry.speedFast.tooltip=Скорость: 1.2 (1.07× к общей производительности)
+item.gendustry.GeneSample.forestry.speedFaster.tooltip=Скорость: 1.4 (1.13× к общей производительности)
+item.gendustry.GeneSample.forestry.speedFastest.tooltip=Скорость: 1.7 (1.22× к общей производительности)
+item.gendustry.GeneSample.forestry.speedNormal.tooltip=Скорость: 1.0 (1.0× к общей производительности)
+item.gendustry.GeneSample.forestry.speedSlow.tooltip=Скорость: 0.8 (0.92× к общей производительности)
+item.gendustry.GeneSample.forestry.speedSlower.tooltip=Скорость: 0.6 (0.83× к общей производительности)
+item.gendustry.GeneSample.forestry.speedSlowest.tooltip=Скорость: 0.3 (0.64× к общей производительности)
+item.gendustry.GeneSample.magicbees.speedBlinding.tooltip=Скорость: 2.0 (1.29× к общей производительности)
+
+item.gendustry.GeneSample.forestry.lifespanElongated.tooltip=Базовые тики пчелы: 45 (31:10.0 после режима пчеловодства)
+item.gendustry.GeneSample.forestry.lifespanLong.tooltip=Базовые тики пчелы: 50 (34:22.5 после режима пчеловодства)
+item.gendustry.GeneSample.forestry.lifespanLonger.tooltip=Базовые тики пчелы: 60 (41:15.0 после режима пчеловодства)
+item.gendustry.GeneSample.forestry.lifespanLongest.tooltip=Базовые тики пчелы: 70 (48:07.5 после режима пчеловодства)
+item.gendustry.GeneSample.forestry.lifespanNormal.tooltip=Базовые тики пчелы: 40 (27:30.0 после режима пчеловодства)
+item.gendustry.GeneSample.forestry.lifespanShort.tooltip=Базовые тики пчелы: 30 (20:37.5 после режима пчеловодства)
+item.gendustry.GeneSample.forestry.lifespanShortened.tooltip=Базовые тики пчелы: 35 (24:17.5 после режима пчеловодства)
+item.gendustry.GeneSample.forestry.lifespanShorter.tooltip=Базовые тики пчелы: 20 (13:45.0 после режима пчеловодства)
+item.gendustry.GeneSample.forestry.lifespanShortest.tooltip=Базовые тики пчелы: 10 (6:52.5 после режима пчеловодства)
+item.gendustry.GeneSample.gregtech.lifeEon.tooltip=Базовые тики пчелы: 600 (6:52:30.0 после режима пчеловодства)
+
+item.gendustry.GeneSample.forestry.territoryAverage.tooltip=Поиск цветов / Эффект: 9×6×9\nРаспространение цветов / Опыление: 27×18×27
+item.gendustry.GeneSample.forestry.territoryLarge.tooltip=Поиск цветов / Эффект: 11×8×11\nРаспространение цветов / Опыление: 33×24×33
+item.gendustry.GeneSample.forestry.territoryLarger.tooltip=Поиск цветов / Эффект: 13×12×13\nРаспространение цветов / Опыление: 39×36×39
+item.gendustry.GeneSample.forestry.territoryLargest.tooltip=Поиск цветов / Эффект: 15×13×15\nРаспространение цветов / Опыление: 45×39×45
+
+item.gendustry.GeneSample.extrabees.effect.acid.tooltip=Преобразует блоки грязи в песок
+item.gendustry.GeneSample.extrabees.effect.birthday.tooltip=Создаёт фейерверки (цвет зависит от цвета пчелы)
+item.gendustry.GeneSample.extrabees.effect.blindness.tooltip=Накладывает слепоту на игроков
+item.gendustry.GeneSample.extrabees.effect.bonemeal_fruit.tooltip=Подкормливает деревья forestry/extratrees "fruits"
+item.gendustry.GeneSample.extrabees.effect.bonemeal_mushroom.tooltip=Подкормки ванильные грибы
+item.gendustry.GeneSample.extrabees.effect.bonemeal_sapling.tooltip=Подкормки саженцы
+item.gendustry.GeneSample.extrabees.effect.ectoplasm.tooltip=Порождает экто-плазмы из randomthings
+item.gendustry.GeneSample.extrabees.effect.fireworks.tooltip=Создаёт фейерверки (цвет зависит от цвета пчелы)
+item.gendustry.GeneSample.extrabees.effect.gravity.tooltip=Дает игрокам эффект прыжка
+item.gendustry.GeneSample.extrabees.effect.hunger.tooltip=Устанавливает насыщение и голод игроков в ноль
+item.gendustry.GeneSample.extrabees.effect.lightning.tooltip=Спавнит полу-реальные удары молнии\n(наносит урон сущностям и поджигает,\nно не активирует генераторы молний)
+item.gendustry.GeneSample.extrabees.effect.meteor.tooltip=Порождает падающие огненные снаряды
+item.gendustry.GeneSample.extrabees.effect.power.tooltip=Добавляет по 5 RF за раз в ближайшие RF-приёмники
+item.gendustry.GeneSample.extrabees.effect.radioactive.tooltip=Наносит урон очень быстро
+item.gendustry.GeneSample.extrabees.effect.slow.tooltip=Накладывает замедление на игроков
+item.gendustry.GeneSample.extrabees.effect.spawn_creeper.tooltip=Спавнит криперов при низком освещении.\nНе путать с эффектом Creeper (отдельный эффект)
+item.gendustry.GeneSample.extrabees.effect.spawn_skeleton.tooltip=Спавнит скелетов при низком освещении
+item.gendustry.GeneSample.extrabees.effect.spawn_zombie.tooltip=Спавнит зомби и злых зомби при низком освещении
+item.gendustry.GeneSample.extrabees.effect.teleport.tooltip=Случайно телепортирует мобов/игроков на короткое расстояние
+item.gendustry.GeneSample.extrabees.effect.water.tooltip=Добавляет 100 mb воды в случайный ближайший бак с очень редкими интервалами
+item.gendustry.GeneSample.extrabees.effect.wither.tooltip=Накладывает эффект иссушения, но не наносит урона
+item.gendustry.GeneSample.forestry.effectAggressive.tooltip=Наносит урон (медленнее)
+item.gendustry.GeneSample.forestry.effectBeatific.tooltip=Даёт игрокам регенерацию
+item.gendustry.GeneSample.forestry.effectCreeper.tooltip=Вызывает фальшивые взрывы криперов вокруг игроков.\nОни не разрушают блоки, но наносят большой урон,\nобходящий обычную броню.\nНе путать с эффектом Creepers (отдельный эффект)
+item.gendustry.GeneSample.forestry.effectDrunkard.tooltip=Даёт игрокам тошноту
+item.gendustry.GeneSample.forestry.effectExploration.tooltip=Даёт игрокам опыт
+item.gendustry.GeneSample.forestry.effectFertile.tooltip=Добавляет случайные тики роста растениям в радиусе\n(не работает на грядках IC2)
+item.gendustry.GeneSample.forestry.effectFestiveEaster.tooltip=Создаёт фейерверк-ракеты без формы, цвета или следа
+item.gendustry.GeneSample.forestry.effectGlacial.tooltip=Превращает воду в лёд
+item.gendustry.GeneSample.forestry.effectHeroic.tooltip=Атакует монстров
+item.gendustry.GeneSample.forestry.effectIgnition.tooltip=Поджигает игроков
+item.gendustry.GeneSample.forestry.effectMiasmic.tooltip=Даёт игрокам эффект отравления
+item.gendustry.GeneSample.forestry.effectMisanthropic.tooltip=Наносит большой урон
+item.gendustry.GeneSample.forestry.effectMycophilic.tooltip=Преобразует траву и открытые земле-экспонированные блоки в мицелий,\nфорсирует рост ванильных грибов (вызывает генерацию больших грибов,\nобходит подкормку), и превращает коров в моошрумов
+item.gendustry.GeneSample.forestry.effectNone.tooltip=Ничего не делает
+item.gendustry.GeneSample.forestry.effectRadioactive.tooltip=Наносит урон (медленнее чем unstable) и ломает блоки\nв любой части территории королевы, кроме центрального блока,\nи не ломает блоки стандартного жилья пчёл Forestry. Замечательно ломает\nблоки жилья extrabees/magicbees
+item.gendustry.GeneSample.forestry.effectReanimation.tooltip=Спавнит скелетов, ифритов или зомби при наличии их дропов
+item.gendustry.GeneSample.forestry.effectRepulsion.tooltip=Добавляет задачe ИИ, чтобы сущности избегали игроков
+item.gendustry.GeneSample.forestry.effectResurrection.tooltip=Спавнит криперов, эндерменов, пауков, пещерных пауков, гастов,\nили эндер-драконов при наличии их дропов
+item.gendustry.GeneSample.forestry.effectSnowing.tooltip=Создаёт косметический эффект снега
+item.gendustry.GeneSample.gregtech.effectTreetwister.tooltip=Преобразует саженцы в BarnardaC-саженцы при определённых условиях:\n1) саженец должен быть достаточно магическим\n(например, саженец Дерева Преобразования с данжа над сумеречным дубом)\n2) измерение должно быть магически активно\n(попробуйте Spectre, Bedrock, Last Millenium или Pocket Plane)
+item.gendustry.GeneSample.magicbees.effectAMWisp.tooltip=В GTNH ничего не делает (спавнит Ars Magica Wisps или\nHecates, если Ars Magica установлена)
+item.gendustry.GeneSample.magicbees.effectAblaze.tooltip=Спавнит ифритов
+item.gendustry.GeneSample.magicbees.effectBatty.tooltip=Спавнит летучих мышей и огненных летучих мышей
+item.gendustry.GeneSample.magicbees.effectBovine.tooltip=Спавнит коров
+item.gendustry.GeneSample.magicbees.effectBrainy.tooltip=Спавнит злых зомби
+item.gendustry.GeneSample.magicbees.effectCanine.tooltip=Спавнит волков
+item.gendustry.GeneSample.magicbees.effectCatty.tooltip=Спавнит оцелотов
+item.gendustry.GeneSample.magicbees.effectChicken.tooltip=Спавнит кур
+item.gendustry.GeneSample.magicbees.effectCrumbling.tooltip=Преобразует камень -> булыжник -> замшелый булыжник,\nкаменные кирпичи -> потрескавшиеся каменные кирпичи -> замшелые каменные кирпичи,\nгравий -> песок, и\nбулыжниковые стены -> замшелые булыжниковые стены
+item.gendustry.GeneSample.magicbees.effectCurative.tooltip=Лечит игроков от эффектов зелий
+item.gendustry.GeneSample.magicbees.effectDigSpeed.tooltip=Даёт игрокам спешку\nЖаль, но он не выкопает яму за вас
+item.gendustry.GeneSample.magicbees.effectDreaming.tooltip=Преобразует камень -> жизнекамень и бревна -> жизнедерево
+item.gendustry.GeneSample.magicbees.effectGhastly.tooltip=Спавнит гастов
+item.gendustry.GeneSample.magicbees.effectHorse.tooltip=Спавнит лошадей
+item.gendustry.GeneSample.magicbees.effectInvisibility.tooltip=Даёт игрокам невидимость
+item.gendustry.GeneSample.magicbees.effectManaDrain.tooltip=В GTNH ничего не делает (спавнит манакриперов/мановоронки при наличии Ars Magica)
+item.gendustry.GeneSample.magicbees.effectMoveSpeed.tooltip=Даёт игрокам ускорение
+item.gendustry.GeneSample.magicbees.effectNodeEmpower.tooltip=Добавляет случайные аспекты к узлам, включая узлы в банках
+item.gendustry.GeneSample.magicbees.effectNodePurifying.tooltip=Удаляет специальные типы, кроме чистый, и делает обычные узлы в чистый, включая в банках
+item.gendustry.GeneSample.magicbees.effectNodeRavening.tooltip=Удаляет специальные типы, кроме голодного, и делает обычные узлы в голодный, включая в банках
+item.gendustry.GeneSample.magicbees.effectNodeRepair.tooltip=Повышает статус узлов увядающий -> тусклый -> обычный -> яркий, включая в банках
+item.gendustry.GeneSample.magicbees.effectNodeTainting.tooltip=Удаляет специальные типы, кроме заражённого, и делает обычные узлы в заражённый, включая в банках
+item.gendustry.GeneSample.magicbees.effectPorcine.tooltip=Спавнит свиней
+item.gendustry.GeneSample.magicbees.effectSheep.tooltip=Спавнит овец
+item.gendustry.GeneSample.magicbees.effectSlowSpeed.tooltip=Даёт игрокам замедление\nУвы, это не ускорит машины или саму пчелу
+item.gendustry.GeneSample.magicbees.effectSpidery.tooltip=Спавнит пауков (не пещерных пауков)
+item.gendustry.GeneSample.magicbees.effectTEBasalz.tooltip=В GTNH ничего не делает (спавнит Basalz, если установлен Thermal Foundation)
+item.gendustry.GeneSample.magicbees.effectTEBlitz.tooltip=В GTNH ничего не делает (спавнит Blitz, если установлен Thermal Foundation)
+item.gendustry.GeneSample.magicbees.effectTEBlizzy.tooltip=В GTNH ничего не делает (спавнит Blizzy, если установлен Thermal Foundation)
+item.gendustry.GeneSample.magicbees.effectTransmuting.tooltip=Преобразует песок -> песчаник в пустынях или\nкамень/булыжник -> камень бездны/карьерный камень в местах их естественной генерации\nПримечание: буровая установка также заменяет соответствующие руды этими блоками при включённой замене на булыжник
+item.gendustry.GeneSample.magicbees.effectVisRecharge.tooltip=Перезаряжает неэнергетические узлы, у которых аспекты ниже максимума
+item.gendustry.GeneSample.magicbees.effectWispy.tooltip=Спавнит thaumcraft виспов с равномерно выбранным случайным типом эссенции от 1 до 47\n(Кажется сломано, попробуйте электрический спаунер)
+item.gendustry.GeneSample.magicbees.effectWithering.tooltip=Даёт игрокам эффект иссушения
+
 # ==== CUSTOM BEE SPECIES ====
+
 for.bees.custom.drone.gendustry.black=Чёрный трутень
 for.bees.custom.drone.gendustry.red=Красный трутень
 for.bees.custom.drone.gendustry.green=Зелёный трутень
