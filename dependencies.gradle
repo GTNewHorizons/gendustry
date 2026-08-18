@@ -14,6 +14,8 @@ dependencies {
         transitive = false
     }
 
+    compileOnly("com.ruling_0:MaterialLib:0.9.0-mu:dev")
+
     compileOnly("com.github.GTNewHorizons:waila:1.19.31:api") {
         transitive = false
     }
