@@ -54,6 +54,11 @@ object ResourceListener extends IResourceManagerReloadListener {
       configFiles
         .filter(_.endsWith("." + newLang + ".lang"))
         .foreach(loadLangFile(newLang, _))
-    Client.minecraft.getLanguageManager.onResourceManagerReload(rm)
+    if (
+      configFiles.exists(_.endsWith(".en_US.lang")) ||
+      (newLang != "en_US" && configFiles.exists(
+        _.endsWith("." + newLang + ".lang")
+      ))
+    ) Client.minecraft.getLanguageManager.onResourceManagerReload(rm)
   }
 }
