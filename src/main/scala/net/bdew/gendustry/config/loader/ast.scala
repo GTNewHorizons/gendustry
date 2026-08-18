@@ -14,6 +14,15 @@ import net.bdew.lib.recipes.gencfg.ConfigEntry
 
 case class FluidSpec(id: String, amount: Int)
 
+// === Item references ===
+
+/** MaterialLib reference Syntax: I:ml:"{material}:{shape}" Parser:
+  * [[net.bdew.gendustry.config.loader.Parser.specMaterialLib]]
+  * @param ref
+  *   MaterialLib material name and shape name, separated by a colon
+  */
+case class StackMaterialLib(ref: String) extends StackRef
+
 // === Modifiers for apiary upgrades ===
 
 abstract class EntryModifier extends ConfigEntry

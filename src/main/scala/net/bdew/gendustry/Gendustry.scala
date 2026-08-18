@@ -44,7 +44,7 @@ import org.apache.logging.log4j.Logger
   version = Tags.VERSION,
   name = "Gendustry",
   dependencies =
-    "required-after:Forestry@[4.0.0.0,);after:BuildCraft|energy;after:BuildCraft|Silicon;after:IC2;after:CoFHCore;after:BinnieCore;after:ExtraBees;after:ExtraTrees;after:MineFactoryReloaded;after:MagicBees;required-after:bdlib@[1.9.4.109,)",
+    "required-after:Forestry@[4.0.0.0,);after:BuildCraft|energy;after:BuildCraft|Silicon;after:IC2;after:CoFHCore;after:BinnieCore;after:ExtraBees;after:ExtraTrees;after:MineFactoryReloaded;after:MagicBees;after:materiallib;required-after:bdlib@[1.9.4.109,)",
   modLanguage = "scala"
 )
 object Gendustry {

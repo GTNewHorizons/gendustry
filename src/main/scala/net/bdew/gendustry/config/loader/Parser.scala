@@ -22,6 +22,14 @@ class Parser
   override def recipeStatement =
     mutagen | dna | protein | assembly | stMutation | centrifuge | squeezer | super.recipeStatement
 
+  // === Item references ===
+
+  // The material and shape names fully identify the stack, so a metadata suffix is accepted and discarded
+  def specMaterialLib =
+    "I" ~> ":" ~> "ml" ~> ":" ~> str <~ maybeMeta ^^ StackMaterialLib
+
+  override def spec = specMaterialLib | super.spec
+
   // === Machine Recipes ===
 
   def mutagen = "mutagen" ~> ":" ~> spec ~ ("=>" ~> int <~ "mb") ^^ {
