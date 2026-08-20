@@ -24,7 +24,7 @@ class Parser
 
   // === Item references ===
 
-  // The material and shape names fully identify the stack, so a metadata suffix is accepted and discarded
+  // Metadata carries no meaning in a MaterialLib reference, but is accepted
   def specMaterialLib =
     "I" ~> ":" ~> "ml" ~> ":" ~> str <~ maybeMeta ^^ StackMaterialLib
 

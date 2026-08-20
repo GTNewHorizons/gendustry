@@ -5,21 +5,19 @@ import net.bdew.gendustry.Gendustry
 import net.minecraft.item.ItemStack
 
 /** Resolves the `I:ml:"{material}:{shape}"` item references MaterialLib-aware
-  * config files carry. Such a reference names its item by material and shape
-  * instead of by registry name and metadata, so it survives sessions that
-  * renumber MaterialLib's metadata.
+  * config files carry. Naming an item by material and shape keeps a reference
+  * valid across sessions that renumber MaterialLib's metadata.
   *
-  * This is the only class holding MaterialLib types, so the rest of Gendustry
-  * loads without MaterialLib installed. Every caller checks
-  * `cpw.mods.fml.common.Loader.isModLoaded("materiallib")` before naming it.
+  * MaterialLib types appear only here, so the rest of Gendustry loads without
+  * MaterialLib installed. Reference this object only when
+  * `cpw.mods.fml.common.Loader.isModLoaded("materiallib")` holds.
   */
 object MaterialLibStacks {
   private var resolved = 0
   private var invalid = 0
 
-  /** The stack `ref` names, with the given stack size and the metadata
-    * MaterialLib assigned the material this session. Null when the reference is
-    * malformed or names nothing MaterialLib registers.
+  /** The stack `ref` names, with `cnt` as its stack size. Null when the
+    * reference is malformed or names nothing MaterialLib registers.
     */
   def resolve(ref: String, cnt: Int): ItemStack = {
     val parts = ref.split(":")
@@ -42,13 +40,13 @@ object MaterialLibStacks {
     stack
   }
 
-  /** Reports the tally of the config load pass that just finished and starts a
-    * fresh one.
+  /** Logs the tally of the config load pass that just finished, then starts a
+    * fresh tally.
     */
   def logPass(): Unit = {
     if (resolved + invalid > 0)
       Gendustry.logInfo(
-        "Gendustry: resolved %d MaterialLib entries (%d invalid)",
+        "Resolved %d MaterialLib entries (%d invalid)",
         resolved,
         invalid
       )

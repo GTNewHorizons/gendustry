@@ -16,10 +16,9 @@ case class FluidSpec(id: String, amount: Int)
 
 // === Item references ===
 
-/** MaterialLib reference Syntax: I:ml:"{material}:{shape}" Parser:
-  * [[net.bdew.gendustry.config.loader.Parser.specMaterialLib]]
-  * @param ref
-  *   MaterialLib material name and shape name, separated by a colon
+/** A MaterialLib item reference, written `I:ml:"{material}:{shape}"`. `ref`
+  * holds the quoted part: a material name and a shape name separated by a
+  * colon.
   */
 case class StackMaterialLib(ref: String) extends StackRef
 
