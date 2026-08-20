@@ -24,11 +24,15 @@ import net.minecraft.client.resources.{
 }
 
 object ResourceListener extends IResourceManagerReloadListener {
+  private var registering = false
+
   def init() {
     Gendustry.logInfo("Registered reload listener")
-    Client.minecraft.getResourceManager
+    val resourceManager = Client.minecraft.getResourceManager
       .asInstanceOf[IReloadableResourceManager]
-      .registerReloadListener(this)
+    registering = true
+    try resourceManager.registerReloadListener(this)
+    finally registering = false
   }
 
   def loadLangFile(lang: String, fileName: String) {
@@ -44,6 +48,7 @@ object ResourceListener extends IResourceManagerReloadListener {
   }
 
   override def onResourceManagerReload(rm: IResourceManager) {
+    if (registering) return
     val newLang = FMLClientHandler.instance().getCurrentLanguage
     Gendustry.logInfo("Resource manager reload, new language: %s", newLang)
     val configFiles = Gendustry.configDir.list().sorted

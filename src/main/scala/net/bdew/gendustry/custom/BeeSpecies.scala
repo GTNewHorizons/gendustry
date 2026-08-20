@@ -31,7 +31,7 @@ import scala.collection.mutable
 
 class BeeSpecies(cfg: ConfigSection, ident: String) extends IAlleleBeeSpecies {
   // IAllele
-  override val getName = Misc.toLocal("gendustry.bees.species." + ident)
+  override def getName = Misc.toLocal("gendustry.bees.species." + ident)
   override val isDominant = cfg.getBoolean("Dominant")
   override val getUID = "gendustry.bee." + ident
 
@@ -61,7 +61,7 @@ class BeeSpecies(cfg: ConfigSection, ident: String) extends IAlleleBeeSpecies {
   )
   override val getAuthority = cfg.getString("Authority")
   override val getBinomial = cfg.getString("Binominal")
-  override val getDescription =
+  override def getDescription =
     if (Misc.hasLocal("gendustry.bees.species." + ident + ".description"))
       Misc.toLocal("gendustry.bees.species." + ident + ".description")
     else ""
