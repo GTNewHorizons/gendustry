@@ -16,6 +16,7 @@ import cpw.mods.fml.common.event.FMLInterModComms
 import cpw.mods.fml.common.Loader;
 import net.bdew.gendustry.Gendustry
 import net.bdew.gendustry.config.Config
+import net.bdew.gendustry.config.Fluids
 import net.bdew.gendustry.custom.CustomUpgradeFrame
 import net.bdew.gendustry.items.GeneSample
 import net.bdew.gendustry.machines.apiary.BlockApiary
@@ -30,9 +31,52 @@ import net.bdew.gendustry.machines.sampler.MachineSampler
 import net.bdew.gendustry.machines.transposer.MachineTransposer
 import net.bdew.gendustry.misc.GeneticsCache
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
 
 import java.util
 import scala.collection.JavaConverters.collectionAsScalaIterableConverter
+
+object NEIGendustryConfig {
+
+  private case class HandlerOverride(
+      itemName: String,
+      maxRecipesPerPage: Int,
+      height: Int
+  )
+
+  private val handlerOverrides: Map[Class[_], HandlerOverride] = Map(
+    classOf[MutagenProducerHandler] -> HandlerOverride(
+      "gendustry:MutagenProducer",
+      5,
+      98
+    ),
+    classOf[MutatronHandler] -> HandlerOverride("gendustry:Mutatron", 5, 71),
+    classOf[SamplerHandler] -> HandlerOverride("gendustry:Sampler", 5, 71),
+    classOf[ImprinterHandler] -> HandlerOverride("gendustry:Imprinter", 5, 71),
+    classOf[ExtractorHandler] -> HandlerOverride("gendustry:Extractor", 5, 98),
+    classOf[LiquifierHandler] -> HandlerOverride("gendustry:Liquifier", 5, 98),
+    classOf[ReplicatorHandler] -> HandlerOverride(
+      "gendustry:Replicator",
+      5,
+      71
+    ),
+    classOf[TransposerHandler] -> HandlerOverride("gendustry:Transposer", 5, 71)
+  )
+
+  def sendHandlerInfo() {
+    for ((handlerClass, o) <- handlerOverrides) {
+      val tag = new NBTTagCompound
+      tag.setString("handler", handlerClass.getName)
+      tag.setString("modName", "Gendustry")
+      tag.setString("modId", Gendustry.modId)
+      tag.setBoolean("modRequired", true)
+      tag.setString("itemName", o.itemName)
+      tag.setInteger("maxRecipesPerPage", o.maxRecipesPerPage)
+      tag.setInteger("handlerHeight", o.height)
+      FMLInterModComms.sendMessage("NotEnoughItems", "registerHandlerInfo", tag)
+    }
+  }
+}
 
 class NEIGendustryConfig extends IConfigureNEI {
   def getName: String = "Gendustry"
@@ -132,6 +176,10 @@ class NEIGendustryConfig extends IConfigureNEI {
     }
 
     GuiContainerManager.addTooltipHandler(new SmeltingTooltipHandler)
+
+    API.hideItem(new ItemStack(Fluids.mutagen.getBlock))
+    API.hideItem(new ItemStack(Fluids.dna.getBlock))
+    API.hideItem(new ItemStack(Fluids.protein.getBlock))
 
     if (Loader.isModLoaded("dreamcraft")) {
       API.hideItem(new ItemStack(BlockApiary))
