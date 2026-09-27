@@ -21,10 +21,11 @@ import net.bdew.gendustry.config.{Fluids, Items}
 import net.bdew.gendustry.forestry.GeneticsHelper
 import net.bdew.gendustry.machines.mutatron.MachineMutatron
 import net.bdew.gendustry.misc.GeneticsCache
-import net.bdew.gendustry.nei.helpers.{FluidComponent, PowerComponent}
+import net.bdew.gendustry.nei.helpers.PowerComponent
 import net.bdew.lib.Misc
 import net.bdew.lib.gui.Rect
 import net.bdew.lib.items.{IStack, IStackBlock}
+import codechicken.nei.recipe.StackInfo
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.fluids.FluidStack
@@ -41,19 +42,19 @@ class MutatronHandler extends BaseRecipeHandler(5, 13) {
     val in1 = position(getRecipeStack(0, mutation), 60, 30)
     val in2 = position(getRecipeStack(1, mutation), 60, 53)
     val labware = position(new ItemStack(Items.labware), 98, 17)
-
-    components :+= new FluidComponent(
-      mutagenRect,
+    val mutagenStack = positionFluid(
       new FluidStack(Fluids.mutagen, MachineMutatron.mutagenPerItem),
+      mutagenRect,
       MachineMutatron.tankSize
     )
+
     components :+= new PowerComponent(
       mjRect,
       MachineMutatron.mjPerItem,
       MachineMutatron.maxStoredEnergy
     )
 
-    override def getIngredients = List(in1, in2, labware)
+    override def getIngredients = List(in1, in2, labware, mutagenStack)
   }
 
   def getRecipeStack(slot: Int, mutation: IMutation): ItemStack = {
@@ -130,6 +131,10 @@ class MutatronHandler extends BaseRecipeHandler(5, 13) {
       case ("liquid", Seq(x: FluidStack)) if x.getFluid == Fluids.mutagen =>
         addAllRecipes()
       case ("item", Seq(IStackBlock(x))) if x == Fluids.mutagen.getBlock =>
+        addAllRecipes()
+      case ("item", Seq(x: ItemStack))
+          if Option(StackInfo.getFluid(x))
+            .exists(_.getFluid == Fluids.mutagen) =>
         addAllRecipes()
       case ("item", Seq(IStack(x))) if x == Items.labware => addAllRecipes()
       case ("item", Seq(x: ItemStack)) =>

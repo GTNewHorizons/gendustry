@@ -13,10 +13,11 @@ import net.bdew.gendustry.Gendustry
 import net.bdew.gendustry.config.Fluids
 import net.bdew.gendustry.fluids.MutagenSources
 import net.bdew.gendustry.machines.mproducer.MachineMutagenProducer
-import net.bdew.gendustry.nei.helpers.{FluidComponent, PowerComponent}
+import net.bdew.gendustry.nei.helpers.PowerComponent
 import net.bdew.lib.Misc
 import net.bdew.lib.gui.Rect
 import net.bdew.lib.items.IStackBlock
+import codechicken.nei.recipe.StackInfo
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
 
@@ -30,13 +31,12 @@ class MutagenProducerHandler extends BaseRecipeHandler(5, 13) {
     import scala.collection.JavaConversions._
 
     val inPositioned = position(in, 44, 41)
-    val getResult = null
-
-    components :+= new FluidComponent(
-      mutagenRect,
+    val getResult = positionFluid(
       new FluidStack(Fluids.mutagen, out),
+      mutagenRect,
       MachineMutagenProducer.tankSize
     )
+
     components :+= new PowerComponent(
       mjRect,
       MachineMutagenProducer.mjPerItem,
@@ -62,6 +62,10 @@ class MutagenProducerHandler extends BaseRecipeHandler(5, 13) {
       case ("liquid", Seq(x: FluidStack)) if x.getFluid == Fluids.mutagen =>
         addAllRecipes()
       case ("item", Seq(IStackBlock(x))) if x == Fluids.mutagen.getBlock =>
+        addAllRecipes()
+      case ("item", Seq(x: ItemStack))
+          if Option(StackInfo.getFluid(x))
+            .exists(_.getFluid == Fluids.mutagen) =>
         addAllRecipes()
       case ("MutagenProducer", _) => addAllRecipes()
     }

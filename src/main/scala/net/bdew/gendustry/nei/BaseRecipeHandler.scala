@@ -13,12 +13,25 @@ import java.awt.Rectangle
 import java.util
 
 import codechicken.nei.PositionedStack
+import codechicken.nei.drawable.DrawableBuilder
 import codechicken.nei.recipe.TemplateRecipeHandler.RecipeTransferRect
 import codechicken.nei.recipe.{GuiRecipe, TemplateRecipeHandler}
+import net.bdew.gendustry.Gendustry
 import net.bdew.gendustry.nei.helpers.RecipeComponent
 import net.bdew.lib.gui._
 import net.minecraft.item.ItemStack
+import net.minecraftforge.fluids.FluidStack
 import org.lwjgl.opengl.GL11
+
+object BaseRecipeHandler {
+  lazy val tankOverlay = new DrawableBuilder(
+    Gendustry.modId + ":textures/gui/widgets.png",
+    16,
+    0,
+    16,
+    58
+  ).build()
+}
 
 abstract class BaseRecipeHandler(val offX: Int, val offY: Int)
     extends TemplateRecipeHandler {
@@ -29,6 +42,16 @@ abstract class BaseRecipeHandler(val offX: Int, val offY: Int)
     var components = List.empty[RecipeComponent]
     def position(s: ItemStack, x: Int, y: Int) =
       new PositionedStack(s, x - offX, y - offY)
+
+    def positionFluid(f: FluidStack, rect: Rect, capacity: Int) =
+      new PositionedStack.Tank(
+        f,
+        rect.x.round - offX,
+        rect.y.round - offY,
+        rect.w.round,
+        rect.h.round,
+        capacity
+      ).setOverlay(BaseRecipeHandler.tankOverlay)
   }
 
   def addTransferRect(r: Rect, id: String) {

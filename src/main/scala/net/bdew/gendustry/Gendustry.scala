@@ -34,6 +34,7 @@ import net.bdew.gendustry.gui.HintIcons
 import net.bdew.gendustry.machines.apiary.GendustryErrorStates
 import net.bdew.gendustry.machines.apiary.upgrades.Upgrades
 import net.bdew.gendustry.misc._
+import net.bdew.gendustry.nei.NEIGendustryConfig
 import net.bdew.lib.Misc
 import net.minecraft.command.CommandHandler
 import net.minecraftforge.oredict.RecipeSorter
@@ -100,8 +101,10 @@ object Gendustry {
 
   @EventHandler
   def init(event: FMLInitializationEvent) {
-    if (event.getSide.isClient)
+    if (event.getSide.isClient) {
       Config.load(new File(configDir, "client.config"))
+      NEIGendustryConfig.sendHandlerInfo()
+    }
     NetworkRegistry.INSTANCE.registerGuiHandler(this, Config.guiHandler)
 
     GameRegistry.addRecipe(new GeneRecipe)

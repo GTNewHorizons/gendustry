@@ -14,9 +14,10 @@ import net.bdew.gendustry.config.Fluids
 import net.bdew.gendustry.forestry.GeneticsHelper
 import net.bdew.gendustry.items.GeneTemplate
 import net.bdew.gendustry.machines.replicator.MachineReplicator
-import net.bdew.gendustry.nei.helpers.{FluidComponent, PowerComponent}
+import net.bdew.gendustry.nei.helpers.PowerComponent
 import net.bdew.lib.Misc
 import net.bdew.lib.gui.Rect
+import codechicken.nei.recipe.StackInfo
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
 
@@ -31,24 +32,24 @@ class ReplicatorHandler extends BaseRecipeHandler(5, 13) {
       extends CachedRecipeWithComponents {
     val getResult = position(out, 142, 41)
     val templateStack = position(template, 98, 17)
-
-    components :+= new FluidComponent(
-      dnaRect,
+    val dnaStack = positionFluid(
       new FluidStack(Fluids.dna, MachineReplicator.dnaPerItem),
+      dnaRect,
       MachineReplicator.dnaTankSize
     )
-    components :+= new FluidComponent(
-      proteinRect,
+    val proteinStack = positionFluid(
       new FluidStack(Fluids.protein, MachineReplicator.proteinPerItem),
+      proteinRect,
       MachineReplicator.proteinTankSize
     )
+
     components :+= new PowerComponent(
       mjRect,
       MachineReplicator.mjPerItem,
       MachineReplicator.maxStoredEnergy
     )
 
-    override def getIngredients = List(templateStack)
+    override def getIngredients = List(templateStack, dnaStack, proteinStack)
   }
 
   def addRecipe(tpl: ItemStack) {
@@ -84,6 +85,11 @@ class ReplicatorHandler extends BaseRecipeHandler(5, 13) {
       case ("liquid", Seq(x: FluidStack)) if x.getFluid == Fluids.dna =>
         addAllRecipes()
       case ("liquid", Seq(x: FluidStack)) if x.getFluid == Fluids.protein =>
+        addAllRecipes()
+      case ("item", Seq(x: ItemStack))
+          if Option(StackInfo.getFluid(x)).exists(f =>
+            f.getFluid == Fluids.dna || f.getFluid == Fluids.protein
+          ) =>
         addAllRecipes()
       case ("item", Seq(x: ItemStack))
           if x.getItem == GeneTemplate && GeneTemplate.isComplete(x) =>
