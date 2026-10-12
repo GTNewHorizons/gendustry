@@ -10,9 +10,10 @@
 package net.bdew.gendustry.config.loader
 
 import buildcraft.core.recipes.AssemblyRecipeManager
+import cpw.mods.fml.common.{Loader => FMLLoader}
 import forestry.api.recipes.RecipeManagers
 import net.bdew.gendustry.Gendustry
-import net.bdew.gendustry.compat.ForestryHelper
+import net.bdew.gendustry.compat.{ForestryHelper, MaterialLibStacks}
 import net.bdew.gendustry.config.Tuning
 import net.bdew.gendustry.custom.{CustomFlowerAlleles, CustomHives}
 import net.bdew.gendustry.fluids.{
@@ -42,6 +43,22 @@ class Loader extends RecipeLoader with GenericConfigLoader with LootListLoader {
       Gendustry.logDebug("meta/damage is unset in %s, defaulting to 0", ref)
     }
     resolved
+  }
+
+  override def getConcreteStack(s: StackRef, cnt: Int): ItemStack = s match {
+    case StackMaterialLib(ref) =>
+      if (!FMLLoader.isModLoaded("materiallib"))
+        error("MaterialLib is not installed, can't resolve ml:%s", ref)
+      notNull(
+        MaterialLibStacks.resolve(ref, cnt),
+        "MaterialLib stack not found ml:%s".format(ref)
+      )
+    case _ => super.getConcreteStack(s, cnt)
+  }
+
+  override def processRecipeStatements(): Unit = {
+    super.processRecipeStatements()
+    if (FMLLoader.isModLoaded("materiallib")) MaterialLibStacks.logPass()
   }
 
   override def resolveCondition(cond: Condition) = cond match {
