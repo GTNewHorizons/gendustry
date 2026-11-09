@@ -20,10 +20,11 @@ import net.bdew.gendustry.Gendustry
 import net.bdew.gendustry.config.{Fluids, Items}
 import net.bdew.gendustry.fluids.LiquidDNASources
 import net.bdew.gendustry.machines.extractor.MachineExtractor
-import net.bdew.gendustry.nei.helpers.{FluidComponent, PowerComponent}
+import net.bdew.gendustry.nei.helpers.PowerComponent
 import net.bdew.lib.Misc
 import net.bdew.lib.gui.Rect
 import net.bdew.lib.items.IStackBlock
+import codechicken.nei.recipe.StackInfo
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
 
@@ -38,13 +39,12 @@ class ExtractorHandler extends BaseRecipeHandler(5, 13) {
 
     val inPositioned = position(in, 44, 41)
     val labware = position(new ItemStack(Items.labware), 94, 19)
-    val getResult = null
-
-    components :+= new FluidComponent(
-      dnaRect,
+    val getResult = positionFluid(
       new FluidStack(Fluids.dna, out),
+      dnaRect,
       MachineExtractor.tankSize
     )
+
     components :+= new PowerComponent(
       mjRect,
       MachineExtractor.mjPerItem,
@@ -114,6 +114,9 @@ class ExtractorHandler extends BaseRecipeHandler(5, 13) {
       case ("liquid", Seq(x: FluidStack)) if x.getFluid == Fluids.dna =>
         addAllRecipes()
       case ("item", Seq(IStackBlock(x))) if x == Fluids.dna.getBlock =>
+        addAllRecipes()
+      case ("item", Seq(x: ItemStack))
+          if Option(StackInfo.getFluid(x)).exists(_.getFluid == Fluids.dna) =>
         addAllRecipes()
       case ("Extractor", _) => addAllRecipes()
     }
