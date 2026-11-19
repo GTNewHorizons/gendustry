@@ -9,7 +9,7 @@
 
 package net.bdew.gendustry.machines.imprinter
 
-import forestry.api.apiculture.{EnumBeeType, IBee, IBeeRoot}
+import forestry.api.apiculture.{EnumBeeType, IBee, IBeeGenome, IBeeRoot}
 import forestry.api.genetics.AlleleManager
 import net.bdew.gendustry.apiimpl.TileWorker
 import net.bdew.gendustry.config.Items
@@ -91,10 +91,26 @@ class TileImprinter
       val newStack = getStackInSlot(slots.inIndividual).copy()
       newStack.stackSize = 1
 
+      val newGenome = root.templateAsGenome(primary, secondary)
       newStack.getTagCompound.setTag(
         "Genome",
-        NBT.from(root.templateAsGenome(primary, secondary).writeToNBT)
+        NBT.from(newGenome.writeToNBT)
       )
+
+      newGenome match {
+        case beeGenome: IBeeGenome =>
+          val tag = newStack.getTagCompound
+          val lifespan = beeGenome.getLifespan
+          tag.setInteger(
+            "Health",
+            math.max(
+              0,
+              tag.getInteger("Health") + lifespan - tag.getInteger("MaxH")
+            )
+          )
+          tag.setInteger("MaxH", lifespan)
+        case _ =>
+      }
 
       if (
         individual.isAnalyzed || GeneTemplate.isComplete(
